@@ -1,18 +1,10 @@
 local nex_proto = Proto("nex", "NEX")
 local prudp_proto
 
-function proto_buffer(tree, stream)
-	length = stream['data'](0,4):le_uint()
-	buffer = stream['data'](0, length)
-	stream['data'] = stream['data'](length)
-	local sub = tree:add(ProtoField.uint32(stream['name'] .. "_length", "Length", base.HEX), length)
-	data = ProtoField.bytes(stream['name'] .. "_data", "Data")
-	sub:add(data, buffer)
-end
+F = nex_proto.fields
 
 local protos = require("protos")
 
-local F = nex_proto.fields
 F.size = ProtoField.uint32("nex.size", "Big ass size", base.HEX)
 F.proto = ProtoField.uint8("nex.proto", "Protocol", base.HEX, nil, 0x7f)
 F.call_id = ProtoField.uint32("nex.call_id", "Call ID", base.HEX)
@@ -25,11 +17,11 @@ local f_ack = Field.new("prudp.ack")
 
 function resolve(proto_id, method_id)
 	local proto_name, method_name
-	proto = protos[proto_id]
-	if proto ~= nil then
-		proto_name = proto['name']
-		if proto['methods'][method_id] ~= nil then
-			method_name = proto['methods'][method_id]['name']
+	p = protos[proto_id]
+	if p ~= nil then
+		proto_name = p['name']
+		if p['methods'][method_id] ~= nil then
+			method_name = p['methods'][method_id]['name']
 		else
 			method_name = "Unknown_"..string.format("0x%04x", method_id)
 		end
@@ -40,20 +32,20 @@ function resolve(proto_id, method_id)
 	return proto_name, method_name
 end
 
-function dissect_req(tree, tvb, proto, method)
-	if protos[proto] ~= nil then
-		p = protos[proto]
-		if p['methods'][method_id] ~= nil and p['methods'][method_id]['req'] ~= nil then
-			p['methods'][method_id]['req'](tree, tvb)
+function dissect_req(tree, tvb, proto_id, method_id)
+	if protos[proto_id] ~= nil then
+		p = protos[proto_id]
+		if p['methods'][method_id] ~= nil and p['methods'][method_id]['request'] ~= nil then
+			p['methods'][method_id]['request'](tree, tvb)
 		end
 	end
 end
 
-function dissect_resp(tree, tvb, proto, method)
-	if protos[proto] ~= nil then
-		p = protos[proto]
-		if p['methods'][method_id] ~= nil and p['methods'][method_id]['resp'] ~= nil then
-			p['methods'][method_id]['req'](tree, tvb)
+function dissect_resp(tree, tvb, proto_id, method_id)
+	if protos[proto_id] ~= nil then
+		p = protos[proto_id]
+		if p['methods'][method_id] ~= nil and p['methods'][method_id]['response'] ~= nil then
+			p['methods'][method_id]['response'](tree, tvb)
 		end
 	end
 end
@@ -91,9 +83,11 @@ function nex_proto.dissector(buf, pinfo, tree)
 		local pkt_method_id = payload(9,4):le_uint()
 		subtreeitem:add_le(F.method_id, payload(9,4))
 		
-		local tvb = payload(0xd)
-		local t = subtreeitem:add(F.payload, tvb)
-		dissect_req(t, tvb, pkt_proto_id, pkt_method_id)
+		if tvb:len() > 0xd then
+			local tvb = payload(0xd)
+			local t = subtreeitem:add(F.payload, tvb)
+			dissect_req(t, tvb, pkt_proto_id, pkt_method_id)
+		end
 
 		local proto_name, method_name = resolve(pkt_proto_id, pkt_method_id)
 		info = info .. string.format(" %s->%s, call=0x%08x", proto_name, method_name, pkt_call_id)
@@ -107,9 +101,11 @@ function nex_proto.dissector(buf, pinfo, tree)
 			local pkt_method_id = bit.band(payload(0xa, 4):le_uint(), bit.bnot(0x8000))
 			subtreeitem:add_le(F.method_id, payload(0xa,4))
 
-			local tvb = payload(0xe)
-			local t = subtreeitem:add(F.payload, tvb)
-			dissect_resp(t, tvb, pkt_proto_id, pkt_method_id)
+			if tvb:len() > 0xe then
+				local tvb = payload(0xe)
+				local t = subtreeitem:add(F.payload, tvb)
+				dissect_resp(t, tvb, pkt_proto_id, pkt_method_id)
+			end
 
 			local proto_name, method_name = resolve(pkt_proto_id, pkt_method_id)
 			info = info .. string.format(" Success %s->%s call=%08x", proto_name, method_name, pkt_call_id)

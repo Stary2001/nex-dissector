@@ -179,7 +179,7 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 			subtree:add(F.payload, tvb)
 			
 			local proto_pkt_type = tvb(4,1):le_uint()
-			if bit.band(proto_pkt_type, 0x80) == 0 then -- response
+			if bit.band(proto_pkt_type, 0x80) == 0 and tvb:len() > 14 then -- response, AND there must be something to dissect here..
 				local pkt_proto = bit.band(proto_pkt_type, bit.bnot(0x80))
 				local pkt_method_id = bit.band(tvb(0xa, 4):le_uint(), bit.bnot(0x8000))
 				local nex_data = tvb(14)
