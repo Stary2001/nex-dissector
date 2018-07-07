@@ -220,6 +220,9 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 						new_conn_id = addr .. "-" .. port .. "-" .. tostring(pinfo.dst)
 						SECURE_KEYS[new_conn_id] = secure_key
 						CONNECTIONS[new_conn_id] = {[0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key)}
+
+						nex_proto = udp_table:get_dissector(60000)
+						udp_table:add(tonumber(port), nex_proto)
 					elseif pkt_method_id == 3 then -- If we request a ticket seperately, use that secure key instead.
 						new_conn_id = conn['secure_id'] .. "-" .. tostring(pinfo.dst)
 						SECURE_KEYS[new_conn_id] = secure_key
