@@ -83,6 +83,10 @@ def do_list(field_name, arg_name, list_type):
 	end
 	"""
 
+def reg_struct(struct_name, struct_info):
+	proto_fields.append((struct_name, struct_name, 'bytes', struct_name)) 
+	types[struct_name] = lambda field_name, arg_name, struct_name=struct_name, struct_info=struct_info: do_struct(field_name, arg_name, struct_name, struct_info)
+
 def do_struct(field_name, arg_name, struct_name, struct_info):
 	struct_length = 0
 	func = f"""local {field_name}_container = tree:add(F.{struct_name}, tvb(off, {struct_length}))
@@ -110,21 +114,102 @@ def dispatch_type(field_unique_name, arg_name, arg_type):
 			return types[arg_type](field_unique_name, arg_name) + "\n"
 
 RVConnectionData_info = (
-('m_urlRegularProtocols', 'StationURL'),
-('m_lstSpecialProtocols', 'List<byte>'),
-('m_urlSpecialProtocols', 'StationURL')
+	('m_urlRegularProtocols', 'StationURL'),
+	('m_lstSpecialProtocols', 'List<byte>'),
+	('m_urlSpecialProtocols', 'StationURL')
 )
-
-proto_fields.append(('RVConnectionData', 'RVConnectionData', 'bytes', 'RVConnectionData')) 
-types['RVConnectionData'] = lambda field_name, arg_name: do_struct(field_name, arg_name, 'RVConnectionData', RVConnectionData_info)
+reg_struct('RVConnectionData', RVConnectionData_info)
 
 GameKey_info = (
-('title_id', 'Uint64'),
-('title_version', 'Uint16')
+	('title_id', 'Uint64'),
+	('title_version', 'Uint16')
 )
+reg_struct('GameKey', GameKey_info)
 
-proto_fields.append(('GameKey', 'GameKey', 'bytes', 'GameKey')) 
-types['GameKey'] = lambda field_name, arg_name: do_struct(field_name, arg_name, 'GameKey', GameKey_info)
+FriendPersistentInfo_info = (
+	('pid', 'Uint32'),
+	('unk_2', 'Uint8'),
+	('unk_3', 'Uint8'),
+	('unk_4', 'Uint8'),
+	('unk_5', 'Uint8'),
+	('unk_6', 'Uint8'),
+	('favourite_game', 'GameKey'),
+	('status', 'String'),
+	('unk_8',  'DateTime'),
+	('unk_9',  'DateTime'),
+	('unk_10', 'DateTime')
+)
+reg_struct('FriendPersistentInfo', FriendPersistentInfo_info)
+
+FriendPicture_info = (
+	("unk", "Uint32"),
+	("data", "Buffer"),
+	("datetime", "DateTime")
+)
+reg_struct('FriendPicture', FriendPicture_info)
+
+FriendRelationship_info = (
+	('pid', 'Uint32'),
+	('unk_2', 'Uint64'),
+	('unk_3', 'Uint8')
+)
+reg_struct('FriendRelationship', FriendRelationship_info)
+
+MyProfile_info = (
+('unk_1', 'Uint8'),
+('unk_2', 'Uint8'),
+('unk_3', 'Uint8'),
+('unk_4', 'Uint8'),
+('unk_5', 'Uint8'),
+('unk_6', 'Uint64'),
+('unk_7', 'String'),
+('unk_8', 'String')
+)
+reg_struct('MyProfile', MyProfile_info)
+
+PlayedGame_info = (
+('game_key', 'GameKey'),
+('date_time', 'DateTime')
+)
+reg_struct('PlayedGame', PlayedGame_info)
+
+NintendoPresence_info = (
+	('m_changedBitFlag', 'Uint32'),
+	('m_gameKey', 'GameKey'),
+	('m_gameModeDescription', 'String'),
+	('m_joinAvailabilityFlag', 'Uint32'),
+	('m_matchmakeSystemType', 'Uint8'),
+	('m_joinGameID', 'Uint32'),
+	('m_joinGameMode', 'Uint32'),
+	('m_ownerPrincipalID', 'PID'),
+	('m_joinGroupID', 'Uint32'),
+	('m_applicationArg', 'Buffer')
+)
+reg_struct('NintendoPresence', NintendoPresence_info)
+
+FriendPresence_info = (
+	('unk', 'Uint32'),
+	('nintendo', 'NintendoPresence')
+)
+reg_struct('FriendPresence', FriendPresence_info)
+
+Mii_info = (
+	('unk_1', 'String'),
+	('unk_2', 'Bool'),
+	('unk_3', 'Uint8'),
+	('mii_data', 'Buffer')
+)
+reg_struct('Mii', Mii_info)
+
+
+MiiList_info = (
+	('unk_1', 'String'),
+	('unk_2', 'Bool'),
+	('unk_3', 'Uint8'),
+	('mii_data_list', 'List<Buffer>')
+)
+reg_struct('MiiList', MiiList_info)
+
 
 def lua_build_method(method_prefix, info):
 	func = """function (tree, tvb)
@@ -220,7 +305,6 @@ for name in a:
 				SearchingForMethod = 1
 				MethodRequest = 2
 				MethodResponse = 3
-				StructInfo = 4
 
 				cmd_list = []
 				method_infos = None
@@ -233,9 +317,7 @@ for name in a:
 				skip_table = False
 
 				for l in f.readlines():
-
 					l=l.strip()
-					#print(l)
 					if not table and l.startswith('|'):
 						table = True
 						continue # Skip the table header..
@@ -266,17 +348,15 @@ for name in a:
 								current_method.request.append(row)
 							elif state == MethodResponse:
 								current_method.response.append(row)
-							elif state == StructInfo:
-								print(row)
-								exit()
+								#exit()
 					else:
 						if l.startswith("# "):
 							if state == SearchingForMethod:
 								if l == '# Types': # lol
-									state = StructInfo
-								else:
-									current_method = Method(l)
-									state = MethodRequest
+									continue
+
+								current_method = Method(l)
+								state = MethodRequest
 							elif state == MethodResponse:
 								# Maybe the method before is just missing info. That's fine.
 								method_infos[current_method.id] = current_method
@@ -290,7 +370,6 @@ for name in a:
 								#print((state == MethodRequest and l != '## Request'), (state == MethodResponse and l != '## Response'))
 								skip_table = True
 							else:
-								#print("Got correct header, stop skipping!!")
 								skip_table = False
 						elif l.startswith('This method does not take any request data') or l.startswith('This method does not take any parameters'):
 							state = MethodResponse
