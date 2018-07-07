@@ -33,13 +33,14 @@ def i32(field_name, arg_name):
 	off = off + 4"""
 types['Int32'] = i32
 
+types['byte'] = lambda a,b: u(8, a, b)
 types['Uint8'] = lambda a,b: u(8, a, b)
 types['Uint16'] = lambda a,b: u(16, a, b)
 types['Uint32'] = lambda a,b: u(32, a, b)
 types['Uint64'] = lambda a,b: u(64, a, b)
 
 types['PID'] = types['Uint32']
-types['NEXDateTime'] = types['Uint64']
+types['DateTime'] = types['Uint64']
 
 def buffer(l, field_name, arg_name):
 	proto_fields.append((field_name+"_len", arg_name + " length", "uint{}".format(l), "Buffer"))
@@ -47,8 +48,8 @@ def buffer(l, field_name, arg_name):
 
 	return f"""local {field_name}_len = tvb(off,{l//8}):le_uint()
 	tree:add_le(F.{field_name}_len, tvb(off, {l//8}))
-	tree:add(F.{field_name}_data, tvb(off+{l//8}, len))
-	off = off + {l//8}"""
+	tree:add(F.{field_name}_data, tvb(off+{l//8}, {field_name}_len))
+	off = off + {l//8} + {field_name}_len"""
 
 types['Buffer'] = lambda a,b: buffer(32, a, b)
 types['qBuffer'] = lambda a,b: buffer(16, a, b)
@@ -66,15 +67,64 @@ types['String'] = do_string
 types['StationURL'] = do_string
 
 def do_bool(field_name, arg_name):
-	proto_fields.append((field_name+"_len", arg_name, "bool", "bool"))
+	proto_fields.append((field_name, arg_name, "bool", "bool"))
 	return f"""tree:add(F.{field_name}, tvb(off,1))
 	off = off + 1"""
 types['Bool'] = do_bool
 
-def do_list(name, arg_name, list_type):
-	#print(name, list_type)
-	#exit()
-	return "--[[ Stubbed list. ]]"
+def do_list(field_name, arg_name, list_type):
+	proto_fields.append((field_name+"_len", arg_name + " length", "uint32", "uint32"))
+	return f"""-- list !! 
+	local {field_name}_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.{field_name}_len, tvb(off,4))
+	off = off + 4
+	for i=1,{field_name}_len do
+	""" + types[list_type](field_name, arg_name).replace("tree", "subtree") + """
+	end
+	"""
+
+def do_struct(field_name, arg_name, struct_name, struct_info):
+	struct_length = 0
+	func = f"""local {field_name}_container = tree:add(F.{struct_name}, tvb(off, {struct_length}))
+	{field_name}_container:set_text("{struct_name}")
+	"""
+	for f in struct_info:
+		func += dispatch_type(field_name + "_" + f[0], f[0], f[1]).replace("tree", f"{field_name}_container")
+
+	return func
+
+def dispatch_type(field_unique_name, arg_name, arg_type):
+	if arg_type.startswith("List"):
+		list_type = arg_type[5:-1]
+		if not list_type in types:
+			# bail.
+			print("Stubbed type {}".format(list_type))
+			return "--[[ Stubbed! Missing type (in list) {}]]\n".format(list_type)
+		return do_list(field_unique_name, arg_name, list_type) + "\n"
+	else:
+		if not arg_type in types:
+			# bail.
+			print("Stubbed type {}".format(arg_type))
+			return "--[[ Stubbed! Missing type {}]]\n".format(arg_type)
+		else:
+			return types[arg_type](field_unique_name, arg_name) + "\n"
+
+RVConnectionData_info = (
+('m_urlRegularProtocols', 'StationURL'),
+('m_lstSpecialProtocols', 'List<byte>'),
+('m_urlSpecialProtocols', 'StationURL')
+)
+
+proto_fields.append(('RVConnectionData', 'RVConnectionData', 'bytes', 'RVConnectionData')) 
+types['RVConnectionData'] = lambda field_name, arg_name: do_struct(field_name, arg_name, 'RVConnectionData', RVConnectionData_info)
+
+GameKey_info = (
+('title_id', 'Uint64'),
+('title_version', 'Uint16')
+)
+
+proto_fields.append(('GameKey', 'GameKey', 'bytes', 'GameKey')) 
+types['GameKey'] = lambda field_name, arg_name: do_struct(field_name, arg_name, 'GameKey', GameKey_info)
 
 def lua_build_method(method_prefix, info):
 	func = """function (tree, tvb)
@@ -92,21 +142,8 @@ def lua_build_method(method_prefix, info):
 		if len(i) > 2:
 			arg_detail = i[2]
 		#print(method_prefix, arg_type, arg_name, '"' + str(arg_detail) + '"')
-
-		if arg_type.startswith("List"):
-			list_type = arg_type[5:-1]
-			if not list_type in types:
-				# bail.
-				print("Stubbed type {}".format(list_type))
-				return "function (a, b) end --[[ Stubbed! Missing type (in list) {}]]".format(list_type)
-			func += do_list(field_unique_name, arg_name, list_type) + "\n"
-		else:
-			if not arg_type in types:
-				# bail.
-				print("Stubbed type {}".format(arg_type))
-				return "function (a, b) end --[[ Stubbed! Missing type {}]]".format(arg_type)
-			else:
-				func += types[arg_type](field_unique_name, arg_name) + "\n"
+		func += dispatch_type(field_unique_name, arg_name, arg_type)
+		
 	func += " end"
 	return func
 
@@ -183,6 +220,7 @@ for name in a:
 				SearchingForMethod = 1
 				MethodRequest = 2
 				MethodResponse = 3
+				StructInfo = 4
 
 				cmd_list = []
 				method_infos = None
@@ -228,13 +266,17 @@ for name in a:
 								current_method.request.append(row)
 							elif state == MethodResponse:
 								current_method.response.append(row)
+							elif state == StructInfo:
+								print(row)
+								exit()
 					else:
 						if l.startswith("# "):
 							if state == SearchingForMethod:
 								if l == '# Types': # lol
-									continue
-								current_method = Method(l)
-								state = MethodRequest
+									state = StructInfo
+								else:
+									current_method = Method(l)
+									state = MethodRequest
 							elif state == MethodResponse:
 								# Maybe the method before is just missing info. That's fine.
 								method_infos[current_method.id] = current_method
