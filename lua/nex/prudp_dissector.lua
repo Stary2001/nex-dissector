@@ -34,15 +34,13 @@ function deepcopy(orig)
     return copy
 end
 
-function gen_secure_key(pid, password)
-	secure_key = password
+function gen_kerb_key(pid, password)
+	kerb_key = password
 	a = 65000 + (pid % 1024)
 	for i=1, a do
-		secure_key = md5.sum(secure_key)
+		kerb_key = md5.sum(kerb_key)
 	end
-
-	--secure_key = md5.tohex(secure_key)
-	return secure_key
+	return kerb_key
 end
 
 function string.fromhex(str)
@@ -57,9 +55,17 @@ function string.tohex(str)
     end))
 end
 
+function int_from_bytes(bytearr)
+	local out = 0
+	for i=0,bytearr:len()-1 do
+		out = bit.bor(out, bit.lshift(bytearr:get_index(i), i*8))
+	end
+	return out
+end
+
 local KERB_KEYS = {}
-KERB_KEYS[1863211397] = gen_secure_key(1863211397, "|+GF-i):/7Z87_:q")
-KERB_KEYS[1847701639] = gen_secure_key(1847701639, "ORbL78Oo>Y]-^(MF")
+KERB_KEYS[1863211397] = gen_kerb_key(1863211397, "|+GF-i):/7Z87_:q")
+KERB_KEYS[1847701639] = gen_kerb_key(1847701639, "ORbL78Oo>Y]-^(MF")
 
 local SECURE_KEYS = {}
 local CONNECTIONS = {}
@@ -145,8 +151,50 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 	if pkt_type == 0 and pkt_src == 0xaf and pkt_dst == 0xa1 then
 		a = tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port) .. "-" .. tostring(pinfo.src)
 		if CONNECTIONS[a] == nil then
-			info = "nEW!"
 			CONNECTIONS[a] = {[0xa1]=rc4.new_ks("CD&ML"), [0xaf]=rc4.new_ks("CD&ML")}
+		end
+	end
+
+	if pkt_type == 1 and not pkt_flag_ack then
+		local payload = buf(off, buf:len() - off - 1):bytes()
+		local conn
+		local conn_id
+
+		a = tostring(pinfo.src) .. "-" .. tostring(pinfo.src_port) .. "-" .. tostring(pinfo.dst)
+		b = tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port) .. "-" .. tostring(pinfo.src)
+		if CONNECTIONS[a] ~= nil then
+			conn = CONNECTIONS[a]
+			conn_id = a
+		elseif CONNECTIONS[b] ~= nil then
+			conn = CONNECTIONS[b]
+			conn_id = b
+		end
+		if SECURE_KEYS[conn_id] ~= nil then
+			if buf:len() > 15 then 
+				local payload = buf(15, buf:len() - 16)
+				subtree:add(F.payload, payload)
+				local first_buff_size = payload(0, 4):le_uint() + 4
+				local check_buffer_size = payload(first_buff_size, 4):le_uint()
+				local check_buffer = payload(first_buff_size + 4, check_buffer_size)
+
+				local check_contents = check_buffer(0, check_buffer:len() - 16)
+				local check_hmac = check_buffer(check_buffer:len() - 16, 16)
+
+				local secure_key = SECURE_KEYS[conn_id]
+				local check_decrypted = rc4.crypt(rc4.new_ks(secure_key), check_contents:bytes())
+				local pid = int_from_bytes(check_decrypted(0,4))
+				if pid ~= conn['nonsecure_pid'] then
+					secure_key = secure_key:sub(1,16)
+					local check_decrypted = rc4.crypt(rc4.new_ks(secure_key), check_contents:bytes())
+					local pid = int_from_bytes(check_decrypted(0,4))
+					if pid ~= conn['nonsecure_pid'] then
+						info = "Secure key is fucked!"
+					else
+						CONNECTIONS[conn_id] = { [0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = conn['nonsecure_pid'] }
+						SECURE_KEYS[conn_id] = secure_key
+					end
+				end
+			end
 		end
 	end
 
@@ -208,7 +256,7 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 
 					kerb_key = KERB_KEYS[pid]
 					ticket = rc4.crypt(rc4.new_ks(kerb_key), ticket:bytes())
-					secure_key = string.fromhex(tostring(ticket(0, 16)))
+					secure_key = string.fromhex(tostring(ticket(0, 32)))
 
 					if pkt_method_id == 1 or pkt_method_id == 2 then
 						secure_url_len = nex_data(12 + buffer_len, 2):le_uint()
@@ -216,17 +264,18 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 						addr = string.match(secure_url, "address=([^;]+)")
 						port = string.match(secure_url, "port=([^;]+)")
 						conn['secure_id'] = addr .. "-" .. port
+
 						-- this packet is server->client, so we use the server ip (from the secure url) first, then the dst ip (client ip)
 						new_conn_id = addr .. "-" .. port .. "-" .. tostring(pinfo.dst)
 						SECURE_KEYS[new_conn_id] = secure_key
-						CONNECTIONS[new_conn_id] = {[0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key)}
+						CONNECTIONS[new_conn_id] = {[0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = pid}
 
 						nex_proto = udp_table:get_dissector(60000)
 						udp_table:add(tonumber(port), nex_proto)
 					elseif pkt_method_id == 3 then -- If we request a ticket seperately, use that secure key instead.
 						new_conn_id = conn['secure_id'] .. "-" .. tostring(pinfo.dst)
 						SECURE_KEYS[new_conn_id] = secure_key
-						CONNECTIONS[new_conn_id] = {[0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key)}
+						CONNECTIONS[new_conn_id] = {[0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = pid}
 					end
 				end
 			end
