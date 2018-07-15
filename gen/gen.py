@@ -72,6 +72,7 @@ def do_bool(field_name, arg_name):
 	off = off + 1"""
 types['Bool'] = do_bool
 
+
 def do_list(field_name, arg_name, list_type):
 	proto_fields.append((field_name+"_len", arg_name + " length", "uint32", "uint32"))
 	return f"""-- list !! 
@@ -210,6 +211,12 @@ MiiList_info = (
 )
 reg_struct('MiiList', MiiList_info)
 
+Data_info = (
+	('type_name', 'String'),
+	('len_plus_four', 'Uint32'),
+	('data', 'Buffer')
+)
+reg_struct('Data', Data_info)
 
 def lua_build_method(method_prefix, info):
 	func = """function (tree, tvb)
