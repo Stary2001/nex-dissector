@@ -10,3 +10,4 @@ to install the dissector, copy init.lua and the lua/ directory to %appdata%/Wire
 # what does it not do
 * handle multiple connections _well_
 * handle being ran live _well_
+* fragment reassembly
