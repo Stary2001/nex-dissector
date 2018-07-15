@@ -5,6 +5,8 @@ to install the dissector, copy init.lua and the lua/ directory to %appdata%/Wire
 * dissection of prudp, most nex stuff
 * secure connection handling
 * automatic generation of dissector code from wiki
+* Data<> handling
 
 # what does it not do
-* 32 byte secure key (so anything but friends server..)
+* handle multiple connections _well_
+* handle being ran live _well_

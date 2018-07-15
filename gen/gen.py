@@ -21,80 +21,131 @@ def delink(link):
 def fix_html(s):
 	return s.replace("&gt;", ">").replace("&lt;", "<")
 
+
+struct_funcs = {}
+def reg_struct(struct_name, struct_info):
+	proto_fields.append((struct_name, struct_name, 'bytes', struct_name)) 
+	#types[struct_name] = lambda field_name, arg_name, struct_name=struct_name, struct_info=struct_info: do_struct(field_name, arg_name, struct_name, struct_info)
+	types[struct_name] = lambda field_name, arg_name, struct_name=struct_name: f"off = do_{struct_name}(tree, tvb, off, '{field_name}')"
+
+	struct_length = 0
+	func = f"function do_{struct_name}(tree, tvb, off, field_name)\n"
+
+	func += f"""local {struct_name}_container = tree:add(F.{struct_name}, tvb(off, {struct_length}))
+	{struct_name}_container:set_text("{struct_name}")
+	"""
+
+	for f in struct_info:
+		func += dispatch_type(struct_name + "_" + f[0], f[0], f[1]).replace("tree", f"{struct_name}_container")
+
+	func += "\nreturn off\nend"
+
+	struct_funcs[struct_name] = func
+	print(struct_funcs[struct_name])
+
 types = {}
+type_funcs = {}
+def reg_type(type_name, func):
+	type_funcs[type_name] = f"function do_{type_name}(tree, tvb, off, field_name)\n" + func(type_name, type_name) + "\nend"
+	def type_thunk(field_name, arg_name, type_name=type_name, func=func, extract=False):
+		func(field_name, arg_name) # TODO: why?????
+		return f"off, {field_name} = do_{type_name}(tree, tvb, off, '{field_name}')"
+	types[type_name] = type_thunk
+
 def u(l, field_name, arg_name):
 	proto_fields.append((field_name, arg_name, "uint{}".format(l), "uint{}".format(l)))
-	return f"""tree:add_le(F.{field_name}, tvb(off,{l//8}))
-	off = off + {l//8}"""
+	func = f"tree:add_le(F[field_name], tvb(off,{l//8}))"
+	if l != 64:
+		func += f"return off + {l//8}, tvb(off,{l//8}):le_uint()"
+	else:
+		func += f"return off + {l//8}"
+	return func
 
 def i32(field_name, arg_name):
 	proto_fields.append((field_name, arg_name, 'int32', 'int32'))
-	return f"""tree:add_le(F.{field_name}, tvb(off,4))
-	off = off + 4"""
-types['Int32'] = i32
+	return f"""tree:add_le(F[field_name], tvb(off,4))
+	return off + 4, tvb(off,4):le_int()"""
 
-types['byte'] = lambda a,b: u(8, a, b)
-types['Uint8'] = lambda a,b: u(8, a, b)
-types['Uint16'] = lambda a,b: u(16, a, b)
-types['Uint32'] = lambda a,b: u(32, a, b)
-types['Uint64'] = lambda a,b: u(64, a, b)
+reg_type('Int32', i32)
+reg_type('byte', lambda a,b: u(8, a, b))
+reg_type('Uint8', lambda a,b: u(8, a, b))
+reg_type('Uint16', lambda a,b: u(16, a, b))
+reg_type('Uint32', lambda a,b: u(32, a, b))
+reg_type('Uint64', lambda a,b: u(64, a, b))
 
-types['PID'] = types['Uint32']
-types['DateTime'] = types['Uint64']
+reg_type('PID', lambda a,b: u(32, a, b))
+reg_type('DateTime', lambda a,b: u(64, a, b))
 
 def buffer(l, field_name, arg_name):
 	proto_fields.append((field_name+"_len", arg_name + " length", "uint{}".format(l), "Buffer"))
 	proto_fields.append((field_name+"_data", arg_name + " data", "bytes", "Buffer"))
 
 	return f"""local {field_name}_len = tvb(off,{l//8}):le_uint()
-	tree:add_le(F.{field_name}_len, tvb(off, {l//8}))
-	tree:add(F.{field_name}_data, tvb(off+{l//8}, {field_name}_len))
-	off = off + {l//8} + {field_name}_len"""
+	tree:add_le(F[field_name.."_len"], tvb(off, {l//8}))
+	if {field_name}_len ~= 0 then
+		tree:add(F[field_name.."_data"], tvb(off+{l//8}, {field_name}_len))
+		return off + {l//8} + {field_name}_len, tvb(off+{l//8}, {field_name}_len)
+	else
+		return off + {l//8}
+	end
+	"""
 
-types['Buffer'] = lambda a,b: buffer(32, a, b)
-types['qBuffer'] = lambda a,b: buffer(16, a, b)
+reg_type('Buffer', lambda a,b: buffer(32, a, b))
+reg_type('qBuffer', lambda a,b: buffer(16, a, b))
 
 def do_string(field_name, arg_name):
 	proto_fields.append((field_name+"_len", arg_name + " length", "uint16", "String"))
 	proto_fields.append((field_name+"_data", arg_name + " data", "string", "String"))
 
 	return f"""local {field_name}_len = tvb(off,2):le_uint()
-	tree:add_le(F.{field_name}_len, tvb(off, 2))
-	tree:add(F.{field_name}_data, tvb(off+2, {field_name}_len))
-	off = off + 2 + {field_name}_len"""
+	tree:add_le(F[field_name.. "_len"], tvb(off, 2))
+	tree:add(F[field_name.. "_data"], tvb(off+2, {field_name}_len))
+	return off + 2 + {field_name}_len, tvb(off+2, {field_name}_len-1):string()"""
 
-types['String'] = do_string
-types['StationURL'] = do_string
+reg_type('String', do_string)
+reg_type('StationURL', do_string)
 
 def do_bool(field_name, arg_name):
 	proto_fields.append((field_name, arg_name, "bool", "bool"))
-	return f"""tree:add(F.{field_name}, tvb(off,1))
-	off = off + 1"""
-types['Bool'] = do_bool
-
+	return f"""tree:add(F[field_name], tvb(off,1))
+	return off + 1, (tvb(off,1)~= 0)"""
+reg_type('Bool', do_bool)
 
 def do_list(field_name, arg_name, list_type):
 	proto_fields.append((field_name+"_len", arg_name + " length", "uint32", "uint32"))
-	return f"""-- list !! 
+	return f"""-- list !!
 	local {field_name}_len = tvb(off, 4):le_uint()
 	subtree = tree:add_le(F.{field_name}_len, tvb(off,4))
 	off = off + 4
 	for i=1,{field_name}_len do
-	""" + types[list_type](field_name, arg_name).replace("tree", "subtree") + """
+	""" + dispatch_type(field_name+"_item", arg_name, list_type).replace("tree", "subtree") + """
 	end
 	"""
 
-def reg_struct(struct_name, struct_info):
-	proto_fields.append((struct_name, struct_name, 'bytes', struct_name)) 
-	types[struct_name] = lambda field_name, arg_name, struct_name=struct_name, struct_info=struct_info: do_struct(field_name, arg_name, struct_name, struct_info)
-
-def do_struct(field_name, arg_name, struct_name, struct_info):
-	struct_length = 0
-	func = f"""local {field_name}_container = tree:add(F.{struct_name}, tvb(off, {struct_length}))
-	{field_name}_container:set_text("{struct_name}")
+def do_data(field_name, arg_name, full_type):
+	func = ""
+	func += f"""
+		local {field_name}_container = tree:add(F.Data, tvb(off, 0))
+		{field_name}_container:set_text("{full_type}")
 	"""
-	for f in struct_info:
-		func += dispatch_type(field_name + "_" + f[0], f[0], f[1]).replace("tree", f"{field_name}_container")
+
+	proto_fields.append((field_name+"_data_bytes", arg_name + " data bytes", "bytes", "bytes"))
+
+	func += dispatch_type(field_name + "_type_name", arg_name + "_type_name", "String").replace("tree", f"{field_name}_container") + "\n"
+	func += dispatch_type(field_name + "_len_plus_four", arg_name + "_len_plus_four", "Uint32").replace("tree", f"{field_name}_container") + "\n"
+	func += dispatch_type(field_name + "_data_len", arg_name + "_data_len", "Uint32").replace("tree", f"{field_name}_container") + "\n"
+	func += f"""local type_func = 'do_'..{field_name}_type_name
+		if _G[type_func] ~= nil then
+			off = _G[type_func]({field_name}_container, tvb, off, "{field_name}_data")
+		else
+			{field_name}_container:add(F.{field_name}_data_bytes, tvb(off, {field_name}_len))
+			off = off + {field_name}_data_len
+		end
+	"""
+	print("===========================================================")
+	print(func)
+	print("===========================================================")
+	print()
 
 	return func
 
@@ -106,6 +157,13 @@ def dispatch_type(field_unique_name, arg_name, arg_type):
 			print("Stubbed type {}".format(list_type))
 			return "--[[ Stubbed! Missing type (in list) {}]]\n".format(list_type)
 		return do_list(field_unique_name, arg_name, list_type) + "\n"
+	if arg_type.startswith("Data"):
+		if len(arg_type) > 4:
+			data_type = arg_type[5:-1]
+			if not data_type in types:
+				print("Stubbed type {}".format(data_type))
+				return "--[[ Stubbed! Missing type (in Data) {}]]\n".format(data_type)
+		return do_data(field_unique_name, arg_name, arg_type) + "\n"
 	else:
 		if not arg_type in types:
 			# bail.
@@ -113,6 +171,13 @@ def dispatch_type(field_unique_name, arg_name, arg_type):
 			return "--[[ Stubbed! Missing type {}]]\n".format(arg_type)
 		else:
 			return types[arg_type](field_unique_name, arg_name) + "\n"
+
+Data_info = (
+	('type_name', 'String'),
+	('len_plus_four', 'Uint32'),
+	('data', 'Buffer')
+)
+reg_struct('Data', Data_info)
 
 RVConnectionData_info = (
 	('m_urlRegularProtocols', 'StationURL'),
@@ -157,20 +222,20 @@ FriendRelationship_info = (
 reg_struct('FriendRelationship', FriendRelationship_info)
 
 MyProfile_info = (
-('unk_1', 'Uint8'),
-('unk_2', 'Uint8'),
-('unk_3', 'Uint8'),
-('unk_4', 'Uint8'),
-('unk_5', 'Uint8'),
-('unk_6', 'Uint64'),
-('unk_7', 'String'),
-('unk_8', 'String')
+	('unk_1', 'Uint8'),
+	('unk_2', 'Uint8'),
+	('unk_3', 'Uint8'),
+	('unk_4', 'Uint8'),
+	('unk_5', 'Uint8'),
+	('unk_6', 'Uint64'),
+	('unk_7', 'String'),
+	('unk_8', 'String')
 )
 reg_struct('MyProfile', MyProfile_info)
 
 PlayedGame_info = (
-('game_key', 'GameKey'),
-('date_time', 'DateTime')
+	('game_key', 'GameKey'),
+	('date_time', 'DateTime')
 )
 reg_struct('PlayedGame', PlayedGame_info)
 
@@ -211,12 +276,62 @@ MiiList_info = (
 )
 reg_struct('MiiList', MiiList_info)
 
-Data_info = (
-	('type_name', 'String'),
-	('len_plus_four', 'Uint32'),
-	('data', 'Buffer')
+Gathering_info = (
+	('m_idMyself', 'Int32'),
+	('m_pidOwner', 'PID'),
+	('m_pidHost', 'PID'),
+	('m_uiMinParticipants', 'Uint16'),
+	('m_uiMaxParticipants', 'Uint16'),
+	('m_uiParticipationPolicy', 'Uint32'),
+	('m_uiPolicyArgument', 'Uint32'),
+	('m_uiFlags', 'Uint32'),
+	('m_uiState', 'Uint32'),
+	('m_strDescription', 'String')
 )
-reg_struct('Data', Data_info)
+reg_struct('Gathering', Gathering_info)
+
+MatchmakeSession_info = (
+	('m_Gathering_base', 'Gathering'),
+	('m_GameMode', 'Uint32'),
+	('m_Attribs', 'List<Uint32>'),
+	('m_OpenParticipation', 'Bool'),
+	('m_MatchmakeSystemType', 'Uint32'),
+	('m_ApplicationBuffer', 'Buffer'),
+	('m_ParticipationCount', 'Uint32'),
+#	('m_ProgressScore', 'Uint8'), # Added in NEX 3.5.0
+#	('m_SessionKey', 'Buffer'),
+#	('m_Option0', 'Uint32')
+)
+reg_struct('MatchmakeSession', MatchmakeSession_info)
+
+GatheringStats_info = (
+	('m_pidParticipant', 'Uint32'),
+	('m_uiFlags', 'Uint32'),
+	('m_lstValues', 'List<Float>')
+)
+reg_struct('GatheringStats', GatheringStats_info)
+
+Invitation_info = (
+	('m_idGathering', 'Uint32'),
+	('m_idGuest', 'Uint32'),
+	('m_strMessage', 'String')
+)
+reg_struct('Invitation', Invitation_info)
+
+ParticipantDetails_info = (
+	('m_idParticipant', 'Uint32'),
+	('m_strName', 'String'),
+	('m_strMessage', 'String'),
+	('m_uiParticipants', 'Uint16')
+)
+reg_struct('ParticipantDetails', ParticipantDetails_info)
+
+DeletionEntry_info = (
+	('m_idGathering', 'Uint32'),
+	('m_pid', 'PID'),
+	('m_uiReason', 'Uint32')
+)
+reg_struct('DeletionEntry', DeletionEntry_info)
 
 def lua_build_method(method_prefix, info):
 	func = """function (tree, tvb)
@@ -400,6 +515,12 @@ out_file.write("""-- This file is autogenerated
 for field in proto_fields:
 	field_name, human_name, arg_type, real_type = field
 	out_file.write(f"F.{field_name} = ProtoField.{arg_type}(\"{field_name}\", \"{human_name} ({real_type})\")\n")
+
+for type_name in type_funcs:
+	out_file.write(type_funcs[type_name] + "\n")
+
+for struct_name in struct_funcs:
+	out_file.write(struct_funcs[struct_name] + "\n")
 
 out_file.write("local info = {\n")
 out_file.write(proto_info)

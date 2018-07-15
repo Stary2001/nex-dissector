@@ -83,7 +83,7 @@ function nex_proto.dissector(buf, pinfo, tree)
 		local pkt_method_id = payload(9,4):le_uint()
 		subtreeitem:add_le(F.method_id, payload(9,4))
 		
-		if tvb:len() > 0xd then
+		if payload:len() > 0xd then
 			local tvb = payload(0xd)
 			local t = subtreeitem:add(F.payload, tvb)
 			dissect_req(t, tvb, pkt_proto_id, pkt_method_id)
@@ -101,7 +101,7 @@ function nex_proto.dissector(buf, pinfo, tree)
 			local pkt_method_id = bit.band(payload(0xa, 4):le_uint(), bit.bnot(0x8000))
 			subtreeitem:add_le(F.method_id, payload(0xa,4))
 
-			if tvb:len() > 0xe then
+			if payload:len() > 0xe then
 				local tvb = payload(0xe)
 				local t = subtreeitem:add(F.payload, tvb)
 				dissect_resp(t, tvb, pkt_proto_id, pkt_method_id)

@@ -223,7 +223,7 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 				dec_payload = dec_packets[pkt_id]
 			end
 
-			tvb = dec_payload:tvb("Decrypted payload"):range()
+			local tvb = dec_payload:tvb("Decrypted payload"):range()
 			subtree:add(F.payload, tvb)
 			
 			local proto_pkt_type = tvb(4,1):le_uint()
