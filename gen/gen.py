@@ -41,7 +41,6 @@ def reg_struct(struct_name, struct_info):
 	func += "\nreturn off\nend"
 
 	struct_funcs[struct_name] = func
-	print(struct_funcs[struct_name])
 
 types = {}
 type_funcs = {}
@@ -113,7 +112,7 @@ reg_type('Bool', do_bool)
 
 def do_list(field_name, arg_name, list_type):
 	proto_fields.append((field_name+"_len", arg_name + " length", "uint32", "uint32"))
-	return f"""-- list !!
+	return f"""-- list !! {list_type}
 	local {field_name}_len = tvb(off, 4):le_uint()
 	subtree = tree:add_le(F.{field_name}_len, tvb(off,4))
 	off = off + 4
@@ -142,26 +141,27 @@ def do_data(field_name, arg_name, full_type):
 			off = off + {field_name}_data_len
 		end
 	"""
-	print("===========================================================")
-	print(func)
-	print("===========================================================")
-	print()
-
 	return func
 
 def dispatch_type(field_unique_name, arg_name, arg_type):
 	if arg_type.startswith("List"):
 		list_type = arg_type[5:-1]
 		if not list_type in types:
-			# bail.
-			print("Stubbed type {}".format(list_type))
-			return "--[[ Stubbed! Missing type (in list) {}]]\n".format(list_type)
+			if list_type.startswith("Data"):
+				data_type = list_type[5:-1]
+				if not data_type in types:
+					print("Stubbed type {} in list... in data".format(data_type))
+					return "--[[ Stubbed! Missing type (in list/in Data) {}]]\n".format(data_type)
+			else:
+				# bail.
+				print("Stubbed type {} in list".format(list_type))
+				return "--[[ Stubbed! Missing type (in list) {}]]\n".format(list_type)
 		return do_list(field_unique_name, arg_name, list_type) + "\n"
-	if arg_type.startswith("Data"):
+	elif arg_type.startswith("Data"):
 		if len(arg_type) > 4:
 			data_type = arg_type[5:-1]
 			if not data_type in types:
-				print("Stubbed type {}".format(data_type))
+				print("Stubbed type {} in Data".format(data_type))
 				return "--[[ Stubbed! Missing type (in Data) {}]]\n".format(data_type)
 		return do_data(field_unique_name, arg_name, arg_type) + "\n"
 	else:
