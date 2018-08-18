@@ -7,10 +7,26 @@ proto_fields = []
 class Method:
 	def __init__(self, name):
 		result = re.match("# \\(([0-9]+)\\) ([A-Za-z0-9_]+)", name)
-		self.id = int(result[1])
-		self.name = result[2]
+		if result == None:
+			self.id = None
+			self.name = name.replace("# ", "")
+		else:
+			self.id = int(result[1])
+			self.name = result[2]
 		self.request = []
 		self.response = []
+
+class Type:
+	def __init__(self, name):
+		self.fields = []
+		result = re.match("## (\S+)(?: \\((\S+)\\))?", name)
+		if result[2] != None:
+			self.base = delink(result[2])
+			self.name = result[1]
+			self.fields.append(('Base', self.base, None))
+		else:
+			self.base = None
+			self.name = result[1]
 
 def extract_name(link):
 	return re.match("\\[([A-Za-z0-9 _]+)\\]\\(([A-Za-z0-9#-_]+)\\)", link)[1]
@@ -20,7 +36,6 @@ def delink(link):
 
 def fix_html(s):
 	return s.replace("&gt;", ">").replace("&lt;", "<")
-
 
 struct_funcs = {}
 def reg_struct(struct_name, struct_info):
@@ -51,11 +66,15 @@ def reg_type(type_name, func):
 		return f"off, {field_name} = do_{type_name}(tree, tvb, off, '{field_name}')"
 	types[type_name] = type_thunk
 
-def u(l, field_name, arg_name):
-	proto_fields.append((field_name, arg_name, "uint{}".format(l), "uint{}".format(l)))
+def int_field(l, field_name, arg_name, signed=False):
+	if signed:
+		prefix = ""
+	else:
+		prefix = "u"
+	proto_fields.append((field_name, arg_name, f"{prefix}int{l}", f"uint{l}"))
 	func = f"tree:add_le(F[field_name], tvb(off,{l//8}))"
 	if l != 64:
-		func += f"return off + {l//8}, tvb(off,{l//8}):le_uint()"
+		func += f"return off + {l//8}, tvb(off,{l//8}):le_{prefix}int()"
 	else:
 		func += f"return off + {l//8}"
 	return func
@@ -63,17 +82,24 @@ def u(l, field_name, arg_name):
 def i32(field_name, arg_name):
 	proto_fields.append((field_name, arg_name, 'int32', 'int32'))
 	return f"""tree:add_le(F[field_name], tvb(off,4))
+
 	return off + 4, tvb(off,4):le_int()"""
 
-reg_type('Int32', i32)
-reg_type('byte', lambda a,b: u(8, a, b))
-reg_type('Uint8', lambda a,b: u(8, a, b))
-reg_type('Uint16', lambda a,b: u(16, a, b))
-reg_type('Uint32', lambda a,b: u(32, a, b))
-reg_type('Uint64', lambda a,b: u(64, a, b))
+reg_type('Sint8', lambda a,b: int_field(8, a, b, True))
+reg_type('Sint16', lambda a,b: int_field(16, a, b, True))
+reg_type('Sint32', lambda a,b: int_field(32, a, b, True))
+reg_type('Sint64', lambda a,b: int_field(64, a, b, True))
+reg_type('Int32', lambda a,b: int_field(32, a, b, True))
 
-reg_type('PID', lambda a,b: u(32, a, b))
-reg_type('DateTime', lambda a,b: u(64, a, b))
+reg_type('byte', lambda a,b: int_field(8, a, b))
+reg_type('Uint8', lambda a,b: int_field(8, a, b))
+reg_type('Uint16', lambda a,b: int_field(16, a, b))
+reg_type('Uint32', lambda a,b: int_field(32, a, b))
+reg_type('Uint64', lambda a,b: int_field(64, a, b))
+
+reg_type('PID', lambda a,b: int_field(32, a, b))
+reg_type('Result', lambda a,b: int_field(32, a, b))
+reg_type('DateTime', lambda a,b: int_field(64, a, b))
 
 def buffer(l, field_name, arg_name):
 	proto_fields.append((field_name+"_len", arg_name + " length", "uint{}".format(l), "Buffer"))
@@ -109,6 +135,17 @@ def do_bool(field_name, arg_name):
 	return f"""tree:add(F[field_name], tvb(off,1))
 	return off + 1, (tvb(off,1)~= 0)"""
 reg_type('Bool', do_bool)
+
+def do_float(l, field_name, arg_name):
+	if l == 4:
+		n = "float"
+	elif l == 8:
+		n = "double"
+	proto_fields.append((field_name, arg_name, n, n))
+	return f"""tree:add_le(F[field_name], tvb(off,{l}))
+	return off + {l}, tvb(off,{l}):le_float()"""
+reg_type('Float', lambda a,b: do_float(4, a, b))
+reg_type('Double', lambda a,b: do_float(8, a, b))
 
 def do_list(field_name, arg_name, list_type):
 	proto_fields.append((field_name+"_len", arg_name + " length", "uint32", "uint32"))
@@ -147,7 +184,7 @@ def dispatch_type(field_unique_name, arg_name, arg_type):
 	if arg_type.startswith("List"):
 		list_type = arg_type[5:-1]
 		if not list_type in types:
-			if list_type.startswith("Data"):
+			if list_type.startswith("Data<"):
 				data_type = list_type[5:-1]
 				if not data_type in types:
 					print("Stubbed type {} in list... in data".format(data_type))
@@ -157,7 +194,7 @@ def dispatch_type(field_unique_name, arg_name, arg_type):
 				print("Stubbed type {} in list".format(list_type))
 				return "--[[ Stubbed! Missing type (in list) {}]]\n".format(list_type)
 		return do_list(field_unique_name, arg_name, list_type) + "\n"
-	elif arg_type.startswith("Data"):
+	elif arg_type == 'Data' or arg_type.startswith("Data<"):
 		if len(arg_type) > 4:
 			data_type = arg_type[5:-1]
 			if not data_type in types:
@@ -178,7 +215,11 @@ Data_info = (
 	('data', 'Buffer')
 )
 reg_struct('Data', Data_info)
+Structure_info = (
+)
+reg_struct('Structure', Structure_info)
 
+"""
 RVConnectionData_info = (
 	('m_urlRegularProtocols', 'StationURL'),
 	('m_lstSpecialProtocols', 'List<byte>'),
@@ -333,6 +374,15 @@ DeletionEntry_info = (
 )
 reg_struct('DeletionEntry', DeletionEntry_info)
 
+AccountExtraInfo_info = (
+	('pid', 'Uint32'),
+	('b', 'Uint32'),
+	('c', 'Uint32'),
+	('token', 'String'),
+)
+reg_struct('AccountExtraInfo', AccountExtraInfo_info)
+"""
+
 def lua_build_method(method_prefix, info):
 	func = """function (tree, tvb)
 	local off = 0
@@ -395,6 +445,178 @@ def lua_build_proto(header, cmds, method_infos):
 		}}
 	}},""".format(proto_id, proto_name, cmd_list)
 
+struct_infos = {}
+def types_pass(f):
+	global struct_infos
+	# First pass: get type info
+	table = False
+	skip_table = True
+	current_type = None
+	types_header_found = is_types # If it's a types page, all of it is types.
+
+	for l in f.readlines():
+		l = l.strip()
+		if not table and l.startswith('|'):
+			if 'This structure inherits from' in l:
+				base = delink(re.search("This structure inherits from ([^|]+) \|", l)[1])
+				current_type.base = base # lol
+				current_type.fields.append(('Base2', base, None))
+				skip_table = True
+				#print("Skipping weird inheritance")
+				continue
+			else:
+				table = True
+				if types_header_found:
+					if 'Value' in l:
+						print("Got weird table ", l)
+						skip_table = True
+				continue # Skip the table header..
+
+		if table:
+			if l == '': # End of table
+				if not skip_table and types_header_found:
+					#print("rEG", current_type.name, current_type.fields)
+					fixed = []
+					for f_name, t_name, rename_count in current_type.fields:
+						if rename_count == None:
+							fixed.append((f_name, t_name))
+						else:
+							fixed.append((f_name + str(rename_count), t_name))
+					struct_infos[current_type.name] = fixed
+				skip_table = False
+				table = False
+			else:
+				row = list(map(lambda a: a.strip(), l[1:-1].split('|')))
+				if set(row) == set(['---']):
+					continue
+				if skip_table:
+					continue
+				if types_header_found:
+					field_name_safe = delink(row[1]).replace(' ', '_').replace("(","").replace(")","")
+					type_name_safe = fix_html(delink(row[0]))
+
+					rename_needed = False
+					max_n = 0
+					for i,f in enumerate(current_type.fields):
+						if field_name_safe == f[0]:
+							print("Field name collision!", f[0])
+							rename_needed = True
+							if len(f) < 3:
+								max_n = 1
+							else:
+								if f[2] == None:
+									max_n = 1
+								else:
+									max_n = f[2]
+					if rename_needed:
+						current_type.fields.append((field_name_safe, type_name_safe, max_n + 1))
+					else:
+						current_type.fields.append((field_name_safe, type_name_safe, None))
+		else:
+			if l == '# Types':
+				types_header_found = True
+			elif l.startswith("## ") and types_header_found:
+				current_type = Type(l)
+
+def methods_pass(f):
+	global proto_info
+	header = f.readline().strip()
+	if header.startswith("## "):
+		header = header[3:]
+	if header.startswith("[["): # parse link
+		end = header.find("]] > ")
+		if end == None:
+			print("?", name)
+			return
+		header = header[end+5:]
+	# Second (more complicated) pass: get method info.
+	# states
+	CmdList = 0
+	SearchingForMethod = 1
+	MethodRequest = 2
+	MethodResponse = 3
+
+	cmd_list = []
+	method_infos = None
+	current_method = None
+
+	state = CmdList
+	
+	cmd = False
+	table = False
+	skip_table = False
+
+	for l in f.readlines():
+		l = l.strip()
+		if not table and l.startswith('|'):
+			table = True
+			continue # Skip the table header..
+
+		if table:
+			if l == '': # End of table
+				if not skip_table: # Don't do state transitions if we skip a table!
+					if state == CmdList:
+						state = SearchingForMethod
+					elif state == MethodRequest:
+						state = MethodResponse
+					elif state == MethodResponse:
+						state = SearchingForMethod
+						method_infos[current_method.id] = current_method
+				table = False
+			else: # Table row
+				row = list(map(lambda a: a.strip(), l[1:-1].split('|')))
+				if set(row) == set(['---']):
+					continue
+
+				if skip_table:
+					continue
+
+				if state == 0: # the cmd list is the first table
+					cmd_list.append(row)
+					method_infos = {}
+				elif state == MethodRequest:
+					current_method.request.append(row)
+				elif state == MethodResponse:
+					current_method.response.append(row)
+		else:
+			if l.startswith("# "):
+				if state == SearchingForMethod:
+					meth = Method(l)
+					found = False
+					for m in cmd_list:
+						if delink(m[1]) == meth.name:
+							found = True
+					if not found:
+						#print("Skipping non-method ", l)
+						continue
+					current_method = meth
+					state = MethodRequest
+				elif state == MethodResponse:
+					# Maybe the method before is just missing info. That's fine.
+					method_infos[current_method.id] = current_method
+
+					current_method = Method(l)
+					state = MethodRequest
+			elif l.startswith("##"):
+				if (state == MethodRequest and l != '## Request') or (state == MethodResponse and l != '## Response'):
+					#print("Odd!", state, l)
+					#	print((state == MethodRequest and l != '## Request'), (state == MethodResponse and l != '## Response'))
+					skip_table = True
+				else:
+					skip_table = False
+			elif l.startswith('This method does not take any request data') or l.startswith('This method does not take any parameters'):
+				state = MethodResponse
+			elif l.startswith('This method does not return anything') or l.startswith("This method doesn't return anything"):
+				state = SearchingForMethod
+				method_infos[current_method.id] = current_method
+			elif l.startswith("This method takes no parameters and doesn't return anything."):
+				state = SearchingForMethod
+				method_infos[current_method.id] = current_method
+	if table:
+		table = False
+
+	proto_info += lua_build_proto(header, cmd_list, method_infos)+"\n"
+
 if not os.path.exists("NintendoClients.wiki"):
 	print("Please run 'git clone https://github.com/Kinnay/NintendoClients.wiki.git'")
 	exit()
@@ -405,107 +627,75 @@ if len(sys.argv) == 1:
 
 proto_info = ""
 
+blacklist = [
+	'RMC-Protocol.md',
+	'PRUDP-Protocol.md',
+	'PIA-Protocol.md',
+	'Mario-Kart-8-Protocol.md',
+	'NEX-Common-Types.md',
+	'PIA-Types.md'
+]
+
 a = os.listdir("NintendoClients.wiki")
 for name in a:
-	if name == 'RMC-Protocol.md' or name == 'PRUDP-Protocol.md':
+	if name in blacklist:
 		continue
-	if re.search("Protocol(?:-[^.]+)?.md", name):
+	is_proto =  re.search("Protocol(?:-[^.]+)?.md", name)
+	is_types = re.search("Types(?:-[^.]+)?.md", name)
+
+	if is_proto or is_types:
 		with open("NintendoClients.wiki/"+name) as f:
 			header = f.readline().strip()
-			if header.startswith("## "):
-				header = header[3:]
-			if header.startswith("[["): # parse link
-				end = header.find("]] > ")
-				if end == None:
-					print("?", name)
-					break
-				header = header[end+5:]
-				#print(header)
+			types_pass(f)
 
-				# states
-				CmdList = 0
-				SearchingForMethod = 1
-				MethodRequest = 2
-				MethodResponse = 3
+print("=====================================================================")
 
-				cmd_list = []
-				method_infos = None
-				current_method = None
+prereq_types = []
 
-				state = CmdList
-				table = False
-				cmd = False
+def pull_prereqs(l):
+	top = []
+	for item in l[:]: # Copy the list!
+		for f_name, f_type in struct_infos[item]:
+			if f_type.startswith("List"):
+				f_type = f_type[5:-1]
+			if f_type in l:
+				l.remove(f_type)
+				top.append(f_type)
+	return top
 
-				skip_table = False
+all_types = list(struct_infos)
 
-				for l in f.readlines():
-					l=l.strip()
-					if not table and l.startswith('|'):
-						table = True
-						continue # Skip the table header..
+prereq_chunks = [pull_prereqs(all_types)]
+remaining = None
+while remaining != []:
+	remaining = pull_prereqs(prereq_chunks[len(prereq_chunks) - 1])
+	if remaining != []:
+		prereq_chunks.append(remaining)
 
-					if table:
-						if l == '':
-							if not skip_table: # Don't do state transitions if we skip a table!
-								if state == CmdList:
-									state = SearchingForMethod
-								elif state == MethodRequest:
-									state = MethodResponse
-								elif state == MethodResponse:
-									state = SearchingForMethod
-									method_infos[current_method.id] = current_method
-							table = False
-						else:
-							row = list(map(lambda a: a.strip(), l[1:-1].split('|')))
-							if set(row) == set(['---']):
-								continue
+for i in range(len(prereq_chunks) - 1, -1, -1):
+	prereq_types += prereq_chunks[i]
 
-							if skip_table:
-								continue
+for prereq_name in prereq_types:
+	#print(prereq_name)
+	reg_struct(prereq_name, struct_infos[prereq_name])
+print("=====================================================================")
 
-							if state == 0: # the cmd list is the first table
-								cmd_list.append(row)
-								method_infos = {}
-							elif state == MethodRequest:
-								current_method.request.append(row)
-							elif state == MethodResponse:
-								current_method.response.append(row)
-								#exit()
-					else:
-						if l.startswith("# "):
-							if state == SearchingForMethod:
-								if l == '# Types': # lol
-									continue
+for type_name in struct_infos:
+	if not type_name in prereq_types:
+		reg_struct(type_name, struct_infos[type_name])
 
-								current_method = Method(l)
-								state = MethodRequest
-							elif state == MethodResponse:
-								# Maybe the method before is just missing info. That's fine.
-								method_infos[current_method.id] = current_method
 
-								current_method = Method(l)
-								state = MethodRequest
+print("=====================================================================")
 
-						elif l.startswith("##"):
-							if (state == MethodRequest and l != '## Request') or (state == MethodResponse and l != '## Response'):
-								#print("Odd!", state, l)
-								#print((state == MethodRequest and l != '## Request'), (state == MethodResponse and l != '## Response'))
-								skip_table = True
-							else:
-								skip_table = False
-						elif l.startswith('This method does not take any request data') or l.startswith('This method does not take any parameters'):
-							state = MethodResponse
-						elif l.startswith('This method does not return anything') or l.startswith("This method doesn't return anything"):
-							state = SearchingForMethod
-							method_infos[current_method.id] = current_method
-						elif l.startswith("This method takes no parameters and doesn't return anything."):
-							state = SearchingForMethod
-							method_infos[current_method.id] = current_method
-				if table:
-					table = False
+a = os.listdir("NintendoClients.wiki")
+for name in a:
+	if name in blacklist:
+		continue
+	is_proto =  re.search("Protocol(?:-[^.]+)?.md", name)
 
-				proto_info += lua_build_proto(header, cmd_list, method_infos)+"\n"
-
+	if is_proto:
+		with open("NintendoClients.wiki/"+name) as f:
+			methods_pass(f)
 
 out_file = open(sys.argv[1], 'w')
 out_file.write("""-- This file is autogenerated
