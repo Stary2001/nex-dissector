@@ -64,8 +64,9 @@ function int_from_bytes(bytearr)
 end
 
 local KERB_KEYS = {}
-KERB_KEYS[1863211397] = gen_kerb_key(1863211397, "|+GF-i):/7Z87_:q")
-KERB_KEYS[1847701639] = gen_kerb_key(1847701639, "ORbL78Oo>Y]-^(MF")
+KERB_KEYS[1863211397] = string.fromhex("a3d8ff2fe8a67a4b1e1837f2065abe0a") -- gen_kerb_key(1863211397, "|+GF-i):/7Z87_:q")
+KERB_KEYS[1847701639] = string.fromhex("75bca4be3f38bf8d638812fa34bc4b9b") -- gen_kerb_key(1847701639, "ORbL78Oo>Y]-^(MF")
+KERB_KEYS[1862483632] = string.fromhex("b238a2ca61f9d880757e22d49ad2c52d") --gen_kerb_key(1862483632, "4i(acJ#OsfDJXr>b")
 
 local SECURE_KEYS = {}
 local CONNECTIONS = {}
@@ -91,6 +92,28 @@ F.size = ProtoField.uint16("prudp.size", "Packet size", base.HEX)
 
 F.payload = ProtoField.bytes("prudp.payload", "Payload")
 F.checksum = ProtoField.uint8("prudp.checksum", "Checksum", base.HEX)
+
+function find_connection(pinfo)
+	a = tostring(pinfo.src) .. "-" .. tostring(pinfo.src_port) .. "-" .. tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port)
+	b = tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port) .. "-" .. tostring(pinfo.src) .. "-" .. tostring(pinfo.src_port)
+	if CONNECTIONS[a] ~= nil then
+		return CONNECTIONS[a], a
+	elseif CONNECTIONS[b] ~= nil then
+		return CONNECTIONS[b], b
+	end
+	return nil, a
+end
+
+function set_connection(pinfo, t)
+	a = tostring(pinfo.src) .. "-" .. tostring(pinfo.src_port) .. "-" .. tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port)
+	b = tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port) .. "-" .. tostring(pinfo.src) .. "-" .. tostring(pinfo.src_port)
+	--[[if CONNECTIONS[a] ~= nil or CONNECTIONS[b] ~= nil then
+		return
+	end]]
+	-- Complete connections with both src+dst port infos.
+	a = tostring(pinfo.src) .. "-" .. tostring(pinfo.src_port) .. "-" .. tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port)
+	CONNECTIONS[a] = t
+end
 
 function prudp_v0_proto.dissector(buf,pinfo,tree)
 	pinfo.cols.protocol = "PRUDP"
@@ -124,6 +147,7 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 	local pkt_flag_multi_ack = bit.band(pkt_op_flags, 0x2000) ~= 0
 	flags:add_le(F.flag_multi_ack, buf(2,2))
 
+	local pkt_session_id = buf(4,1):le_uint()
 	subtree:add(F.session_id, buf(4,1))
 	subtree:add_le(F.packet_sig, buf(5,4))
 
@@ -147,29 +171,15 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 	end
 
 	local info = pkt_types[pkt_type]
-	
-	if pkt_type == 0 and pkt_src == 0xaf and pkt_dst == 0xa1 then
-		a = tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port) .. "-" .. tostring(pinfo.src)
-		if CONNECTIONS[a] == nil then
-			CONNECTIONS[a] = {[0xa1]=rc4.new_ks("CD&ML"), [0xaf]=rc4.new_ks("CD&ML")}
-		end
-	end
 
 	if pkt_type == 1 and not pkt_flag_ack then
 		local payload = buf(off, buf:len() - off - 1):bytes()
-		local conn
-		local conn_id
+		-- This should be client->server. We knew the servers's IP and port, as well as the client's IP.
+		local partial_conn_id = tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port) .. "-" .. tostring(pinfo.src)
+		local partial_conn = CONNECTIONS[partial_conn_id]
+		local conn, conn_id = find_connection(pinfo)
 
-		a = tostring(pinfo.src) .. "-" .. tostring(pinfo.src_port) .. "-" .. tostring(pinfo.dst)
-		b = tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port) .. "-" .. tostring(pinfo.src)
-		if CONNECTIONS[a] ~= nil then
-			conn = CONNECTIONS[a]
-			conn_id = a
-		elseif CONNECTIONS[b] ~= nil then
-			conn = CONNECTIONS[b]
-			conn_id = b
-		end
-		if SECURE_KEYS[conn_id] ~= nil then
+		if SECURE_KEYS[partial_conn_id] ~= nil then
 			if buf:len() > 15 then 
 				local payload = buf(15, buf:len() - 16)
 				subtree:add(F.payload, payload)
@@ -179,43 +189,40 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 
 				local check_contents = check_buffer(0, check_buffer:len() - 16)
 				local check_hmac = check_buffer(check_buffer:len() - 16, 16)
-
-				local secure_key = SECURE_KEYS[conn_id]
+				local secure_key = SECURE_KEYS[partial_conn_id]
 				local check_decrypted = rc4.crypt(rc4.new_ks(secure_key), check_contents:bytes())
 				local pid = int_from_bytes(check_decrypted(0,4))
-				if pid ~= conn['nonsecure_pid'] then
+				if pid ~= partial_conn['nonsecure_pid'] then
 					secure_key = secure_key:sub(1,16)
 					local check_decrypted = rc4.crypt(rc4.new_ks(secure_key), check_contents:bytes())
 					local pid = int_from_bytes(check_decrypted(0,4))
-					if pid ~= conn['nonsecure_pid'] then
-						info = "Secure key is fucked!"
-					else
-						CONNECTIONS[conn_id] = { [0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = conn['nonsecure_pid'] }
-						SECURE_KEYS[conn_id] = secure_key
+
+					if pid ~= partial_conn['nonsecure_pid'] then
+						debug("Secure key is fucked!")
 					end
 				end
+
+				CONNECTIONS[conn_id] = { [0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = partial_conn['nonsecure_pid'] }
+				SECURE_KEYS[conn_id] = secure_key
+				CONNECTIONS[partial_conn_id] = nil
+				SECURE_KEYS[partial_conn_id] = nil
 			end
+		else
+			set_connection(pinfo, {[0xa1]=rc4.new_ks("CD&ML"), [0xaf]=rc4.new_ks("CD&ML")})
 		end
 	end
 
 	if pkt_type == 2 and not pkt_flag_ack then
+
 		if payload_size ~= 0 then
 			local enc_payload = buf(off, buf:len() - off - 1):bytes()
 			local conn
 			local conn_id
 
-			a = tostring(pinfo.src) .. "-" .. tostring(pinfo.src_port) .. "-" .. tostring(pinfo.dst)
-			b = tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port) .. "-" .. tostring(pinfo.src)
+			conn, conn_id = find_connection(pinfo)
 
-			if CONNECTIONS[a] ~= nil then
-				conn = CONNECTIONS[a]
-				conn_id = a
-			elseif CONNECTIONS[b] ~= nil then
-				conn = CONNECTIONS[b]
-				conn_id = b
-			end
-
-			pkt_id = tostring(pinfo.src) .. "-" .. tostring(pinfo.src_port) .. "-" .. tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port) .."-".. tostring(pkt_seq)
+			-- I hate this. Please come up with a better method.
+			pkt_id = tostring(pinfo.src) .. "-" .. tostring(pinfo.src_port) .. "-" .. tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port) .."-".. tostring(pkt_seq) .. "-" .. tostring(pkt_session_id)
 			if dec_packets[pkt_id] == nil then
 				dec_packets[pkt_id] = rc4.crypt(conn[pkt_src], enc_payload)
 				dec_payload = dec_packets[pkt_id]
