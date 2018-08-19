@@ -1,13 +1,14 @@
-# how tf do i use this
-to install the dissector, copy init.lua and the lua/ directory to %appdata%/Wireshark (or equivalent linux location)
+# How to install?
+To install the dissector, copy init.lua and the lua/ directory to %appdata%/Wireshark (or equivalent linux location).
 
-# what does it do
-* dissection of prudp, most nex stuff
-* secure connection handling
-* automatic generation of dissector code from wiki
+This is done because the Wireshark plugin system sucks and has no way to guarantee load order.
+If you already have a custom init.lua you can probably figure out how to merge them.
+
+# What does it do
+* Dissection of PRUDP v0 (3DS, WiiU friends), but not v1 (Some 3DS games, most Wii U uses) or Lite (Switch)
+* Automatic secure connection decryption if the connections are in the same pcap
+* Automatic generation of dissector code from wiki, including structure definitions.
 * Data<> handling
 
 # what does it not do
-* handle multiple connections _well_
-* handle being ran live _well_
-* fragment reassembly
+* Fragment reassembly.
