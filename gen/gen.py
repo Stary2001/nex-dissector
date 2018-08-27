@@ -19,14 +19,19 @@ class Method:
 class Type:
 	def __init__(self, name):
 		self.fields = []
-		result = re.match("## (\S+)(?: \\((\S+)\\))?", name)
+		result = re.match("## ([^\\(]+)(?:\\((\S+)\\))?", name)
+		if result == None:
+			print("????")
+
+		self.name = result[1].strip().replace(" ", "_")
 		if result[2] != None:
 			self.base = delink(result[2])
-			self.name = result[1]
 			self.fields.append(('Base', self.base, None))
 		else:
 			self.base = None
-			self.name = result[1]
+
+		if self.name == 'Gathering':
+			print("HM")
 
 def extract_name(link):
 	return re.match("\\[([A-Za-z0-9 _]+)\\]\\(([A-Za-z0-9#-_]+)\\)", link)[1]
@@ -450,7 +455,7 @@ def types_pass(f):
 	global struct_infos
 	# First pass: get type info
 	table = False
-	skip_table = True
+	skip_table = not is_types
 	current_type = None
 	types_header_found = is_types # If it's a types page, all of it is types.
 
@@ -461,8 +466,10 @@ def types_pass(f):
 				base = delink(re.search("This structure inherits from ([^|]+) \|", l)[1])
 				current_type.base = base # lol
 				current_type.fields.append(('Base2', base, None))
+				table = True
 				skip_table = True
-				#print("Skipping weird inheritance")
+				print("We got some weird inheritance!", base)
+				#exit()
 				continue
 			else:
 				table = True
@@ -676,7 +683,7 @@ for i in range(len(prereq_chunks) - 1, -1, -1):
 	prereq_types += prereq_chunks[i]
 
 for prereq_name in prereq_types:
-	#print(prereq_name)
+	print(prereq_name)
 	reg_struct(prereq_name, struct_infos[prereq_name])
 print("=====================================================================")
 

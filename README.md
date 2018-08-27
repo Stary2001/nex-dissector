@@ -10,5 +10,5 @@ If you already have a custom init.lua you can probably figure out how to merge t
 * Automatic generation of dissector code from wiki, including structure definitions.
 * Data<> handling
 
-# what does it not do
+# What does it not do
 * Fragment reassembly.

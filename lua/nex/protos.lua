@@ -67,10 +67,17 @@ F.PrincipalBasicInfo_NNID_len = ProtoField.uint16("PrincipalBasicInfo_NNID_len",
 F.PrincipalBasicInfo_NNID_data = ProtoField.string("PrincipalBasicInfo_NNID_data", "NNID data (String)")
 F.PrincipalBasicInfo_Unknown = ProtoField.uint8("PrincipalBasicInfo_Unknown", "Unknown (uint8)")
 F.Gathering = ProtoField.bytes("Gathering", "Gathering (Gathering)")
-F.Gathering_m_pidParticipant = ProtoField.uint32("Gathering_m_pidParticipant", "m_pidParticipant (uint32)")
+F.Gathering_m_idMyself = ProtoField.uint32("Gathering_m_idMyself", "m_idMyself (uint32)")
+F.Gathering_m_pidOwner = ProtoField.uint32("Gathering_m_pidOwner", "m_pidOwner (uint32)")
+F.Gathering_m_pidHost = ProtoField.uint32("Gathering_m_pidHost", "m_pidHost (uint32)")
+F.Gathering_m_uiMinParticipants = ProtoField.uint16("Gathering_m_uiMinParticipants", "m_uiMinParticipants (uint16)")
+F.Gathering_m_uiMaxParticipants = ProtoField.uint16("Gathering_m_uiMaxParticipants", "m_uiMaxParticipants (uint16)")
+F.Gathering_m_uiParticipationPolicy = ProtoField.uint32("Gathering_m_uiParticipationPolicy", "m_uiParticipationPolicy (uint32)")
+F.Gathering_m_uiPolicyArgument = ProtoField.uint32("Gathering_m_uiPolicyArgument", "m_uiPolicyArgument (uint32)")
 F.Gathering_m_uiFlags = ProtoField.uint32("Gathering_m_uiFlags", "m_uiFlags (uint32)")
-F.Gathering_m_lstValues_len = ProtoField.uint32("Gathering_m_lstValues_len", "m_lstValues length (uint32)")
-F.Gathering_m_lstValues_item = ProtoField.float("Gathering_m_lstValues_item", "m_lstValues (float)")
+F.Gathering_m_uiState = ProtoField.uint32("Gathering_m_uiState", "m_uiState (uint32)")
+F.Gathering_m_strDescription_len = ProtoField.uint16("Gathering_m_strDescription_len", "m_strDescription length (String)")
+F.Gathering_m_strDescription_data = ProtoField.string("Gathering_m_strDescription_data", "m_strDescription data (String)")
 F.MatchmakeParam = ProtoField.bytes("MatchmakeParam", "MatchmakeParam (MatchmakeParam)")
 F.ResultRange = ProtoField.bytes("ResultRange", "ResultRange (ResultRange)")
 F.ResultRange_m_uiOffset = ProtoField.uint32("ResultRange_m_uiOffset", "m_uiOffset (uint32)")
@@ -687,22 +694,27 @@ F.GatheringURLs_m_gid = ProtoField.uint32("GatheringURLs_m_gid", "m_gid (uint32)
 F.GatheringURLs_m_lstStationURLs_len = ProtoField.uint32("GatheringURLs_m_lstStationURLs_len", "m_lstStationURLs length (uint32)")
 F.GatheringURLs_m_lstStationURLs_item_len = ProtoField.uint16("GatheringURLs_m_lstStationURLs_item_len", "m_lstStationURLs length (String)")
 F.GatheringURLs_m_lstStationURLs_item_data = ProtoField.string("GatheringURLs_m_lstStationURLs_item_data", "m_lstStationURLs data (String)")
+F.Gathering_Stats = ProtoField.bytes("Gathering_Stats", "Gathering_Stats (Gathering_Stats)")
+F.Gathering_Stats_m_pidParticipant = ProtoField.uint32("Gathering_Stats_m_pidParticipant", "m_pidParticipant (uint32)")
+F.Gathering_Stats_m_uiFlags = ProtoField.uint32("Gathering_Stats_m_uiFlags", "m_uiFlags (uint32)")
+F.Gathering_Stats_m_lstValues_len = ProtoField.uint32("Gathering_Stats_m_lstValues_len", "m_lstValues length (uint32)")
+F.Gathering_Stats_m_lstValues_item = ProtoField.float("Gathering_Stats_m_lstValues_item", "m_lstValues (float)")
 F.Invitation = ProtoField.bytes("Invitation", "Invitation (Invitation)")
 F.Invitation_m_idGathering = ProtoField.uint32("Invitation_m_idGathering", "m_idGathering (uint32)")
 F.Invitation_m_idGuest = ProtoField.uint32("Invitation_m_idGuest", "m_idGuest (uint32)")
 F.Invitation_m_strMessage_len = ProtoField.uint16("Invitation_m_strMessage_len", "m_strMessage length (String)")
 F.Invitation_m_strMessage_data = ProtoField.string("Invitation_m_strMessage_data", "m_strMessage data (String)")
-F.Participant = ProtoField.bytes("Participant", "Participant (Participant)")
-F.Participant_m_idParticipant = ProtoField.uint32("Participant_m_idParticipant", "m_idParticipant (uint32)")
-F.Participant_m_strName_len = ProtoField.uint16("Participant_m_strName_len", "m_strName length (String)")
-F.Participant_m_strName_data = ProtoField.string("Participant_m_strName_data", "m_strName data (String)")
-F.Participant_m_strMessage_len = ProtoField.uint16("Participant_m_strMessage_len", "m_strMessage length (String)")
-F.Participant_m_strMessage_data = ProtoField.string("Participant_m_strMessage_data", "m_strMessage data (String)")
-F.Participant_m_uiParticipants = ProtoField.uint16("Participant_m_uiParticipants", "m_uiParticipants (uint16)")
-F.Deletion = ProtoField.bytes("Deletion", "Deletion (Deletion)")
-F.Deletion_m_idGathering = ProtoField.uint32("Deletion_m_idGathering", "m_idGathering (uint32)")
-F.Deletion_m_pid = ProtoField.uint32("Deletion_m_pid", "m_pid (uint32)")
-F.Deletion_m_uiReason = ProtoField.uint32("Deletion_m_uiReason", "m_uiReason (uint32)")
+F.Participant_Details = ProtoField.bytes("Participant_Details", "Participant_Details (Participant_Details)")
+F.Participant_Details_m_idParticipant = ProtoField.uint32("Participant_Details_m_idParticipant", "m_idParticipant (uint32)")
+F.Participant_Details_m_strName_len = ProtoField.uint16("Participant_Details_m_strName_len", "m_strName length (String)")
+F.Participant_Details_m_strName_data = ProtoField.string("Participant_Details_m_strName_data", "m_strName data (String)")
+F.Participant_Details_m_strMessage_len = ProtoField.uint16("Participant_Details_m_strMessage_len", "m_strMessage length (String)")
+F.Participant_Details_m_strMessage_data = ProtoField.string("Participant_Details_m_strMessage_data", "m_strMessage data (String)")
+F.Participant_Details_m_uiParticipants = ProtoField.uint16("Participant_Details_m_uiParticipants", "m_uiParticipants (uint16)")
+F.Deletion_Entry = ProtoField.bytes("Deletion_Entry", "Deletion_Entry (Deletion_Entry)")
+F.Deletion_Entry_m_idGathering = ProtoField.uint32("Deletion_Entry_m_idGathering", "m_idGathering (uint32)")
+F.Deletion_Entry_m_pid = ProtoField.uint32("Deletion_Entry_m_pid", "m_pid (uint32)")
+F.Deletion_Entry_m_uiReason = ProtoField.uint32("Deletion_Entry_m_uiReason", "m_uiReason (uint32)")
 F.PlayingSession = ProtoField.bytes("PlayingSession", "PlayingSession (PlayingSession)")
 F.PlayingSession_m_PrincipalId = ProtoField.uint32("PlayingSession_m_PrincipalId", "m_PrincipalId (uint32)")
 F.PlayingSession_m_Gathering_data_bytes = ProtoField.bytes("PlayingSession_m_Gathering_data_bytes", "m_Gathering data bytes (bytes)")
@@ -1990,17 +2002,17 @@ end
 function do_Gathering(tree, tvb, off, field_name)
 local Gathering_container = tree:add(F.Gathering, tvb(off, 0))
 	Gathering_container:set_text("Gathering")
-	off, Gathering_m_pidParticipant = do_Uint32(Gathering_container, tvb, off, 'Gathering_m_pidParticipant')
+	off = do_Structure(Gathering_container, tvb, off, 'Gathering_Base')
+off, Gathering_m_idMyself = do_Uint32(Gathering_container, tvb, off, 'Gathering_m_idMyself')
+off, Gathering_m_pidOwner = do_PID(Gathering_container, tvb, off, 'Gathering_m_pidOwner')
+off, Gathering_m_pidHost = do_PID(Gathering_container, tvb, off, 'Gathering_m_pidHost')
+off, Gathering_m_uiMinParticipants = do_Uint16(Gathering_container, tvb, off, 'Gathering_m_uiMinParticipants')
+off, Gathering_m_uiMaxParticipants = do_Uint16(Gathering_container, tvb, off, 'Gathering_m_uiMaxParticipants')
+off, Gathering_m_uiParticipationPolicy = do_Uint32(Gathering_container, tvb, off, 'Gathering_m_uiParticipationPolicy')
+off, Gathering_m_uiPolicyArgument = do_Uint32(Gathering_container, tvb, off, 'Gathering_m_uiPolicyArgument')
 off, Gathering_m_uiFlags = do_Uint32(Gathering_container, tvb, off, 'Gathering_m_uiFlags')
--- list !! Float
-	local Gathering_m_lstValues_len = tvb(off, 4):le_uint()
-	subGathering_container = Gathering_container:add_le(F.Gathering_m_lstValues_len, tvb(off,4))
-	off = off + 4
-	for i=1,Gathering_m_lstValues_len do
-	off, Gathering_m_lstValues_item = do_Float(subGathering_container, tvb, off, 'Gathering_m_lstValues_item')
-
-	end
-	
+off, Gathering_m_uiState = do_Uint32(Gathering_container, tvb, off, 'Gathering_m_uiState')
+off, Gathering_m_strDescription = do_String(Gathering_container, tvb, off, 'Gathering_m_strDescription')
 
 return off
 end
@@ -3395,6 +3407,24 @@ off, GatheringURLs_m_gid = do_Uint32(GatheringURLs_container, tvb, off, 'Gatheri
 
 return off
 end
+function do_Gathering_Stats(tree, tvb, off, field_name)
+local Gathering_Stats_container = tree:add(F.Gathering_Stats, tvb(off, 0))
+	Gathering_Stats_container:set_text("Gathering_Stats")
+	off = do_Structure(Gathering_Stats_container, tvb, off, 'Gathering_Stats_Base')
+off, Gathering_Stats_m_pidParticipant = do_Uint32(Gathering_Stats_container, tvb, off, 'Gathering_Stats_m_pidParticipant')
+off, Gathering_Stats_m_uiFlags = do_Uint32(Gathering_Stats_container, tvb, off, 'Gathering_Stats_m_uiFlags')
+-- list !! Float
+	local Gathering_Stats_m_lstValues_len = tvb(off, 4):le_uint()
+	subGathering_Stats_container = Gathering_Stats_container:add_le(F.Gathering_Stats_m_lstValues_len, tvb(off,4))
+	off = off + 4
+	for i=1,Gathering_Stats_m_lstValues_len do
+	off, Gathering_Stats_m_lstValues_item = do_Float(subGathering_Stats_container, tvb, off, 'Gathering_Stats_m_lstValues_item')
+
+	end
+	
+
+return off
+end
 function do_Invitation(tree, tvb, off, field_name)
 local Invitation_container = tree:add(F.Invitation, tvb(off, 0))
 	Invitation_container:set_text("Invitation")
@@ -3405,22 +3435,24 @@ off, Invitation_m_strMessage = do_String(Invitation_container, tvb, off, 'Invita
 
 return off
 end
-function do_Participant(tree, tvb, off, field_name)
-local Participant_container = tree:add(F.Participant, tvb(off, 0))
-	Participant_container:set_text("Participant")
-	off, Participant_m_idParticipant = do_Uint32(Participant_container, tvb, off, 'Participant_m_idParticipant')
-off, Participant_m_strName = do_String(Participant_container, tvb, off, 'Participant_m_strName')
-off, Participant_m_strMessage = do_String(Participant_container, tvb, off, 'Participant_m_strMessage')
-off, Participant_m_uiParticipants = do_Uint16(Participant_container, tvb, off, 'Participant_m_uiParticipants')
+function do_Participant_Details(tree, tvb, off, field_name)
+local Participant_Details_container = tree:add(F.Participant_Details, tvb(off, 0))
+	Participant_Details_container:set_text("Participant_Details")
+	off = do_Structure(Participant_Details_container, tvb, off, 'Participant_Details_Base')
+off, Participant_Details_m_idParticipant = do_Uint32(Participant_Details_container, tvb, off, 'Participant_Details_m_idParticipant')
+off, Participant_Details_m_strName = do_String(Participant_Details_container, tvb, off, 'Participant_Details_m_strName')
+off, Participant_Details_m_strMessage = do_String(Participant_Details_container, tvb, off, 'Participant_Details_m_strMessage')
+off, Participant_Details_m_uiParticipants = do_Uint16(Participant_Details_container, tvb, off, 'Participant_Details_m_uiParticipants')
 
 return off
 end
-function do_Deletion(tree, tvb, off, field_name)
-local Deletion_container = tree:add(F.Deletion, tvb(off, 0))
-	Deletion_container:set_text("Deletion")
-	off, Deletion_m_idGathering = do_Uint32(Deletion_container, tvb, off, 'Deletion_m_idGathering')
-off, Deletion_m_pid = do_PID(Deletion_container, tvb, off, 'Deletion_m_pid')
-off, Deletion_m_uiReason = do_Uint32(Deletion_container, tvb, off, 'Deletion_m_uiReason')
+function do_Deletion_Entry(tree, tvb, off, field_name)
+local Deletion_Entry_container = tree:add(F.Deletion_Entry, tvb(off, 0))
+	Deletion_Entry_container:set_text("Deletion_Entry")
+	off = do_Structure(Deletion_Entry_container, tvb, off, 'Deletion_Entry_Base')
+off, Deletion_Entry_m_idGathering = do_Uint32(Deletion_Entry_container, tvb, off, 'Deletion_Entry_m_idGathering')
+off, Deletion_Entry_m_pid = do_PID(Deletion_Entry_container, tvb, off, 'Deletion_Entry_m_pid')
+off, Deletion_Entry_m_uiReason = do_Uint32(Deletion_Entry_container, tvb, off, 'Deletion_Entry_m_uiReason')
 
 return off
 end
