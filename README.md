@@ -5,12 +5,13 @@ This is done because the Wireshark plugin system sucks and has no way to guarant
 If you already have a custom init.lua you can probably figure out how to merge them.
 
 # What does it do
-* Dissection of PRUDP v0 (3DS, WiiU friends), but not v1 (Some 3DS games, most Wii U uses) or Lite (Switch)
+* Dissection of PRUDP v0 (3DS, WiiU friends)
 * Automatic secure connection decryption if the connections are in the same pcap.
 * Automatic generation of dissector code from wiki, including structure definitions.
 * Data<> handling
 
 # What does it not do
+* Dissection of PRUDP v1 (Some 3DS games, most Wii U uses) or PRUDP-Lite (Switch)
 * Fragment reassembly.
 * Work reliably.
 
