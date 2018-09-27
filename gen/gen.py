@@ -30,9 +30,6 @@ class Type:
 		else:
 			self.base = None
 
-		if self.name == 'Gathering':
-			print("HM")
-
 def extract_name(link):
 	return re.match("\\[([A-Za-z0-9 _]+)\\]\\(([A-Za-z0-9#-_]+)\\)", link)[1]
 
@@ -224,170 +221,6 @@ Structure_info = (
 )
 reg_struct('Structure', Structure_info)
 
-"""
-RVConnectionData_info = (
-	('m_urlRegularProtocols', 'StationURL'),
-	('m_lstSpecialProtocols', 'List<byte>'),
-	('m_urlSpecialProtocols', 'StationURL')
-)
-reg_struct('RVConnectionData', RVConnectionData_info)
-
-GameKey_info = (
-	('title_id', 'Uint64'),
-	('title_version', 'Uint16')
-)
-reg_struct('GameKey', GameKey_info)
-
-FriendPersistentInfo_info = (
-	('pid', 'Uint32'),
-	('unk_2', 'Uint8'),
-	('unk_3', 'Uint8'),
-	('unk_4', 'Uint8'),
-	('unk_5', 'Uint8'),
-	('unk_6', 'Uint8'),
-	('favourite_game', 'GameKey'),
-	('status', 'String'),
-	('unk_8',  'DateTime'),
-	('unk_9',  'DateTime'),
-	('unk_10', 'DateTime')
-)
-reg_struct('FriendPersistentInfo', FriendPersistentInfo_info)
-
-FriendPicture_info = (
-	("unk", "Uint32"),
-	("data", "Buffer"),
-	("datetime", "DateTime")
-)
-reg_struct('FriendPicture', FriendPicture_info)
-
-FriendRelationship_info = (
-	('pid', 'Uint32'),
-	('unk_2', 'Uint64'),
-	('unk_3', 'Uint8')
-)
-reg_struct('FriendRelationship', FriendRelationship_info)
-
-MyProfile_info = (
-	('unk_1', 'Uint8'),
-	('unk_2', 'Uint8'),
-	('unk_3', 'Uint8'),
-	('unk_4', 'Uint8'),
-	('unk_5', 'Uint8'),
-	('unk_6', 'Uint64'),
-	('unk_7', 'String'),
-	('unk_8', 'String')
-)
-reg_struct('MyProfile', MyProfile_info)
-
-PlayedGame_info = (
-	('game_key', 'GameKey'),
-	('date_time', 'DateTime')
-)
-reg_struct('PlayedGame', PlayedGame_info)
-
-NintendoPresence_info = (
-	('m_changedBitFlag', 'Uint32'),
-	('m_gameKey', 'GameKey'),
-	('m_gameModeDescription', 'String'),
-	('m_joinAvailabilityFlag', 'Uint32'),
-	('m_matchmakeSystemType', 'Uint8'),
-	('m_joinGameID', 'Uint32'),
-	('m_joinGameMode', 'Uint32'),
-	('m_ownerPrincipalID', 'PID'),
-	('m_joinGroupID', 'Uint32'),
-	('m_applicationArg', 'Buffer')
-)
-reg_struct('NintendoPresence', NintendoPresence_info)
-
-FriendPresence_info = (
-	('unk', 'Uint32'),
-	('nintendo', 'NintendoPresence')
-)
-reg_struct('FriendPresence', FriendPresence_info)
-
-Mii_info = (
-	('unk_1', 'String'),
-	('unk_2', 'Bool'),
-	('unk_3', 'Uint8'),
-	('mii_data', 'Buffer')
-)
-reg_struct('Mii', Mii_info)
-
-
-MiiList_info = (
-	('unk_1', 'String'),
-	('unk_2', 'Bool'),
-	('unk_3', 'Uint8'),
-	('mii_data_list', 'List<Buffer>')
-)
-reg_struct('MiiList', MiiList_info)
-
-Gathering_info = (
-	('m_idMyself', 'Int32'),
-	('m_pidOwner', 'PID'),
-	('m_pidHost', 'PID'),
-	('m_uiMinParticipants', 'Uint16'),
-	('m_uiMaxParticipants', 'Uint16'),
-	('m_uiParticipationPolicy', 'Uint32'),
-	('m_uiPolicyArgument', 'Uint32'),
-	('m_uiFlags', 'Uint32'),
-	('m_uiState', 'Uint32'),
-	('m_strDescription', 'String')
-)
-reg_struct('Gathering', Gathering_info)
-
-MatchmakeSession_info = (
-	('m_Gathering_base', 'Gathering'),
-	('m_GameMode', 'Uint32'),
-	('m_Attribs', 'List<Uint32>'),
-	('m_OpenParticipation', 'Bool'),
-	('m_MatchmakeSystemType', 'Uint32'),
-	('m_ApplicationBuffer', 'Buffer'),
-	('m_ParticipationCount', 'Uint32'),
-#	('m_ProgressScore', 'Uint8'), # Added in NEX 3.5.0
-#	('m_SessionKey', 'Buffer'),
-#	('m_Option0', 'Uint32')
-)
-reg_struct('MatchmakeSession', MatchmakeSession_info)
-
-GatheringStats_info = (
-	('m_pidParticipant', 'Uint32'),
-	('m_uiFlags', 'Uint32'),
-	('m_lstValues', 'List<Float>')
-)
-reg_struct('GatheringStats', GatheringStats_info)
-
-Invitation_info = (
-	('m_idGathering', 'Uint32'),
-	('m_idGuest', 'Uint32'),
-	('m_strMessage', 'String')
-)
-reg_struct('Invitation', Invitation_info)
-
-ParticipantDetails_info = (
-	('m_idParticipant', 'Uint32'),
-	('m_strName', 'String'),
-	('m_strMessage', 'String'),
-	('m_uiParticipants', 'Uint16')
-)
-reg_struct('ParticipantDetails', ParticipantDetails_info)
-
-DeletionEntry_info = (
-	('m_idGathering', 'Uint32'),
-	('m_pid', 'PID'),
-	('m_uiReason', 'Uint32')
-)
-reg_struct('DeletionEntry', DeletionEntry_info)
-
-AccountExtraInfo_info = (
-	('pid', 'Uint32'),
-	('b', 'Uint32'),
-	('c', 'Uint32'),
-	('token', 'String'),
-)
-reg_struct('AccountExtraInfo', AccountExtraInfo_info)
-"""
-
 def lua_build_method(method_prefix, info):
 	func = """function (tree, tvb)
 	local off = 0
@@ -482,7 +315,6 @@ def types_pass(f):
 		if table:
 			if l == '': # End of table
 				if not skip_table and types_header_found:
-					#print("rEG", current_type.name, current_type.fields)
 					fixed = []
 					for f_name, t_name, rename_count in current_type.fields:
 						if rename_count == None:
