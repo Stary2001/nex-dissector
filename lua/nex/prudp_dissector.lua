@@ -64,9 +64,28 @@ function int_from_bytes(bytearr)
 end
 
 local KERB_KEYS = {}
-KERB_KEYS[1863211397] = string.fromhex("a3d8ff2fe8a67a4b1e1837f2065abe0a") -- gen_kerb_key(1863211397, "|+GF-i):/7Z87_:q")
-KERB_KEYS[1847701639] = string.fromhex("75bca4be3f38bf8d638812fa34bc4b9b") -- gen_kerb_key(1847701639, "ORbL78Oo>Y]-^(MF")
-KERB_KEYS[1862483632] = string.fromhex("b238a2ca61f9d880757e22d49ad2c52d") --gen_kerb_key(1862483632, "4i(acJ#OsfDJXr>b")
+
+local basedir = ( USER_DIR or persconffile_path() )
+local update_keyfile = false
+
+for line in io.lines(basedir .. "nex-keys.txt") do
+	local pid, pass = string.match(line, '^(.-):(.+)$')
+	pid = tonumber(pid)
+	if #pass ~= 32 then
+		KERB_KEYS[pid] = gen_kerb_key(pid, pass)
+		update_keyfile = true
+	else
+		KERB_KEYS[pid] = string.fromhex(pass)
+	end
+end
+
+if update_keyfile then
+	local f = io.open(basedir .. "nex-keys.txt", "w")
+	for pid, key in pairs(KERB_KEYS) do
+		f:write(tostring(pid) .. ":" .. string.tohex(key))
+	end
+	update_keyfile = false
+end
 
 local SECURE_KEYS = {}
 local CONNECTIONS = {}
