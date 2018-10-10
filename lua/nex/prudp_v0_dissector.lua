@@ -97,7 +97,7 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 		payload_size = buf(off, 2):le_uint()
 		subtree:add_le(F.size, buf(off, 2))
 		off = off + 2
-	elseif pkt.type == 2 then
+	elseif pkt.type == 1 or pkt.type == 2 then
 		payload_size = buf:len() - off - 1
 	end
 
