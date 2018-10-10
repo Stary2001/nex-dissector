@@ -34,13 +34,14 @@ local update_keyfile = false
 
 for line in io.lines(basedir .. "nex-keys.txt") do
 	local pid, pass = string.match(line, '^(.-):(.+)$')
-	debug("got " .. pid .. " " .. pass)
-	pid = tonumber(pid)
-	if #pass ~= 32 then
-		KERB_KEYS[pid] = gen_kerb_key(pid, pass)
-		update_keyfile = true
-	else
-		KERB_KEYS[pid] = string.fromhex(pass)
+	if pid ~= nil and pass ~= nil then
+		pid = tonumber(pid)
+		if #pass ~= 32 then
+			KERB_KEYS[pid] = gen_kerb_key(pid, pass)
+			update_keyfile = true
+		else
+			KERB_KEYS[pid] = string.fromhex(pass)
+		end
 	end
 end
 
@@ -208,8 +209,11 @@ function nex_proto.dissector(buf, pinfo, tree)
 					hmac = ticket_buff(buffer_len-16, 16)
 
 					kerb_key = KERB_KEYS[pid]
-					debug("Trying to decrypt a ticket!")
-					debug("We have " .. tostring(kerb_key) .. " and " .. tostring(pid)) 
+
+					if kerb_key == nil then
+						error("Kerberos key for PID " .. tostring(pid) .. " not found! Please add it (or the NEX password) to the config file.")
+					end
+
 					ticket = rc4.crypt(rc4.new_ks(kerb_key), ticket:bytes())
 					secure_key = string.fromhex(tostring(ticket(0, 32)))
 
