@@ -1,5 +1,3 @@
-
-
 local string_char = string.char
 local table_concat = table.concat
 
@@ -46,3 +44,16 @@ function int_from_bytes(bytearr)
 	end
 	return out
 end
+
+ports = {
+    [0xa1] = "Server",
+    [0xaf] = "Client"
+}
+
+pkt_types = {
+    [0] = "SYN",
+    [1] = "CONNECT",
+    [2] = "DATA",
+    [3] = "DISCONNECT",
+    [4] = "PING"
+}

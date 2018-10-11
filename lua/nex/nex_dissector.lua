@@ -1,3 +1,7 @@
+require("rc4")
+require("md5")
+require("common")
+
 local nex_proto = Proto("nex", "NEX")
 local prudp_proto
 
@@ -66,10 +70,19 @@ F.payload = ProtoField.bytes("nex.payload", "Payload")
 
 local f_src_v0 = Field.new("prudpv0.src")
 local f_type_v0 = Field.new("prudpv0.type")
-local f_payload_v0 = Field.new("prudpv0.payload")
 local f_ack_v0 = Field.new("prudpv0.ack")
+local f_multi_ack_v0 = Field.new("prudpv0.multi_ack")
 local f_seq_v0 = Field.new("prudpv0.seq")
+local f_payload_v0 = Field.new("prudpv0.payload")
 local f_session_id_v0 = Field.new("prudpv0.session")
+
+local f_src_v1 = Field.new("prudpv1.src")
+local f_type_v1 = Field.new("prudpv1.type")
+local f_ack_v1 = Field.new("prudpv1.ack")
+local f_multi_ack_v1 = Field.new("prudpv1.multi_ack")
+local f_seq_v1 = Field.new("prudpv1.seq")
+local f_payload_v1 = Field.new("prudpv1.payload")
+local f_session_id_v1 = Field.new("prudpv1.session")
 
 function resolve(proto_id, method_id)
 	local proto_name, method_name
@@ -107,17 +120,37 @@ function dissect_resp(tree, tvb, proto_id, method_id)
 end
 
 function nex_proto.dissector(buf, pinfo, tree)
-	Dissector.get("prudpv0"):call(buf, pinfo, tree)
-
-	local pkt_src = f_src_v0()()
-	local pkt_type = f_type_v0()()
-	local pkt_flag_ack = f_ack_v0()()
-	local pkt_seq = f_seq_v0()()
-	local pkt_session_id = f_session_id_v0()()
+	local pkt_src
+	local pkt_type
+	local pkt_flag_ack
+	local pkt_seq
+	local pkt_session_id
 
 	local payload, raw_payload
+	local payload_field_info
 
-	local payload_field_info = f_payload_v0()
+	if buf(0, 2):le_uint() == 0xd0ea then
+		Dissector.get("prudpv1"):call(buf, pinfo, tree)
+		pkt_src = f_src_v1()()
+		pkt_type = f_type_v1()()
+		pkt_flag_ack = f_ack_v1()()
+		pkt_flag_multi_ack = f_multi_ack_v1()()
+		pkt_seq = f_seq_v1()()
+		pkt_session_id = f_session_id_v1()()
+
+		payload_field_info = f_payload_v1()
+	else
+		Dissector.get("prudpv0"):call(buf, pinfo, tree)
+		pkt_src = f_src_v0()()
+		pkt_type = f_type_v0()()
+		pkt_flag_ack = f_ack_v0()()
+		pkt_flag_multi_ack = f_multi_ack_v0()()
+		pkt_seq = f_seq_v0()()
+		pkt_session_id = f_session_id_v0()()
+
+		payload_field_info = f_payload_v0()
+	end
+
 	if payload_field_info then
 		raw_payload = payload_field_info.range
 	end
@@ -161,7 +194,7 @@ function nex_proto.dissector(buf, pinfo, tree)
 		end
 	end
 
-	if pkt_type == 2 and not pkt_flag_ack then
+	if pkt_type == 2 and not pkt_flag_ack and not pkt_flag_multi_ack then
 		if raw_payload then
 			local conn
 			local conn_id
@@ -240,11 +273,12 @@ function nex_proto.dissector(buf, pinfo, tree)
 		end
 	end
 
-	if pkt_type ~= 2 or pkt_flag_ack then
+	if pkt_type ~= 2 or pkt_flag_ack or pkt_flag_multi_ack then
 		return
 	end
 	
 	local subtreeitem = tree:add(nex_proto, buf)
+	debug("hmmmm " .. tostring(payload) .. " " .. tostring(raw_payload))
 	subtreeitem:add(F.raw_payload, payload)
 
 	local pkt_size = payload(0,4):le_uint()

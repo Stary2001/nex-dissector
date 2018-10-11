@@ -1,5 +1,3 @@
-rc4 = require("rc4")
-md5 = require("md5")
 require("common")
 
 local prudp_v0_proto = Proto("prudpv0", "PRUDPv0")
@@ -39,10 +37,10 @@ F.payload = ProtoField.bytes("prudpv0.payload", "Payload")
 F.checksum = ProtoField.uint8("prudpv0.checksum", "Checksum", base.HEX)
 
 function prudp_v0_proto.dissector(buf,pinfo,tree)
-	pinfo.cols.protocol = "PRUDP"
+	pinfo.cols.protocol = "PRUDP v0"
 	-- Parse the packet header.
 
-	local subtree = tree:add(prudp_v0_proto, buf(), "PRUDP")
+	local subtree = tree:add(prudp_v0_proto, buf(), "PRUDP v0")
 	
 	local payload_size = nil
 
@@ -111,13 +109,17 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 
 	if pkt.flags.ack then
 		info = info .. " ACK"
-	elseif pkt.flags.reliable then
+	end
+	if pkt.flags.reliable then
 		info = info .. " RELIABLE"
-	elseif pkt.flags.need_ack then
+	end
+	if pkt.flags.need_ack then
 		info = info .. " NEED_ACK"
-	elseif pkt.flags.has_size then
+	end
+	if pkt.flags.has_size then
 		info = info .. " HAS_SIZE"
-	elseif pkt.flags.multi_ack ~= 0 then
+	end
+	if pkt.flags.multi_ack then
 		info = info .. " MULTI_ACK"
 	end
 	
@@ -127,7 +129,3 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 
 	pinfo.cols.info = info
 end
-
--- load the udp.port table
-udp_table = DissectorTable.get("udp.port")
-udp_table:add(60000, prudp_v0_proto)
