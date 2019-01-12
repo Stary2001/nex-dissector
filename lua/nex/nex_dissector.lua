@@ -1,6 +1,5 @@
-require("rc4")
-require("md5")
-require("common")
+local rc4 = require("rc4")
+local common = require("common")
 
 local nex_proto = Proto("nex", "NEX")
 local prudp_proto

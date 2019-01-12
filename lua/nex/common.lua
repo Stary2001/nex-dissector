@@ -1,3 +1,4 @@
+local md5 = require("md5")
 local string_char = string.char
 local table_concat = table.concat
 

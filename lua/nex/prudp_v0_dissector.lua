@@ -1,5 +1,3 @@
-require("common")
-
 local prudp_v0_proto = Proto("prudpv0", "PRUDPv0")
 
 local ports = {

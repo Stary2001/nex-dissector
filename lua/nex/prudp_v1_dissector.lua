@@ -1,5 +1,3 @@
-require("common")
-
 local prudp_v1_proto = Proto("prudpv1", "PRUDPv1")
 
 local F = prudp_v1_proto.fields
