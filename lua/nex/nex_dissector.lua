@@ -100,20 +100,20 @@ function resolve(proto_id, method_id)
 	return proto_name, method_name
 end
 
-function dissect_req(tree, tvb, proto_id, method_id)
+function dissect_req(conn, tree, tvb, proto_id, method_id)
 	if protos[proto_id] ~= nil then
 		p = protos[proto_id]
 		if p['methods'][method_id] ~= nil and p['methods'][method_id]['request'] ~= nil then
-			p['methods'][method_id]['request'](tree, tvb)
+			p['methods'][method_id]['request'](conn, tree, tvb)
 		end
 	end
 end
 
-function dissect_resp(tree, tvb, proto_id, method_id)
+function dissect_resp(conn, tree, tvb, proto_id, method_id)
 	if protos[proto_id] ~= nil then
 		p = protos[proto_id]
 		if p['methods'][method_id] ~= nil and p['methods'][method_id]['response'] ~= nil then
-			p['methods'][method_id]['response'](tree, tvb)
+			p['methods'][method_id]['response'](conn, tree, tvb)
 		end
 	end
 end
@@ -180,8 +180,8 @@ function nex_proto.dissector(buf, pinfo, tree)
 						debug("Secure key is fucked!")
 					end
 				end
-
-				CONNECTIONS[conn_id] = { [0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = partial_conn['nonsecure_pid'] }
+				debug("We got struct header len", partial_conn['struct_header_len'])
+				CONNECTIONS[conn_id] = { [0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = partial_conn['nonsecure_pid'], ['struct_header_len'] = partial_conn['struct_header_len'] }
 				SECURE_KEYS[conn_id] = secure_key
 				CONNECTIONS[partial_conn_id] = nil
 				SECURE_KEYS[partial_conn_id] = nil
@@ -250,8 +250,20 @@ function nex_proto.dissector(buf, pinfo, tree)
 					secure_key = string.fromhex(tostring(ticket(0, 32)))
 
 					if pkt_method_id == 1 or pkt_method_id == 2 then
-						secure_url_len = nex_data(12 + buffer_len, 2):le_uint()
-						secure_url = nex_data(14 + buffer_len, secure_url_len):string()
+						
+						struct_header_len = 0
+						secure_url_len = nex_data(12 + struct_header_len + buffer_len, 2):le_uint()
+						
+						-- Time for a shitty heuristic!
+						if 14 + secure_url_len > nex_data:len() then
+							struct_header_len = 5
+							secure_url_len = nex_data(12 + struct_header_len + buffer_len, 2):le_uint()
+						end
+						conn['struct_header_len'] = struct_header_len
+
+						secure_url = nex_data(14 + struct_header_len + buffer_len, secure_url_len):string()
+
+
 						addr = string.match(secure_url, "address=([^;]+)")
 						port = string.match(secure_url, "port=([^;]+)")
 						conn['secure_id'] = addr .. "-" .. port
@@ -259,13 +271,13 @@ function nex_proto.dissector(buf, pinfo, tree)
 						-- this packet is server->client, so we use the server ip (from the secure url) first, then the dst ip (client ip)
 						new_conn_id = addr .. "-" .. port .. "-" .. tostring(pinfo.dst)
 						SECURE_KEYS[new_conn_id] = secure_key
-						CONNECTIONS[new_conn_id] = {[0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = pid}
+						CONNECTIONS[new_conn_id] = {[0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = pid, ['struct_header_len'] = conn['struct_header_len']}
 
 						udp_table:add(tonumber(port), Dissector.get("nex"))
 					elseif pkt_method_id == 3 then -- If we request a ticket seperately, use that secure key instead.
 						new_conn_id = conn['secure_id'] .. "-" .. tostring(pinfo.dst)
 						SECURE_KEYS[new_conn_id] = secure_key
-						CONNECTIONS[new_conn_id] = {[0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = pid}
+						CONNECTIONS[new_conn_id] = {[0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = pid, ['struct_header_len'] = conn['struct_header_len']}
 					end
 				end
 			end
@@ -277,7 +289,6 @@ function nex_proto.dissector(buf, pinfo, tree)
 	end
 	
 	local subtreeitem = tree:add(nex_proto, buf)
-	debug("hmmmm " .. tostring(payload) .. " " .. tostring(raw_payload))
 	subtreeitem:add(F.raw_payload, payload)
 
 	local pkt_size = payload(0,4):le_uint()
@@ -302,7 +313,9 @@ function nex_proto.dissector(buf, pinfo, tree)
 		if payload:len() > 0xd then
 			local tvb = payload(0xd)
 			local t = subtreeitem:add(F.payload, tvb)
-			dissect_req(t, tvb, pkt_proto_id, pkt_method_id)
+
+			local conn, conn_id = find_connection(pinfo)
+			dissect_req(conn, t, tvb, pkt_proto_id, pkt_method_id)
 		end
 
 		local proto_name, method_name = resolve(pkt_proto_id, pkt_method_id)
@@ -320,7 +333,8 @@ function nex_proto.dissector(buf, pinfo, tree)
 			if payload:len() > 0xe then
 				local tvb = payload(0xe)
 				local t = subtreeitem:add(F.payload, tvb)
-				dissect_resp(t, tvb, pkt_proto_id, pkt_method_id)
+				local conn, conn_id = find_connection(pinfo)
+				dissect_resp(conn, t, tvb, pkt_proto_id, pkt_method_id)
 			end
 
 			local proto_name, method_name = resolve(pkt_proto_id, pkt_method_id)

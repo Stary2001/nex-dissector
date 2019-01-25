@@ -43,10 +43,10 @@ struct_funcs = {}
 def reg_struct(struct_name, struct_info):
 	proto_fields.append((struct_name, struct_name, 'bytes', struct_name)) 
 	#types[struct_name] = lambda field_name, arg_name, struct_name=struct_name, struct_info=struct_info: do_struct(field_name, arg_name, struct_name, struct_info)
-	types[struct_name] = lambda field_name, arg_name, struct_name=struct_name: f"off = do_{struct_name}(tree, tvb, off, '{field_name}')"
+	types[struct_name] = lambda field_name, arg_name, struct_name=struct_name: f"off = do_{struct_name}(conn, tree, tvb, off, '{field_name}')"
 
 	struct_length = 0
-	func = f"function do_{struct_name}(tree, tvb, off, field_name)\n"
+	func = f"function do_{struct_name}(conn, tree, tvb, off, field_name)\n"
 
 	func += f"""local {struct_name}_container = tree:add(F.{struct_name}, tvb(off, {struct_length}))
 	{struct_name}_container:set_text("{struct_name}")
@@ -62,10 +62,10 @@ def reg_struct(struct_name, struct_info):
 types = {}
 type_funcs = {}
 def reg_type(type_name, func):
-	type_funcs[type_name] = f"function do_{type_name}(tree, tvb, off, field_name)\n" + func(type_name, type_name) + "\nend"
+	type_funcs[type_name] = f"function do_{type_name}(conn, tree, tvb, off, field_name)\n" + func(type_name, type_name) + "\nend"
 	def type_thunk(field_name, arg_name, type_name=type_name, func=func, extract=False):
 		func(field_name, arg_name) # TODO: why?????
-		return f"off, {field_name} = do_{type_name}(tree, tvb, off, '{field_name}')"
+		return f"off, {field_name} = do_{type_name}(conn, tree, tvb, off, '{field_name}')"
 	types[type_name] = type_thunk
 
 def int_field(l, field_name, arg_name, signed=False):
@@ -174,7 +174,7 @@ def do_data(field_name, arg_name, full_type):
 	func += dispatch_type(field_name + "_data_len", arg_name + "_data_len", "Uint32").replace("tree", f"{field_name}_container") + "\n"
 	func += f"""local type_func = 'do_'..{field_name}_type_name
 		if _G[type_func] ~= nil then
-			off = _G[type_func]({field_name}_container, tvb, off, "{field_name}_data")
+			off = _G[type_func](conn, {field_name}_container, tvb, off, "{field_name}_data")
 		else
 			{field_name}_container:add(F.{field_name}_data_bytes, tvb(off, {field_name}_len))
 			off = off + {field_name}_data_len
@@ -222,7 +222,7 @@ Structure_info = (
 reg_struct('Structure', Structure_info)
 
 def lua_build_method(method_prefix, info):
-	func = """function (tree, tvb)
+	func = """function (conn, tree, tvb)
 	local off = 0
 """
 	for i in info:
@@ -285,7 +285,7 @@ def lua_build_proto(header, cmds, method_infos):
 
 struct_infos = {}
 def types_pass(f):
-	global struct_infos
+	global struct_infos, is_types
 	# First pass: get type info
 	table = False
 	skip_table = not is_types
@@ -311,7 +311,6 @@ def types_pass(f):
 						print("Got weird table ", l)
 						skip_table = True
 				continue # Skip the table header..
-
 		if table:
 			if l == '': # End of table
 				if not skip_table and types_header_found:
@@ -356,6 +355,7 @@ def types_pass(f):
 				types_header_found = True
 			elif l.startswith("## ") and types_header_found:
 				current_type = Type(l)
+			
 
 def methods_pass(f):
 	global proto_info
@@ -549,7 +549,16 @@ for type_name in type_funcs:
 	out_file.write(type_funcs[type_name] + "\n")
 
 for struct_name in struct_funcs:
-	out_file.write(struct_funcs[struct_name] + "\n")
+	if struct_name == 'Structure': # WEW
+		out_file.write("""
+			function do_Structure(conn, tree, tvb, off, field_name)
+				local Structure_container = tree:add(F.Structure, tvb(off, 0))
+				Structure_container:set_text("Structure")
+				return off + conn['struct_header_len']
+			end
+		""")
+	else:
+		out_file.write(struct_funcs[struct_name] + "\n")
 
 out_file.write("local info = {\n")
 out_file.write(proto_info)
