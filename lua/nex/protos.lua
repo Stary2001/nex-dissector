@@ -1707,8 +1707,6 @@ F.Authentication_LoginEx_pbufResponse_len = ProtoField.uint32("Authentication_Lo
 F.Authentication_LoginEx_pbufResponse_data = ProtoField.bytes("Authentication_LoginEx_pbufResponse_data", "pbufResponse data (Buffer)")
 F.Authentication_LoginEx_strReturnMsg_len = ProtoField.uint16("Authentication_LoginEx_strReturnMsg_len", "strReturnMsg length (String)")
 F.Authentication_LoginEx_strReturnMsg_data = ProtoField.string("Authentication_LoginEx_strReturnMsg_data", "strReturnMsg data (String)")
-F.Authentication_LoginEx_pSourceKey_len = ProtoField.uint16("Authentication_LoginEx_pSourceKey_len", "pSourceKey length (String)")
-F.Authentication_LoginEx_pSourceKey_data = ProtoField.string("Authentication_LoginEx_pSourceKey_data", "pSourceKey data (String)")
 F.Authentication_RequestTicket_idSource = ProtoField.uint32("Authentication_RequestTicket_idSource", "idSource (uint32)")
 F.Authentication_RequestTicket_idTarget = ProtoField.uint32("Authentication_RequestTicket_idTarget", "idTarget (uint32)")
 F.Authentication_RequestTicket_retval = ProtoField.uint32("Authentication_RequestTicket_retval", "retval (uint32)")
@@ -3611,7 +3609,11 @@ off, RVConnectionData_m_urlRegularProtocols = do_StationURL(conn, RVConnectionDa
 
 	end
 	
-off, RVConnectionData_m_urlSpecialProtocols = do_StationURL(conn, RVConnectionData_container, tvb, off, 'RVConnectionData_m_urlSpecialProtocols')
+	off, RVConnectionData_m_urlSpecialProtocols = do_StationURL(conn, RVConnectionData_container, tvb, off, 'RVConnectionData_m_urlSpecialProtocols')
+	
+	if conn['version'] == 1 then
+		off = off + 8 -- skip date
+	end
 
 return off
 end
@@ -8769,7 +8771,6 @@ off, Authentication_LoginEx_pidPrincipal = do_PID(conn, tree, tvb, off, 'Authent
 off, Authentication_LoginEx_pbufResponse = do_Buffer(conn, tree, tvb, off, 'Authentication_LoginEx_pbufResponse')
 off = do_RVConnectionData(conn, tree, tvb, off, 'Authentication_LoginEx_pConnectionData')
 off, Authentication_LoginEx_strReturnMsg = do_String(conn, tree, tvb, off, 'Authentication_LoginEx_strReturnMsg')
-off, Authentication_LoginEx_pSourceKey = do_String(conn, tree, tvb, off, 'Authentication_LoginEx_pSourceKey')
  end
 			},
 			[3] = {

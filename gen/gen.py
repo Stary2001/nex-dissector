@@ -557,6 +557,30 @@ for struct_name in struct_funcs:
 				return off + conn['struct_header_len']
 			end
 		""")
+	elif struct_name == "RVConnectionData":
+		out_file.write("""function do_RVConnectionData(conn, tree, tvb, off, field_name)
+local RVConnectionData_container = tree:add(F.RVConnectionData, tvb(off, 0))
+	RVConnectionData_container:set_text("RVConnectionData")
+	off = do_Structure(conn, RVConnectionData_container, tvb, off, 'RVConnectionData_Base')
+off, RVConnectionData_m_urlRegularProtocols = do_StationURL(conn, RVConnectionData_container, tvb, off, 'RVConnectionData_m_urlRegularProtocols')
+-- list !! byte
+	local RVConnectionData_m_lstSpecialProtocols_len = tvb(off, 4):le_uint()
+	subRVConnectionData_container = RVConnectionData_container:add_le(F.RVConnectionData_m_lstSpecialProtocols_len, tvb(off,4))
+	off = off + 4
+	for i=1,RVConnectionData_m_lstSpecialProtocols_len do
+	off, RVConnectionData_m_lstSpecialProtocols_item = do_byte(conn, subRVConnectionData_container, tvb, off, 'RVConnectionData_m_lstSpecialProtocols_item')
+
+	end
+	
+	off, RVConnectionData_m_urlSpecialProtocols = do_StationURL(conn, RVConnectionData_container, tvb, off, 'RVConnectionData_m_urlSpecialProtocols')
+	
+	if conn['version'] == 1 then
+		off = off + 8 -- skip date
+	end
+
+return off
+end
+""")
 	else:
 		out_file.write(struct_funcs[struct_name] + "\n")
 

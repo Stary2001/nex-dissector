@@ -128,7 +128,11 @@ function nex_proto.dissector(buf, pinfo, tree)
 	local payload, raw_payload
 	local payload_field_info
 
+	version = 0
+
 	if buf(0, 2):le_uint() == 0xd0ea then
+		version = 1
+
 		Dissector.get("prudpv1"):call(buf, pinfo, tree)
 		pkt_src = f_src_v1()()
 		pkt_type = f_type_v1()()
@@ -181,7 +185,7 @@ function nex_proto.dissector(buf, pinfo, tree)
 					end
 				end
 				debug("We got struct header len", partial_conn['struct_header_len'])
-				CONNECTIONS[conn_id] = { [0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = partial_conn['nonsecure_pid'], ['struct_header_len'] = partial_conn['struct_header_len'] }
+				CONNECTIONS[conn_id] = { [0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = partial_conn['nonsecure_pid'], ['struct_header_len'] = partial_conn['struct_header_len'], ['version'] = partial_conn['version'] }
 				SECURE_KEYS[conn_id] = secure_key
 				CONNECTIONS[partial_conn_id] = nil
 				SECURE_KEYS[partial_conn_id] = nil
@@ -260,6 +264,7 @@ function nex_proto.dissector(buf, pinfo, tree)
 							secure_url_len = nex_data(12 + struct_header_len + buffer_len, 2):le_uint()
 						end
 						conn['struct_header_len'] = struct_header_len
+						conn['version'] = version
 
 						secure_url = nex_data(14 + struct_header_len + buffer_len, secure_url_len):string()
 
@@ -271,13 +276,13 @@ function nex_proto.dissector(buf, pinfo, tree)
 						-- this packet is server->client, so we use the server ip (from the secure url) first, then the dst ip (client ip)
 						new_conn_id = addr .. "-" .. port .. "-" .. tostring(pinfo.dst)
 						SECURE_KEYS[new_conn_id] = secure_key
-						CONNECTIONS[new_conn_id] = {[0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = pid, ['struct_header_len'] = conn['struct_header_len']}
+						CONNECTIONS[new_conn_id] = {[0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = pid, ['struct_header_len'] = conn['struct_header_len'], ['version'] = conn['version']}
 
 						udp_table:add(tonumber(port), Dissector.get("nex"))
 					elseif pkt_method_id == 3 then -- If we request a ticket seperately, use that secure key instead.
 						new_conn_id = conn['secure_id'] .. "-" .. tostring(pinfo.dst)
 						SECURE_KEYS[new_conn_id] = secure_key
-						CONNECTIONS[new_conn_id] = {[0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = pid, ['struct_header_len'] = conn['struct_header_len']}
+						CONNECTIONS[new_conn_id] = {[0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = pid, ['struct_header_len'] = conn['struct_header_len'], ['version'] = conn['version']}
 					end
 				end
 			end
