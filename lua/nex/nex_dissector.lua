@@ -32,7 +32,7 @@ end
 
 local KERB_KEYS = {}
 
-local basedir = ( USER_DIR or persconffile_path() )
+local basedir = ( USER_DIR or persconffile_path() ) .. "/"
 local update_keyfile = false
 
 for line in io.lines(basedir .. "nex-keys.txt") do
