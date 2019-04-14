@@ -8,12 +8,13 @@ You will need to add your NEX PID and your NEX password (for your device) in 'ne
 
 # What does it do
 * Dissection of PRUDP v0 (3DS, WiiU friends)
+* Dissection of PRUDP v1 (Some 3DS games, most Wii U uses)
 * Automatic secure connection decryption if the connections are in the same pcap.
 * Automatic generation of dissector code from wiki, including structure definitions.
 * Data<> handling
 
 # What does it not do
-* Dissection of PRUDP v1 (Some 3DS games, most Wii U uses) or PRUDP-Lite (Switch)
+* Dissection of PRUDP-Lite (Switch)
 * Fragment reassembly.
 * Work reliably.
 
