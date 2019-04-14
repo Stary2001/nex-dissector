@@ -59,7 +59,7 @@ function prudp_v1_proto.dissector(buf,pinfo,tree)
 	pkt.type = bit.band(pkt_op_flags, 0xf)
 	subtree:add_le(F.type, buf(8,2))
 
-	local flags = subtree:add(prudp_v1_proto, buf(), "Flags")
+	local flags = subtree:add(prudp_v1_proto, buf(8,2), "Flags")
 
 	pkt.flags = {}
 	pkt.flags.ack = bit.band(pkt_op_flags, 0x10) ~= 0
@@ -81,8 +81,8 @@ function prudp_v1_proto.dissector(buf,pinfo,tree)
 	subtree:add_le(F.seq, buf(12, 2))
 	subtree:add_le(F.packet_sig, buf(14,16))
 
-	local options = subtree:add(prudp_v1_proto, buf(off, extra_data_length), "Options")
 	local off = 2 + 12 + 16
+	local options = subtree:add(prudp_v1_proto, buf(off, extra_data_length), "Options")
 	local orig = off
 	while off < orig+extra_data_length do
 		local opt_id = buf(off, 1):le_uint()

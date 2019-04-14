@@ -57,7 +57,7 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 	pkt.type = bit.band(pkt_op_flags, 0xf)
 	subtree:add_le(F.type, buf(2,2))
 
-	local flags = subtree:add(prudp_v0_proto, buf(), "Flags")
+	local flags = subtree:add(prudp_v0_proto, buf(2,2), "Flags")
 
 	pkt.flags = {}
 	pkt.flags.ack = bit.band(pkt_op_flags, 0x10) ~= 0
