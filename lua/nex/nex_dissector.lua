@@ -357,4 +357,7 @@ function nex_proto.dissector(buf, pinfo, tree)
 end
 
 udp_table = DissectorTable.get("udp.port")
+-- prudpv0
 udp_table:add(60000, nex_proto)
+-- prudpv1
+udp_table:add(59900, nex_proto)
