@@ -181,20 +181,26 @@ function nex_proto.dissector(buf, pinfo, tree)
 					local pid = int_from_bytes(check_decrypted(0,4))
 
 					if pid ~= partial_conn['nonsecure_pid'] then
-						debug("Secure key is fucked!")
+						print("Secure key is fucked!")
 					end
 				end
-				debug("We got struct header len", partial_conn['struct_header_len'])
+				print("We got struct header len", partial_conn['struct_header_len'])
 				CONNECTIONS[conn_id] = { [0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = partial_conn['nonsecure_pid'], ['struct_header_len'] = partial_conn['struct_header_len'], ['version'] = partial_conn['version'] }
 				SECURE_KEYS[conn_id] = secure_key
 				CONNECTIONS[partial_conn_id] = nil
 				SECURE_KEYS[partial_conn_id] = nil
 			else
-				debug("Secure connection CONNECT without payload?")
+				print("Secure connection CONNECT without payload?")
 			end
 		else
 			set_connection(pinfo, {[0xa1]=rc4.new_ks("CD&ML"), [0xaf]=rc4.new_ks("CD&ML")})
 		end
+	end
+	if pkt_type == 1 and pkt_flag_ack and pkt_src ~= 0xa1 then
+		-- This should be server->client connection ack, but with a mismatched pkt_src. Fix up the keys
+		conn, conn_id = find_connection(pinfo)
+		conn[pkt_src] = conn[0xa1]
+		print("Mismatched server pkt_src " .. pkt_src .. ", correcting key...")
 	end
 
 	if pkt_type == 2 and not pkt_flag_ack and not pkt_flag_multi_ack then
