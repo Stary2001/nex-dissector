@@ -186,8 +186,8 @@ function nex_proto.dissector(buf, pinfo, tree)
 				end
 				print("We got struct header len", partial_conn['struct_header_len'])
 				CONNECTIONS[conn_id] = {
-					[PORT_SERVER]=rc4.new_ks(secure_key),
-					[PORT_CLIENT]=rc4.new_ks(secure_key),
+					[PORT_SERVER] = rc4.new_ks(secure_key),
+					[PORT_CLIENT] = rc4.new_ks(secure_key),
 					['nonsecure_pid'] = partial_conn['nonsecure_pid'],
 					['struct_header_len'] = partial_conn['struct_header_len'],
 					['version'] = partial_conn['version']
@@ -199,7 +199,10 @@ function nex_proto.dissector(buf, pinfo, tree)
 				print("Secure connection CONNECT without payload?")
 			end
 		else
-			set_connection(pinfo, {[PORT_SERVER]=rc4.new_ks("CD&ML"), [PORT_CLIENT]=rc4.new_ks("CD&ML")})
+			set_connection(pinfo, {
+				[PORT_SERVER] = rc4.new_ks("CD&ML"),
+				[PORT_CLIENT] = rc4.new_ks("CD&ML")
+			})
 		end
 	end
 	if pkt_type == TYPE_CONNECT and pkt_flag_ack and pkt_src ~= PORT_SERVER then
@@ -266,10 +269,10 @@ function nex_proto.dissector(buf, pinfo, tree)
 					secure_key = string.fromhex(tostring(ticket(0, 32)))
 
 					if pkt_method_id == 1 or pkt_method_id == 2 then
-						
+
 						struct_header_len = 0
 						secure_url_len = nex_data(12 + struct_header_len + buffer_len, 2):le_uint()
-						
+
 						-- Time for a shitty heuristic!
 						if 14 + secure_url_len > nex_data:len() then
 							struct_header_len = 5
@@ -289,8 +292,8 @@ function nex_proto.dissector(buf, pinfo, tree)
 						new_conn_id = addr .. "-" .. port .. "-" .. tostring(pinfo.dst)
 						SECURE_KEYS[new_conn_id] = secure_key
 						CONNECTIONS[new_conn_id] = {
-							[PORT_SERVER]=rc4.new_ks(secure_key),
-							[PORT_CLIENT]=rc4.new_ks(secure_key),
+							[PORT_SERVER] = rc4.new_ks(secure_key),
+							[PORT_CLIENT] = rc4.new_ks(secure_key),
 							['nonsecure_pid'] = pid,
 							['struct_header_len'] = conn['struct_header_len'],
 							['version'] = conn['version']
@@ -301,8 +304,8 @@ function nex_proto.dissector(buf, pinfo, tree)
 						new_conn_id = conn['secure_id'] .. "-" .. tostring(pinfo.dst)
 						SECURE_KEYS[new_conn_id] = secure_key
 						CONNECTIONS[new_conn_id] = {
-							[PORT_SERVER]=rc4.new_ks(secure_key),
-							[PORT_CLIENT]=rc4.new_ks(secure_key),
+							[PORT_SERVER] = rc4.new_ks(secure_key),
+							[PORT_CLIENT] = rc4.new_ks(secure_key),
 							['nonsecure_pid'] = pid,
 							['struct_header_len'] = conn['struct_header_len'],
 							['version'] = conn['version']
@@ -316,13 +319,13 @@ function nex_proto.dissector(buf, pinfo, tree)
 	if pkt_type ~= TYPE_DATA or pkt_flag_ack or pkt_flag_multi_ack then
 		return
 	end
-	
+
 	local subtreeitem = tree:add(nex_proto, buf)
 	subtreeitem:add(F.raw_payload, payload)
 
 	local pkt_size = payload(0,4):le_uint()
 	subtreeitem:add_le(F.size, payload(0,4))
-	
+
 	local pkt_proto_id = payload(4,1):le_uint()
 	subtreeitem:add_le(F.proto, payload(4,1))
 
@@ -338,7 +341,7 @@ function nex_proto.dissector(buf, pinfo, tree)
 
 		local pkt_method_id = payload(9,4):le_uint()
 		subtreeitem:add_le(F.method_id, payload(9,4))
-		
+
 		if payload:len() > 0xd then
 			local tvb = payload(0xd)
 			local t = subtreeitem:add(F.payload, tvb)

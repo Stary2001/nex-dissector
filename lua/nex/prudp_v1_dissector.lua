@@ -36,7 +36,7 @@ function prudp_v1_proto.dissector(buf,pinfo,tree)
 	-- Parse the packet header.
 
 	local subtree = tree:add(prudp_v1_proto, buf(), "PRUDP v1")
-	
+
 	local pkt = {}
 
 	subtree:add(F.magic, buf(0,2))
@@ -53,7 +53,7 @@ function prudp_v1_proto.dissector(buf,pinfo,tree)
 
 	pkt.dst = buf(7,1):le_uint()
 	subtree:add(F.dst, buf(7,1))
-	
+
 	local pkt_op_flags = buf(8,2):le_uint()
 
 	pkt.type = bit.band(pkt_op_flags, 0xf)
@@ -118,7 +118,7 @@ function prudp_v1_proto.dissector(buf,pinfo,tree)
 	if pkt.flags.multi_ack then
 		info = info .. " MULTI_ACK"
 	end
-	
+
 	if payload_size ~= nil and payload_size ~= 0 then
 		info = info .. " " .. tostring(payload_size) .. " bytes data"
 	end
