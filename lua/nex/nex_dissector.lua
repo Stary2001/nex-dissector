@@ -158,7 +158,7 @@ function nex_proto.dissector(buf, pinfo, tree)
 		raw_payload = payload_field_info.range
 	end
 
-	if pkt_type == 1 and not pkt_flag_ack then
+	if pkt_type == TYPE_CONNECT and not pkt_flag_ack then
 		-- This should be client->server. We knew the servers's IP and port, as well as the client's IP.
 		local partial_conn_id = tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port) .. "-" .. tostring(pinfo.src)
 		local partial_conn = CONNECTIONS[partial_conn_id]
@@ -185,7 +185,13 @@ function nex_proto.dissector(buf, pinfo, tree)
 					end
 				end
 				print("We got struct header len", partial_conn['struct_header_len'])
-				CONNECTIONS[conn_id] = { [0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = partial_conn['nonsecure_pid'], ['struct_header_len'] = partial_conn['struct_header_len'], ['version'] = partial_conn['version'] }
+				CONNECTIONS[conn_id] = {
+					[PORT_SERVER]=rc4.new_ks(secure_key),
+					[PORT_CLIENT]=rc4.new_ks(secure_key),
+					['nonsecure_pid'] = partial_conn['nonsecure_pid'],
+					['struct_header_len'] = partial_conn['struct_header_len'],
+					['version'] = partial_conn['version']
+				}
 				SECURE_KEYS[conn_id] = secure_key
 				CONNECTIONS[partial_conn_id] = nil
 				SECURE_KEYS[partial_conn_id] = nil
@@ -193,17 +199,17 @@ function nex_proto.dissector(buf, pinfo, tree)
 				print("Secure connection CONNECT without payload?")
 			end
 		else
-			set_connection(pinfo, {[0xa1]=rc4.new_ks("CD&ML"), [0xaf]=rc4.new_ks("CD&ML")})
+			set_connection(pinfo, {[PORT_SERVER]=rc4.new_ks("CD&ML"), [PORT_CLIENT]=rc4.new_ks("CD&ML")})
 		end
 	end
-	if pkt_type == 1 and pkt_flag_ack and pkt_src ~= 0xa1 then
+	if pkt_type == TYPE_CONNECT and pkt_flag_ack and pkt_src ~= PORT_SERVER then
 		-- This should be server->client connection ack, but with a mismatched pkt_src. Fix up the keys
 		conn, conn_id = find_connection(pinfo)
-		conn[pkt_src] = conn[0xa1]
+		conn[pkt_src] = conn[PORT_SERVER]
 		print("Mismatched server pkt_src " .. pkt_src .. ", correcting key...")
 	end
 
-	if pkt_type == 2 and not pkt_flag_ack and not pkt_flag_multi_ack then
+	if pkt_type == TYPE_DATA and not pkt_flag_ack and not pkt_flag_multi_ack then
 		if raw_payload then
 			local conn
 			local conn_id
@@ -282,20 +288,32 @@ function nex_proto.dissector(buf, pinfo, tree)
 						-- this packet is server->client, so we use the server ip (from the secure url) first, then the dst ip (client ip)
 						new_conn_id = addr .. "-" .. port .. "-" .. tostring(pinfo.dst)
 						SECURE_KEYS[new_conn_id] = secure_key
-						CONNECTIONS[new_conn_id] = {[0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = pid, ['struct_header_len'] = conn['struct_header_len'], ['version'] = conn['version']}
+						CONNECTIONS[new_conn_id] = {
+							[PORT_SERVER]=rc4.new_ks(secure_key),
+							[PORT_CLIENT]=rc4.new_ks(secure_key),
+							['nonsecure_pid'] = pid,
+							['struct_header_len'] = conn['struct_header_len'],
+							['version'] = conn['version']
+						}
 
 						udp_table:add(tonumber(port), Dissector.get("nex"))
 					elseif pkt_method_id == 3 then -- If we request a ticket seperately, use that secure key instead.
 						new_conn_id = conn['secure_id'] .. "-" .. tostring(pinfo.dst)
 						SECURE_KEYS[new_conn_id] = secure_key
-						CONNECTIONS[new_conn_id] = {[0xa1]=rc4.new_ks(secure_key), [0xaf]=rc4.new_ks(secure_key), ['nonsecure_pid'] = pid, ['struct_header_len'] = conn['struct_header_len'], ['version'] = conn['version']}
+						CONNECTIONS[new_conn_id] = {
+							[PORT_SERVER]=rc4.new_ks(secure_key),
+							[PORT_CLIENT]=rc4.new_ks(secure_key),
+							['nonsecure_pid'] = pid,
+							['struct_header_len'] = conn['struct_header_len'],
+							['version'] = conn['version']
+						}
 					end
 				end
 			end
 		end
 	end
 
-	if pkt_type ~= 2 or pkt_flag_ack or pkt_flag_multi_ack then
+	if pkt_type ~= TYPE_DATA or pkt_flag_ack or pkt_flag_multi_ack then
 		return
 	end
 	

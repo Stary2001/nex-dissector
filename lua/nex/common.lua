@@ -46,15 +46,18 @@ function int_from_bytes(bytearr)
 	return out
 end
 
+PORT_SERVER, PORT_CLIENT = 0xa1, 0xaf
+TYPE_SYN, TYPE_CONNECT, TYPE_DATA, TYPE_DISCONNECT, TYPE_PING = 0, 1, 2, 3, 4
+
 ports = {
-    [0xa1] = "Server",
-    [0xaf] = "Client"
+    [PORT_SERVER] = "Server",
+    [PORT_CLIENT] = "Client"
 }
 
 pkt_types = {
-    [0] = "SYN",
-    [1] = "CONNECT",
-    [2] = "DATA",
-    [3] = "DISCONNECT",
-    [4] = "PING"
+    [TYPE_SYN] = "SYN",
+    [TYPE_CONNECT] = "CONNECT",
+    [TYPE_DATA] = "DATA",
+    [TYPE_DISCONNECT] = "DISCONNECT",
+    [TYPE_PING] = "PING"
 }

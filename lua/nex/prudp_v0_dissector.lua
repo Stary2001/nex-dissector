@@ -2,19 +2,6 @@ require("common")
 
 local prudp_v0_proto = Proto("prudpv0", "PRUDPv0")
 
-local ports = {
-	[0xa1] = "Server",
-	[0xaf] = "Client"
-}
-
-local pkt_types = {
-	[0] = "SYN",
-	[1] = "CONNECT",
-	[2] = "DATA",
-	[3] = "DISCONNECT",
-	[4] = "PING"
-}
-
 local F = prudp_v0_proto.fields
 F.src = ProtoField.uint8("prudpv0.src", "Source", base.HEX, ports)
 F.dst = ProtoField.uint8("prudpv0.dst", "Destination", base.HEX, ports)
