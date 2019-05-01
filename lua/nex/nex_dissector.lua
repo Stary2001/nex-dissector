@@ -20,14 +20,12 @@ function find_connection(pinfo)
 end
 
 function set_connection(pinfo, t)
-	a = tostring(pinfo.src) .. "-" .. tostring(pinfo.src_port) .. "-" .. tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port)
-	b = tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port) .. "-" .. tostring(pinfo.src) .. "-" .. tostring(pinfo.src_port)
-	--[[if CONNECTIONS[a] ~= nil or CONNECTIONS[b] ~= nil then
-		return
-	end]]
 	-- Complete connections with both src+dst port infos.
 	a = tostring(pinfo.src) .. "-" .. tostring(pinfo.src_port) .. "-" .. tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port)
-	CONNECTIONS[a] = t
+	-- Prevent duplicate connection packets from messing things up
+	if CONNECTIONS[a] == nil then
+		CONNECTIONS[a] = t
+	end
 end
 
 local KERB_KEYS = {}
@@ -74,6 +72,7 @@ local f_multi_ack_v0 = Field.new("prudpv0.multi_ack")
 local f_seq_v0 = Field.new("prudpv0.seq")
 local f_payload_v0 = Field.new("prudpv0.payload")
 local f_session_id_v0 = Field.new("prudpv0.session")
+local f_packet_sig_v0 = Field.new("prudpv0.packet_sig")
 
 local f_src_v1 = Field.new("prudpv1.src")
 local f_type_v1 = Field.new("prudpv1.type")
@@ -82,6 +81,7 @@ local f_multi_ack_v1 = Field.new("prudpv1.multi_ack")
 local f_seq_v1 = Field.new("prudpv1.seq")
 local f_payload_v1 = Field.new("prudpv1.payload")
 local f_session_id_v1 = Field.new("prudpv1.session")
+local f_packet_sig_v1 = Field.new("prudpv1.packet_sig")
 
 function resolve(proto_id, method_id)
 	local proto_name, method_name
@@ -140,6 +140,7 @@ function nex_proto.dissector(buf, pinfo, tree)
 		pkt_flag_multi_ack = f_multi_ack_v1()()
 		pkt_seq = f_seq_v1()()
 		pkt_session_id = f_session_id_v1()()
+		pkt_signature = f_packet_sig_v1()()
 
 		payload_field_info = f_payload_v1()
 	else
@@ -150,6 +151,7 @@ function nex_proto.dissector(buf, pinfo, tree)
 		pkt_flag_multi_ack = f_multi_ack_v0()()
 		pkt_seq = f_seq_v0()()
 		pkt_session_id = f_session_id_v0()()
+		pkt_signature = f_packet_sig_v0()()
 
 		payload_field_info = f_payload_v0()
 	end
