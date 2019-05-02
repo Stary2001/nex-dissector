@@ -1,5 +1,7 @@
 require("common")
 
+-- See: https://github.com/Kinnay/NintendoClients/wiki/PRUDP-Protocol
+
 local prudp_v1_proto = Proto("prudpv1", "PRUDPv1")
 
 local F = prudp_v1_proto.fields
@@ -21,15 +23,23 @@ F.flag_has_size = ProtoField.bool("prudpv1.has_size", "Has size", base.HEX, nil,
 F.flag_multi_ack = ProtoField.bool("prudpv1.multi_ack", "Multi ack", base.HEX, nil, 0x2000)
 
 F.session_id = ProtoField.uint8("prudpv1.session", "Session", base.HEX)
-F.multi_ack_version = ProtoField.uint8("prudpv1.multi_ack_version", "Session", base.HEX)
+F.multi_ack_version = ProtoField.uint8("prudpv1.multi_ack_version", "Multi ack version", base.HEX)
 F.seq = ProtoField.uint16("prudpv1.seq", "Sequence number", base.HEX)
 
 F.payload = ProtoField.bytes("prudpv1.payload", "Payload")
+F.defragmented_payload = ProtoField.bytes("prudpv1.defragmented_payload", "Defragmented payload")
 
-F.option_id = ProtoField.uint8("prudpv1.option_id", "Option ID", base.HEX)
-F.option_size = ProtoField.uint8("prudpv1.option_size", "Option Size", base.HEX)
---F.option_uint8 = ProtoField.uint8("prudpv1.option_int", "Int option", base.HEX)
-F.option_bytes = ProtoField.bytes("prudpv1.option_bytes", "Bytes option")
+F.option_id = ProtoField.uint8("prudpv1.option_id", "Option id", base.HEX)
+F.option_size = ProtoField.uint8("prudpv1.option_size", "Option size", base.HEX)
+F.option_bytes = ProtoField.bytes("prudpv1.option_bytes", "Option bytes")
+F.supported_functions = ProtoField.bytes("prudpv1.supported_functions", "Supported functions")
+F.connection_signature = ProtoField.bytes("prudpv1.connection_signature", "Connection signature")
+F.fragment = ProtoField.uint8("prudpv1.fragment", "Fragment")
+
+local fragments_v1 = {}
+local sequence_stream = {}
+local first_sequence = {}
+local deferred_fragments = {}
 
 function prudp_v1_proto.dissector(buf,pinfo,tree)
 	pinfo.cols.protocol = "PRUDP v1"
@@ -75,6 +85,7 @@ function prudp_v1_proto.dissector(buf,pinfo,tree)
 
 	pkt.session = buf(10, 1):le_uint()
 	subtree:add_le(F.session_id, buf(10, 1))
+	subtree:add_le(F.multi_ack_version, buf(11, 1))
 	pkt.multi_ack_version = buf(11, 1):le_uint()
 
 	pkt.seq = buf(12,2):le_uint()
@@ -82,27 +93,178 @@ function prudp_v1_proto.dissector(buf,pinfo,tree)
 	subtree:add_le(F.packet_sig, buf(14,16))
 
 	local off = 2 + 12 + 16
-	local options = subtree:add(prudp_v1_proto, buf(off, extra_data_length), "Options")
-	local orig = off
-	while off < orig+extra_data_length do
-		local opt_id = buf(off, 1):le_uint()
-		local opt_size = buf(off+1, 1):le_uint()
+	if extra_data_length > 0 then
+		local options = subtree:add(prudp_v1_proto, buf(off, extra_data_length), "Options")
+		local orig = off
+		while off < orig+extra_data_length do
+			local opt_id = buf(off, 1):le_uint()
+			local opt_size = buf(off+1, 1):le_uint()
 
-		local opt = options:add(prudp_v1_proto, buf(off, opt_size+2)):set_text("Option")
-		opt:add(F.option_id, buf(off, 1))
-		opt:add(F.option_size, buf(off+1, 1))
-		opt:add(F.option_bytes, buf(off + 2, opt_size))
+			local opt = options:add(prudp_v1_proto, buf(off, opt_size+2)):set_text("Option")
+			opt:add(F.option_id, buf(off, 1))
+			opt:add(F.option_size, buf(off+1, 1))
 
-		off = off + 2 + opt_size
+			local option_bytes = buf(off + 2, opt_size)
+
+			if opt_id == 0 then
+				opt:add(F.supported_functions, option_bytes)
+			elseif opt_id == 1 then
+				opt:add(F.connection_signature, option_bytes)
+			elseif opt_id == 2 then
+				pkt.fragment = option_bytes:le_uint()
+				opt:add(F.fragment, option_bytes)
+			else
+				opt:add(F.option_bytes, option_bytes)
+			end
+
+			off = off + 2 + opt_size
+		end
 	end
 
 	if payload_size and payload_size ~= 0 then
-		subtree:add(F.payload, buf:range(off, payload_size))
-		off = off + payload_size
+		local payload_range = buf:range(off, payload_size)
+		subtree:add(F.payload, payload_range)
+
+		if pkt.type == TYPE_DATA then
+			local base_id = tostring(pinfo.src) .. "-" .. tostring(pinfo.src_port) .. "-" .. tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port)
+			if first_sequence[base_id] == nil then
+				first_sequence[base_id] = pkt.seq
+			end
+			local function make_sequence_id(seq)
+				return base_id .. "+" .. tostring(pkt.src) .. "-" .. tostring(pkt.dst) .. "-" .. tostring(pkt.session) .. "-" .. tostring(seq)
+			end
+			local payload = payload_range:bytes()
+			local sequence_id = make_sequence_id(pkt.seq)
+			sequence_stream[sequence_id] = {
+				['payload'] = payload
+			}
+			if pkt.fragment ~= nil then
+				if fragments_v1[sequence_id] == nil then
+					fragments_v1[sequence_id] = {
+						['fragment'] = pkt.fragment,
+						['payload'] = payload
+					}
+				end
+
+				local defragmented = fragments_v1[sequence_id]['defragmented']
+
+				if defragmented == nil then
+					defragmented = {}
+					if pkt.fragment == 0 then
+						-- look back in the sequence stream for which packets we are missing (max 50)
+						-- TODO: try to do some heuristic here, to see if we likely have to restore or not
+						-- this can be based on if a higher fragment id was seen in the past for this stream
+						missing = {}
+						for i = pkt.seq - 1, math.max(pkt.seq - 50, first_sequence[base_id]), -1 do
+							local id = make_sequence_id(i)
+							if sequence_stream[id] == nil then
+								missing[id] = i
+								print("Missing packet " .. id .. " in stream, deferrring fragment restoration")
+							end
+						end
+
+						for id, _ in pairs(missing) do
+							deferred_fragments[id] = {
+								['missing'] = missing,
+								['sequence_id'] = pkt.seq
+							}
+						end
+
+						if next(missing) == nil then -- nothing missing, restore the fragments
+							local defragmented_payload = nil
+							local prev_fragment = fragments_v1[make_sequence_id(pkt.seq - 1)]
+							if prev_fragment ~= nil and prev_fragment['fragment'] > pkt.fragment then
+								print("Restoring " .. prev_fragment['fragment'] .. " fragments")
+								for i = pkt.seq, first_sequence[base_id] - 1, -1 do
+									local fragment = fragments_v1[make_sequence_id(i)]
+									if fragment == nil then
+										error("Cannot find fragment " .. i .. " in the past for packet " .. sequence_id)
+										break
+									end
+									local fragment_payload = fragment['payload']
+									if defragmented_payload == nil then
+										defragmented_payload = fragment_payload
+									else
+										defragmented_payload = fragment_payload .. defragmented_payload
+									end
+
+									if fragment['fragment'] == 1 then
+										break
+									end
+								end
+								defragmented['payload'] = defragmented_payload
+								defragmented['size'] = defragmented_payload:len()
+								defragmented['fragment'] = pkt.fragment
+							else
+								-- no additional fragments detected
+								defragmented['payload'] = payload
+								defragmented['size'] = nil
+								-- no need to highlight the packet as fragmented
+								defragmented['fragment'] = nil
+							end
+						end
+					else -- missing fragments, attempt to defer defragmentation until a later stage
+						local deferred = deferred_fragments[sequence_id]
+						if deferred ~= nil then
+							print("Found missing packet " .. sequence_id .. " (fragment: " .. pkt.fragment .. ")")
+							local missing = deferred['missing']
+							for id, _ in pairs(missing) do
+								if id == sequence_id then
+									missing[id] = nil
+								end
+							end
+							if next(missing) == nil then
+								local deferred_sequence_id = deferred['sequence_id']
+								print("Found all missing packets, defragmenting from " .. make_sequence_id(deferred_sequence_id))
+
+								local defragmented_payload = nil
+								for i = deferred_sequence_id, first_sequence[base_id] - 1, -1 do
+									local fragment = fragments_v1[make_sequence_id(i)]
+									if fragment == nil then
+										error("Cannot find fragment " .. i .. " in the past for packet " .. deferred_sequence_id)
+										break
+									end
+									local fragment_payload = fragment['payload']
+									if defragmented_payload == nil then
+										defragmented_payload = fragment_payload
+									else
+										defragmented_payload = fragment_payload .. defragmented_payload
+									end
+
+									if fragment['fragment'] == 1 then
+										break
+									end
+								end
+
+								defragmented['payload'] = defragmented_payload
+								defragmented['size'] = defragmented_payload:len()
+								defragmented['fragment'] = pkt.fragment
+							end
+						end
+					end
+					-- save the result of defragmentation (whether successful or not) to the global state in case packets are dissected multiple times (in the GUI)
+					fragments_v1[sequence_id]['defragmented'] = defragmented
+				end
+
+				-- dump defragmentation results
+				if defragmented['payload'] ~= nil then
+					subtree:add(F.defragmented_payload, defragmented['payload']:tvb("Defragmented payload"):range())
+				end
+				pkt.defragmented_size = defragmented['size']
+				pkt.fragment = defragmented['fragment']
+
+			end
+		end
 	end
 
 	local info = pkt_types[pkt.type]
 
+	if pkt.fragment ~= nil then
+		info = info .. " FRAGMENT " .. tostring(pkt.fragment)
+	end
+	if pkt.session ~= nil then
+		info = info .. " SESSION " .. string.format("0x%02x", pkt.session)
+	end
 	if pkt.flags.ack then
 		info = info .. " ACK"
 	end
@@ -120,8 +282,15 @@ function prudp_v1_proto.dissector(buf,pinfo,tree)
 	end
 
 	if payload_size ~= nil and payload_size ~= 0 then
-		info = info .. " " .. tostring(payload_size) .. " bytes data"
+		info = info .. " " .. tostring(payload_size)
+		if pkt.defragmented_size ~= nil then
+			info = info .. " DEFRAGMENTED_SIZE " .. tostring(pkt.defragmented_size)
+		end
 	end
 
 	pinfo.cols.info = info
 end
+
+--udp_table = DissectorTable.get("udp.port")
+--udp_table:add(59900, prudp_v1_proto)
+--udp_table:add(59911, prudp_v1_proto)
