@@ -1,6 +1,8 @@
 local rc4 = require("rc4")
 local common = require("common")
 
+-- See: https://github.com/Kinnay/NintendoClients/wiki/RMC-Protocol
+
 local nex_proto = Proto("nex", "NEX")
 local prudp_proto
 
@@ -80,6 +82,7 @@ local f_ack_v1 = Field.new("prudpv1.ack")
 local f_multi_ack_v1 = Field.new("prudpv1.multi_ack")
 local f_seq_v1 = Field.new("prudpv1.seq")
 local f_payload_v1 = Field.new("prudpv1.payload")
+local f_defragmented_payload_v1 = Field.new("prudpv1.defragmented_payload")
 local f_session_id_v1 = Field.new("prudpv1.session")
 local f_packet_sig_v1 = Field.new("prudpv1.packet_sig")
 
@@ -141,8 +144,11 @@ function nex_proto.dissector(buf, pinfo, tree)
 		pkt_seq = f_seq_v1()()
 		pkt_session_id = f_session_id_v1()()
 		pkt_signature = f_packet_sig_v1()()
-
-		payload_field_info = f_payload_v1()
+		if pkt_type == TYPE_DATA then
+			payload_field_info = f_defragmented_payload_v1()
+		else
+			payload_field_info = f_payload_v1()
+		end
 	else
 		Dissector.get("prudpv0"):call(buf, pinfo, tree)
 		pkt_src = f_src_v0()()
@@ -152,7 +158,6 @@ function nex_proto.dissector(buf, pinfo, tree)
 		pkt_seq = f_seq_v0()()
 		pkt_session_id = f_session_id_v0()()
 		pkt_signature = f_packet_sig_v0()()
-
 		payload_field_info = f_payload_v0()
 	end
 
@@ -202,9 +207,9 @@ function nex_proto.dissector(buf, pinfo, tree)
 			end
 		else
 			set_connection(pinfo, {
-				[PORT_SERVER] = rc4.new_ks("CD&ML"),
-				[PORT_CLIENT] = rc4.new_ks("CD&ML")
-			})
+					[PORT_SERVER] = rc4.new_ks("CD&ML"),
+					[PORT_CLIENT] = rc4.new_ks("CD&ML")
+				})
 		end
 	end
 	if pkt_type == TYPE_CONNECT and pkt_flag_ack and pkt_src ~= PORT_SERVER then
