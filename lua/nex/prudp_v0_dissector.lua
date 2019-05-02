@@ -1,5 +1,7 @@
 require("common")
 
+-- See: https://github.com/Kinnay/NintendoClients/wiki/PRUDP-Protocol
+
 local prudp_v0_proto = Proto("prudpv0", "PRUDPv0")
 
 local F = prudp_v0_proto.fields
@@ -12,12 +14,12 @@ F.flag_need_ack = ProtoField.bool("prudpv0.need_ack", "Need ack", base.HEX, nil,
 F.flag_has_size = ProtoField.bool("prudpv0.has_size", "Has size", base.HEX, nil, 0x80)
 F.flag_multi_ack = ProtoField.bool("prudpv0.multi_ack", "Multi ack", base.HEX, nil, 0x2000)
 
-F.session_id = ProtoField.uint8("prudpv0.session", "Session", base.HEX)
+F.session = ProtoField.uint8("prudpv0.session", "Session", base.HEX)
 F.packet_sig = ProtoField.uint32("prudpv0.packet_sig", "Packet signature", base.HEX)
 F.seq = ProtoField.uint16("prudpv0.seq", "Sequence number", base.HEX)
 
 F.conn_sig = ProtoField.uint32("prudpv0.conn_sig", "Connection signature", base.HEX)
-F.frag = ProtoField.uint8("prudpv0.frag", "Fragment", base.HEX)
+F.fragment = ProtoField.uint8("prudpv0.fragment", "Fragment", base.HEX)
 F.size = ProtoField.uint16("prudpv0.size", "Packet size", base.HEX)
 
 F.payload = ProtoField.bytes("prudpv0.payload", "Payload")
@@ -28,8 +30,6 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 	-- Parse the packet header.
 
 	local subtree = tree:add(prudp_v0_proto, buf(), "PRUDP v0")
-
-	local payload_size = nil
 
 	local pkt = {}
 
@@ -58,8 +58,8 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 	pkt.flags.multi_ack = bit.band(pkt_op_flags, 0x2000) ~= 0
 	flags:add_le(F.flag_multi_ack, buf(2,2))
 
-	pkt.session_id = buf(4,1):le_uint()
-	subtree:add(F.session_id, buf(4,1))
+	pkt.session = buf(4,1):le_uint()
+	subtree:add(F.session, buf(4,1))
 	subtree:add_le(F.packet_sig, buf(5,4))
 
 	pkt.seq = buf(9,2):le_uint()
@@ -73,7 +73,9 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 		subtree:add_le(F.conn_sig, buf(11, 4))
 		off = off + 4
 	elseif pkt.type == 2 then -- DATA packets have a fragment.
-		subtree:add_le(F.frag, buf(11, 1))
+		local fragment_range = buf(11, 1)
+		pkt.fragment = fragment_range:le_uint()
+		subtree:add_le(F.fragment, fragment_range)
 		off = off + 1
 	end
 
@@ -94,6 +96,12 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 	local info = pkt_types[pkt.type]
 	subtree:add(F.checksum, buf(off, 1))
 
+	if pkt.fragment ~= nil then
+		info = info .. " FRAGMENT " .. tostring(pkt.fragment)
+	end
+	if pkt.session ~= nil then
+		info = info .. " SESSION " .. string.format("0x%02x", pkt.session)
+	end
 	if pkt.flags.ack then
 		info = info .. " ACK"
 	end
@@ -116,3 +124,7 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 
 	pinfo.cols.info = info
 end
+
+--udp_table = DissectorTable.get("udp.port")
+--udp_table:add(60000, prudp_v0_proto)
+--udp_table:add(60111, prudp_v0_proto)
