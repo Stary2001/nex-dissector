@@ -327,6 +327,10 @@ function nex_proto.dissector(buf, pinfo, tree)
 		return
 	end
 
+	if payload == nil then
+		return
+	end
+
 	local subtreeitem = tree:add(nex_proto, buf)
 	subtreeitem:add(F.raw_payload, payload)
 
