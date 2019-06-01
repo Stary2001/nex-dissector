@@ -204,6 +204,17 @@ function nex_proto.dissector(buf, pinfo, tree)
 				SECURE_KEYS[partial_conn_id] = nil
 			else
 				print("Secure connection CONNECT without payload?")
+				print("We got struct header len", partial_conn['struct_header_len'])
+				CONNECTIONS[conn_id] = {
+					[PORT_SERVER] = rc4.new_ks("CD&ML"),
+					[PORT_CLIENT] = rc4.new_ks("CD&ML"),
+					['nonsecure_pid'] = partial_conn['nonsecure_pid'],
+					['struct_header_len'] = partial_conn['struct_header_len'],
+					['version'] = partial_conn['version']
+				}
+				SECURE_KEYS[conn_id] = secure_key
+				CONNECTIONS[partial_conn_id] = nil
+				SECURE_KEYS[partial_conn_id] = nil
 			end
 		else
 			set_connection(pinfo, {
@@ -247,14 +258,14 @@ function nex_proto.dissector(buf, pinfo, tree)
 				local buffer_len
 
 				if proto_pkt_type == 10 then
-					if pkt_method_id == 1 or pkt_method_id == 2 then
+					if pkt_method_id == 1 or pkt_method_id == 2 then -- 1: Login, 2: LoginEx
 						buffer_len = nex_data(8, 4):le_uint()
 						ticket_buff = nex_data(12, buffer_len)
 
 						pid = nex_data(4, 4):le_uint()
 						conn['pid'] = pid
 						info = tostring(conn['pid'])
-					elseif pkt_method_id == 3 then
+					elseif pkt_method_id == 3 then -- 3: RequestTicket
 						buffer_len = nex_data(4, 4):le_uint()
 						ticket_buff = nex_data(8, buffer_len)
 						if conn['pid'] ~= nil then
@@ -275,7 +286,7 @@ function nex_proto.dissector(buf, pinfo, tree)
 					ticket = rc4.crypt(rc4.new_ks(kerb_key), ticket:bytes())
 					secure_key = string.fromhex(tostring(ticket(0, 32)))
 
-					if pkt_method_id == 1 or pkt_method_id == 2 then
+					if pkt_method_id == 1 or pkt_method_id == 2 then -- 1: Login, 2: LoginEx
 
 						struct_header_len = 0
 						secure_url_len = nex_data(12 + struct_header_len + buffer_len, 2):le_uint()
