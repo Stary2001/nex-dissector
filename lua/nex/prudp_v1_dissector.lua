@@ -259,14 +259,17 @@ function prudp_v1_proto.dissector(buf,pinfo,tree)
 
 	local info = pkt_types[pkt.type]
 
+	if pkt.flags.ack then
+		info = info .. " ACK"
+	end
+	if pkt.flags.multi_ack then
+		info = info .. " MULTI_ACK"
+	end
 	if pkt.fragment ~= nil then
 		info = info .. " FRAGMENT " .. tostring(pkt.fragment)
 	end
 	if pkt.session ~= nil then
 		info = info .. " SESSION " .. string.format("0x%02x", pkt.session)
-	end
-	if pkt.flags.ack then
-		info = info .. " ACK"
 	end
 	if pkt.flags.reliable then
 		info = info .. " RELIABLE"
@@ -276,9 +279,6 @@ function prudp_v1_proto.dissector(buf,pinfo,tree)
 	end
 	if pkt.flags.has_size then
 		info = info .. " HAS_SIZE"
-	end
-	if pkt.flags.multi_ack then
-		info = info .. " MULTI_ACK"
 	end
 
 	if payload_size ~= nil and payload_size ~= 0 then
