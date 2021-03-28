@@ -3,6 +3,9 @@ import os
 import re
 import sys
 
+is_proto = False
+is_types = False
+
 proto_fields = []
 class Method:
 	def __init__(self, name):
@@ -19,7 +22,7 @@ class Method:
 class Type:
 	def __init__(self, name):
 		self.fields = []
-		result = re.match("## ([^\\(]+)(?:\\((\S+)\\))?", name)
+		result = re.match("###? ([^\\(]+)(?:\\((\S+)\\))?", name)
 		if result == None:
 			print("????")
 
@@ -221,6 +224,13 @@ Structure_info = (
 )
 reg_struct('Structure', Structure_info)
 
+ResultRange_info = (
+	('m_uiOffset', 'Uint32'),
+	('m_uiSize', 'Uint32')
+)
+reg_struct('ResultRange', ResultRange_info)
+
+
 def lua_build_method(method_prefix, info):
 	func = """function (conn, tree, tvb)
 	local off = 0
@@ -243,7 +253,8 @@ def lua_build_method(method_prefix, info):
 	return func
 
 def lua_build_proto(header, cmds, method_infos):
-	result = re.match("([A-Za-z0-9 ]+) \\(([0-9A-Fa-fx?]+)\\)", header)
+	result = re.search("([A-Za-z0-9 ]+) \\(([0-9A-Fa-fx?]+)\\)", header)
+	print(header,result)
 	proto_name = result[1]
 	proto_name_safe = proto_name.replace(' ', '_')
 	proto_id = result[2]
@@ -286,16 +297,21 @@ def lua_build_proto(header, cmds, method_infos):
 struct_infos = {}
 def types_pass(f):
 	global struct_infos, is_types
+
 	# First pass: get type info
 	table = False
 	skip_table = not is_types
-	current_type = None
-	types_header_found = is_types # If it's a types page, all of it is types.
+	sticky_skip_table = False
 
+	current_type = None
+	#should_parse_type = is_types # If it's a types page, all of it is types.
+	# Fuck it
+	should_parse_type = True
 	for l in f.readlines():
 		l = l.strip()
 		if not table and l.startswith('|'):
 			if 'This structure inherits from' in l:
+				print(current_type, should_parse_type)
 				base = delink(re.search("This structure inherits from ([^|]+) \|", l)[1])
 				current_type.base = base # lol
 				current_type.fields.append(('Base2', base, None))
@@ -306,14 +322,20 @@ def types_pass(f):
 				continue
 			else:
 				table = True
-				if types_header_found:
-					if 'Value' in l:
-						print("Got weird table ", l)
+				if should_parse_type:
+					fields = list(map(lambda a: a.strip(), filter(None, l.split("|"))))
+					allowed_tables = [
+						['Type','Name','Description'],
+						['Type','Description'],
+						['Type','Name']
+					]
+					if fields not in allowed_tables:
+						#print("Got weird table ", l)
 						skip_table = True
 				continue # Skip the table header..
 		if table:
 			if l == '': # End of table
-				if not skip_table and types_header_found:
+				if not skip_table and should_parse_type:
 					fixed = []
 					for f_name, t_name, rename_count in current_type.fields:
 						if rename_count == None:
@@ -321,7 +343,7 @@ def types_pass(f):
 						else:
 							fixed.append((f_name + str(rename_count), t_name))
 					struct_infos[current_type.name] = fixed
-				skip_table = False
+				skip_table = sticky_skip_table
 				table = False
 			else:
 				row = list(map(lambda a: a.strip(), l[1:-1].split('|')))
@@ -329,7 +351,7 @@ def types_pass(f):
 					continue
 				if skip_table:
 					continue
-				if types_header_found:
+				if should_parse_type:
 					field_name_safe = delink(row[1]).replace(' ', '_').replace("(","").replace(")","")
 					type_name_safe = fix_html(delink(row[0]))
 
@@ -352,14 +374,28 @@ def types_pass(f):
 						current_type.fields.append((field_name_safe, type_name_safe, None))
 		else:
 			if l == '# Types':
-				types_header_found = True
-			elif l.startswith("## ") and types_header_found:
-				current_type = Type(l)
+				should_parse_type = True
+			elif l.startswith("## ") or l.startswith("### ") and should_parse_type:
+				if sticky_skip_table:
+					sticky_skip_table = False
+					skip_table = False
+
+				#print(l)
+				# Hack lmao
+				if l == '## Request' or l == '## Response':
+					skip_table = True
+					sticky_skip_table = True
+				else:
+					current_type = Type(l)
 			
 
 def methods_pass(f):
 	global proto_info
 	header = f.readline().strip()
+
+	if "Pia Protocols" in header:
+		return
+
 	if header.startswith("## "):
 		header = header[3:]
 	if header.startswith("[["): # parse link
@@ -368,6 +404,7 @@ def methods_pass(f):
 			print("?", name)
 			return
 		header = header[end+5:]
+
 	# Second (more complicated) pass: get method info.
 	# states
 	CmdList = 0
@@ -467,24 +504,33 @@ if len(sys.argv) == 1:
 proto_info = ""
 
 blacklist = [
-	'RMC-Protocol.md',
-	'PRUDP-Protocol.md',
-	'PIA-Protocol.md',
-	'Mario-Kart-8-Protocol.md',
-	'NEX-Common-Types.md',
-	'PIA-Types.md'
+	'RMC-Protocol.md'.lower(),
+	'PRUDP-Protocol.md'.lower(),
+	'PIA-Protocol.md'.lower(),
+	'ENL-Protocol.md'.lower(),
+	'Mario-Kart-8-Protocol.md'.lower(),
+	'NEX-Common-Types.md'.lower(),
+	'PIA-Types.md'.lower(),
+	'LAN-Protocol.md'.lower(),
+	'Eagle-Protocol.md'.lower(),
+	'Station-Protocol.md'.lower(),
+	'Web-Notification-Storage-Protocol.md'.lower(),
+	'User-Storage-Admin-Protocol.md'.lower()
 ]
 
 a = os.listdir("NintendoClients.wiki")
 for name in a:
-	if name in blacklist:
+	if name.lower() in blacklist:
 		continue
 	is_proto =  re.search("Protocol(?:-[^.]+)?.md", name)
 	is_types = re.search("Types(?:-[^.]+)?.md", name)
 
 	if is_proto or is_types:
 		with open("NintendoClients.wiki/"+name) as f:
+			print(name)
 			header = f.readline().strip()
+			if "Pia Protocols" in header:
+				continue
 			types_pass(f)
 
 print("=====================================================================")
@@ -515,7 +561,7 @@ for i in range(len(prereq_chunks) - 1, -1, -1):
 	prereq_types += prereq_chunks[i]
 
 for prereq_name in prereq_types:
-	print(prereq_name)
+	#print(prereq_name)
 	reg_struct(prereq_name, struct_infos[prereq_name])
 print("=====================================================================")
 
@@ -528,7 +574,7 @@ print("=====================================================================")
 
 a = os.listdir("NintendoClients.wiki")
 for name in a:
-	if name in blacklist:
+	if name.lower() in blacklist:
 		continue
 	is_proto =  re.search("Protocol(?:-[^.]+)?.md", name)
 
