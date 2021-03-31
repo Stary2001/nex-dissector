@@ -154,8 +154,7 @@ reg_type('Double', lambda a,b: do_float(8, a, b))
 
 def do_list(field_name, arg_name, list_type):
 	proto_fields.append((field_name+"_len", arg_name + " length", "uint32", "uint32"))
-	return f"""-- list !! {list_type}
-	local {field_name}_len = tvb(off, 4):le_uint()
+	return f"""local {field_name}_len = tvb(off, 4):le_uint()
 	subtree = tree:add_le(F.{field_name}_len, tvb(off,4))
 	off = off + 4
 	for i=1,{field_name}_len do
@@ -252,12 +251,11 @@ def lua_build_method(method_prefix, info):
 	func += " end"
 	return func
 
-def lua_build_proto(header, cmds, method_infos):
+def lua_build_proto(header, cmds, method_infos, nested):
 	result = re.search("([A-Za-z0-9 ]+) \\(([0-9A-Fa-fx?]+)\\)", header)
-	print(header,result)
-	proto_name = result[1]
+	proto_name = result[1].strip()
 	proto_name_safe = proto_name.replace(' ', '_')
-	proto_id = result[2]
+	proto_id = result[2].strip()
 	if proto_id == '0x??':
 		return ""
 
@@ -286,13 +284,14 @@ def lua_build_proto(header, cmds, method_infos):
 			}},
 			""".format(cmd_id, name, req, resp)
 
-	return """[{}] =
+	return """add_proto({},
 	{{
+		["nested"] = {},
 		["name"] = "{}",
 		["methods"] = {{
 {}
 		}}
-	}},""".format(proto_id, proto_name, cmd_list)
+	}})""".format(proto_id, "true" if nested else "false", proto_name, cmd_list)
 
 struct_infos = {}
 def types_pass(f):
@@ -327,7 +326,9 @@ def types_pass(f):
 					allowed_tables = [
 						['Type','Name','Description'],
 						['Type','Description'],
-						['Type','Name']
+						['Type','Name'],
+						['Type', 'Name', 'Only present on'],
+						
 					]
 					if fields not in allowed_tables:
 						#print("Got weird table ", l)
@@ -395,6 +396,10 @@ def methods_pass(f):
 
 	if "Pia Protocols" in header:
 		return
+
+	nested = False
+	if len(header.split(">")) > 2:
+		nested = True
 
 	if header.startswith("## "):
 		header = header[3:]
@@ -491,7 +496,7 @@ def methods_pass(f):
 	if table:
 		table = False
 
-	proto_info += lua_build_proto(header, cmd_list, method_infos)+"\n"
+	proto_info += lua_build_proto(header, cmd_list, method_infos, nested=nested)+"\n"
 
 if not os.path.exists("NintendoClients.wiki"):
 	print("Please run 'git clone https://github.com/Kinnay/NintendoClients.wiki.git'")
@@ -527,7 +532,6 @@ for name in a:
 
 	if is_proto or is_types:
 		with open("NintendoClients.wiki/"+name) as f:
-			print(name)
 			header = f.readline().strip()
 			if "Pia Protocols" in header:
 				continue
@@ -609,7 +613,6 @@ local RVConnectionData_container = tree:add(F.RVConnectionData, tvb(off, 0))
 	RVConnectionData_container:set_text("RVConnectionData")
 	off = do_Structure(conn, RVConnectionData_container, tvb, off, 'RVConnectionData_Base')
 off, RVConnectionData_m_urlRegularProtocols = do_StationURL(conn, RVConnectionData_container, tvb, off, 'RVConnectionData_m_urlRegularProtocols')
--- list !! byte
 	local RVConnectionData_m_lstSpecialProtocols_len = tvb(off, 4):le_uint()
 	subRVConnectionData_container = RVConnectionData_container:add_le(F.RVConnectionData_m_lstSpecialProtocols_len, tvb(off,4))
 	off = off + 4
@@ -630,6 +633,14 @@ end
 	else:
 		out_file.write(struct_funcs[struct_name] + "\n")
 
+out_file.write("""
+local info = {}
+function add_proto(id, tab)
+	if not tab["nested"] then
+		info[id] = tab
+	end
+end
+	""")
 out_file.write("local info = {\n")
 out_file.write(proto_info)
 out_file.write("}\nreturn info")
