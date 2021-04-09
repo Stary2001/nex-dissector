@@ -19,6 +19,10 @@ class Method:
 		self.request = []
 		self.response = []
 
+
+def bad_lua_chars(s):
+	return s.replace(" ", "_").replace("(","").replace(")","").replace(".","_").replace("/","_")
+
 class Type:
 	def __init__(self, name):
 		self.fields = []
@@ -26,7 +30,7 @@ class Type:
 		if result == None:
 			print("????")
 
-		self.name = result[1].strip().replace(" ", "_")
+		self.name = bad_lua_chars(result[1].strip())
 		if result[2] != None:
 			self.base = delink(result[2])
 			self.fields.append(('Base', self.base, None))
@@ -236,7 +240,7 @@ def lua_build_method(method_prefix, info):
 """
 	for i in info:
 		arg_type = fix_html(delink(i[0]))
-		arg_name = i[1]
+		arg_name = delink(i[1])
 		if arg_name == "%retval%":
 			arg_name = "retval"
 
@@ -353,7 +357,7 @@ def types_pass(f):
 				if skip_table:
 					continue
 				if should_parse_type:
-					field_name_safe = delink(row[1]).replace(' ', '_').replace("(","").replace(")","")
+					field_name_safe = bad_lua_chars(delink(row[1]))
 					type_name_safe = fix_html(delink(row[0]))
 
 					rename_needed = False
@@ -387,6 +391,7 @@ def types_pass(f):
 					skip_table = True
 					sticky_skip_table = True
 				else:
+					# todo: sanitize type
 					current_type = Type(l)
 			
 
@@ -456,6 +461,7 @@ def methods_pass(f):
 					cmd_list.append(row)
 					method_infos = {}
 				elif state == MethodRequest:
+					print("cccc", row)
 					current_method.request.append(row)
 				elif state == MethodResponse:
 					current_method.response.append(row)
@@ -641,7 +647,8 @@ function add_proto(id, tab)
 	end
 end
 	""")
-out_file.write("local info = {\n")
+
+#out_file.write("local info = {\n")
 out_file.write(proto_info)
-out_file.write("}\nreturn info")
+out_file.write("\nreturn info")
 out_file.close()
