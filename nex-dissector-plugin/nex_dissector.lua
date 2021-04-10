@@ -1,6 +1,9 @@
 local rc4 = require("rc4")
 local common = require("common")
 
+require("prudp_v0_dissector")
+require("prudp_v1_dissector")
+
 -- See: https://github.com/Kinnay/NintendoClients/wiki/RMC-Protocol
 
 local nex_proto = Proto("nex", "NEX")
@@ -56,9 +59,9 @@ if update_keyfile then
 	update_keyfile = false
 end
 
-F = nex_proto.fields
-
-local protos = require("protos")
+-- F = nex_proto.fields
+F, protos = require("protos")
+nex_proto.fields = F
 F.raw_payload = ProtoField.bytes("nex.rawpayload", "Decrypted PRUDP payload")
 
 F.size = ProtoField.uint32("nex.size", "Big ass size", base.HEX)

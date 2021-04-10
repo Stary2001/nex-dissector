@@ -1,3 +1,6 @@
+if not PROTO_V1 then
+	_G["PROTO_V1"] = true
+
 require("common")
 
 -- See: https://github.com/Kinnay/NintendoClients/wiki/PRUDP-Protocol
@@ -294,3 +297,4 @@ end
 --udp_table = DissectorTable.get("udp.port")
 --udp_table:add(59900, prudp_v1_proto)
 --udp_table:add(59911, prudp_v1_proto)
+end

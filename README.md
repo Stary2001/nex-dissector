@@ -25,28 +25,14 @@ Date: xxx
 </xml>
 ```
 
-Each game 
-
 ## Windows
 
-- Copy `init.lua` to `%appdata%\Wireshark\plugins`
-- Create the directory `%appdata%\Wireshark\lua`
-- Symlink the `nex` directory to the `nex` directory in this repository (run from elevated command prompt):
-  ```
-  cd %appdata%\Wireshark\lua
-  mklink /d nex C:\projects\nex-dissector\lua\nex
-  ```
+- Copy the `nex-dissector-plugin` folder to `%appdata%\Wireshark\plugins`.
 - Create `%appdata%\Wireshark\nex-keys.txt` and (optionally) add your pid/password.
 
-## OSX
+## OSX/Linux
 
-- Copy `init.lua` to `~/.config/wireshark`
-- Create the directory `~/.config/wireshark/lua`
-- Symlink the `nex` directory to the `nex` directory in this repository:
-  ```
-  cd ~/.config/wireshark/lua
-  ln -s ~/projects/nex-dissector/lua/nex nex
-  ```
+- Copy the `nex-dissector-plugin` folder to `~/.local/lib/wireshark/plugins/` (you may need to create this folder).
 - Create `~/.config/wireshark/nex-keys.txt` and (optionally) add your pid/password.
 
 # What does it do

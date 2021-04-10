@@ -21,7 +21,7 @@ class Method:
 
 
 def bad_lua_chars(s):
-	return s.replace(" ", "_").replace("(","").replace(")","").replace(".","_").replace("/","_")
+	return s.replace(" ", "_").replace("(","").replace(")","").replace(".","_").replace(",","_").replace("/","_")
 
 class Type:
 	def __init__(self, name):
@@ -461,7 +461,6 @@ def methods_pass(f):
 					cmd_list.append(row)
 					method_infos = {}
 				elif state == MethodRequest:
-					print("cccc", row)
 					current_method.request.append(row)
 				elif state == MethodResponse:
 					current_method.response.append(row)
