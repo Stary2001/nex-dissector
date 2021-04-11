@@ -156,12 +156,14 @@ def do_float(l, field_name, arg_name):
 reg_type('Float', lambda a,b: do_float(4, a, b))
 reg_type('Double', lambda a,b: do_float(8, a, b))
 
-def do_list(field_name, arg_name, list_type):
+def do_list(field_name, arg_name, list_type, in_list=False):
+	# todo: i hope i never get a list<list<list<object>>>
+	loop_var_name = 'i' if not in_list else 'j'
 	proto_fields.append((field_name+"_len", arg_name + " length", "uint32", "uint32"))
 	return f"""local {field_name}_len = tvb(off, 4):le_uint()
 	subtree = tree:add_le(F.{field_name}_len, tvb(off,4))
 	off = off + 4
-	for i=1,{field_name}_len do
+	for {loop_var_name}=1,{field_name}_len do
 	""" + dispatch_type(field_name+"_item", arg_name, list_type).replace("tree", "subtree") + """
 	end
 	"""
@@ -190,6 +192,8 @@ def do_data(field_name, arg_name, full_type):
 
 def dispatch_type(field_unique_name, arg_name, arg_type):
 	if arg_type.startswith("List"):
+		in_list = False
+
 		list_type = arg_type[5:-1]
 		if not list_type in types:
 			if list_type.startswith("Data<"):
@@ -197,14 +201,27 @@ def dispatch_type(field_unique_name, arg_name, arg_type):
 				if not data_type in types:
 					print("Stubbed type {} in list... in data".format(data_type))
 					return "--[[ Stubbed! Missing type (in list/in Data) {}]]\n".format(data_type)
+			elif list_type.startswith("List<"):
+				in_list = True
+				contained_type = list_type[5:-1]
+				if not contained_type in types:
+					print("Stubbed type {} in list... in list".format(data_type))
+					return "--[[ Stubbed! Missing type (in list in list {}]]\n".format(data_type)
 			else:
 				# bail.
 				print("Stubbed type {} in list".format(list_type))
 				return "--[[ Stubbed! Missing type (in list) {}]]\n".format(list_type)
-		return do_list(field_unique_name, arg_name, list_type) + "\n"
+		return do_list(field_unique_name, arg_name, list_type, in_list) + "\n"
 	elif arg_type == 'Data' or arg_type.startswith("Data<"):
 		if len(arg_type) > 4:
 			data_type = arg_type[5:-1]
+			if not data_type in types:
+				print("Stubbed type {} in Data".format(data_type))
+				return "--[[ Stubbed! Missing type (in Data) {}]]\n".format(data_type)
+		return do_data(field_unique_name, arg_name, arg_type) + "\n"
+	elif arg_type == 'Any' or arg_type.startswith("Any<"):
+		if len(arg_type) > 3:
+			data_type = arg_type[4:-1]
 			if not data_type in types:
 				print("Stubbed type {} in Data".format(data_type))
 				return "--[[ Stubbed! Missing type (in Data) {}]]\n".format(data_type)

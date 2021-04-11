@@ -1362,6 +1362,11 @@ F.ValidateAndRequestTicketParam = ProtoField.bytes("ValidateAndRequestTicketPara
 F.ValidateAndRequestTicketParam_Platform_type_always_3 = ProtoField.uint32("ValidateAndRequestTicketParam_Platform_type_always_3", "Platform_type_always_3 (uint32)")
 F.ValidateAndRequestTicketParam_Username_len = ProtoField.uint16("ValidateAndRequestTicketParam_Username_len", "Username length (String)")
 F.ValidateAndRequestTicketParam_Username_data = ProtoField.string("ValidateAndRequestTicketParam_Username_data", "Username data (String)")
+F.ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_data_bytes = ProtoField.bytes("ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_data_bytes", "NullData_or_AuthenticationInfo data bytes (bytes)")
+F.ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_type_name_len = ProtoField.uint16("ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_type_name_len", "NullData_or_AuthenticationInfo_type_name length (String)")
+F.ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_type_name_data = ProtoField.string("ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_type_name_data", "NullData_or_AuthenticationInfo_type_name data (String)")
+F.ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_len_plus_four = ProtoField.uint32("ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_len_plus_four", "NullData_or_AuthenticationInfo_len_plus_four (uint32)")
+F.ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_data_len = ProtoField.uint32("ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_data_len", "NullData_or_AuthenticationInfo_data_len (uint32)")
 F.ValidateAndRequestTicketParam_Unknown = ProtoField.bool("ValidateAndRequestTicketParam_Unknown", "Unknown (bool)")
 F.ValidateAndRequestTicketParam_NEX_version_e_g__40601 = ProtoField.uint32("ValidateAndRequestTicketParam_NEX_version_e_g__40601", "NEX_version_e_g__40601 (uint32)")
 F.ValidateAndRequestTicketParam_Client_version = ProtoField.uint32("ValidateAndRequestTicketParam_Client_version", "Client_version (uint32)")
@@ -2217,6 +2222,10 @@ F.SMM_GetBufferQueue_pBufferQueue_len = ProtoField.uint32("SMM_GetBufferQueue_pB
 F.SMM_GetBufferQueue_pBufferQueue_item_len = ProtoField.uint16("SMM_GetBufferQueue_pBufferQueue_item_len", "pBufferQueue length (Buffer)")
 F.SMM_GetBufferQueue_pBufferQueue_item_data = ProtoField.bytes("SMM_GetBufferQueue_pBufferQueue_item_data", "pBufferQueue data (Buffer)")
 F.SMM_GetBufferQueues_params_len = ProtoField.uint32("SMM_GetBufferQueues_params_len", "params length (uint32)")
+F.SMM_GetBufferQueues_pBufferQueueLst_len = ProtoField.uint32("SMM_GetBufferQueues_pBufferQueueLst_len", "pBufferQueueLst length (uint32)")
+F.SMM_GetBufferQueues_pBufferQueueLst_item_len = ProtoField.uint32("SMM_GetBufferQueues_pBufferQueueLst_item_len", "pBufferQueueLst length (uint32)")
+F.SMM_GetBufferQueues_pBufferQueueLst_item_item_len = ProtoField.uint16("SMM_GetBufferQueues_pBufferQueueLst_item_item_len", "pBufferQueueLst length (Buffer)")
+F.SMM_GetBufferQueues_pBufferQueueLst_item_item_data = ProtoField.bytes("SMM_GetBufferQueues_pBufferQueueLst_item_item_data", "pBufferQueueLst data (Buffer)")
 F.SMM_GetBufferQueues_pResults_len = ProtoField.uint32("SMM_GetBufferQueues_pResults_len", "pResults length (uint32)")
 F.SMM_GetBufferQueues_pResults_item = ProtoField.uint32("SMM_GetBufferQueues_pResults_item", "pResults (uint32)")
 F.SMM_ClearBufferQueues_params_len = ProtoField.uint32("SMM_ClearBufferQueues_params_len", "params length (uint32)")
@@ -2320,6 +2329,8 @@ F.Subscriber_DeleteContent_Unknown_item_len = ProtoField.uint16("Subscriber_Dele
 F.Subscriber_DeleteContent_Unknown_item_data = ProtoField.string("Subscriber_DeleteContent_Unknown_item_data", "Unknown data (String)")
 F.Subscriber_DeleteContent_Unknown = ProtoField.uint64("Subscriber_DeleteContent_Unknown", "Unknown (uint64)")
 F.Subscriber_GetContentMulti_Param_len = ProtoField.uint32("Subscriber_GetContentMulti_Param_len", "Param length (uint32)")
+F.Subscriber_GetContentMulti_Content_len = ProtoField.uint32("Subscriber_GetContentMulti_Content_len", "Content length (uint32)")
+F.Subscriber_GetContentMulti_Content_item_len = ProtoField.uint32("Subscriber_GetContentMulti_Content_item_len", "Content length (uint32)")
 F.Subscriber_UpdateUserStatus_Unknown_len = ProtoField.uint32("Subscriber_UpdateUserStatus_Unknown_len", "Unknown length (uint32)")
 F.Subscriber_UpdateUserStatus_Unknown_len = ProtoField.uint32("Subscriber_UpdateUserStatus_Unknown_len", "Unknown length (uint32)")
 F.Subscriber_UpdateUserStatus_Unknown_item = ProtoField.uint8("Subscriber_UpdateUserStatus_Unknown_item", "Unknown (uint8)")
@@ -2673,6 +2684,8 @@ F.Data_Store_GetRating_accessPassword = ProtoField.uint64("Data_Store_GetRating_
 F.Data_Store_GetRatings_dataIds_len = ProtoField.uint32("Data_Store_GetRatings_dataIds_len", "dataIds length (uint32)")
 F.Data_Store_GetRatings_dataIds_item = ProtoField.uint64("Data_Store_GetRatings_dataIds_item", "dataIds (uint64)")
 F.Data_Store_GetRatings_accessPassword = ProtoField.uint64("Data_Store_GetRatings_accessPassword", "accessPassword (uint64)")
+F.Data_Store_GetRatings_pRatings_len = ProtoField.uint32("Data_Store_GetRatings_pRatings_len", "pRatings length (uint32)")
+F.Data_Store_GetRatings_pRatings_item_len = ProtoField.uint32("Data_Store_GetRatings_pRatings_item_len", "pRatings length (uint32)")
 F.Data_Store_GetRatings_pResults_len = ProtoField.uint32("Data_Store_GetRatings_pResults_len", "pResults length (uint32)")
 F.Data_Store_GetRatings_pResults_item = ProtoField.uint32("Data_Store_GetRatings_pResults_item", "pResults (uint32)")
 F.Data_Store_ResetRating_updatePassword = ProtoField.uint64("Data_Store_ResetRating_updatePassword", "updatePassword (uint64)")
@@ -3186,6 +3199,11 @@ F.Ticket_Granting_Login_strReturnMsg_len = ProtoField.uint16("Ticket_Granting_Lo
 F.Ticket_Granting_Login_strReturnMsg_data = ProtoField.string("Ticket_Granting_Login_strReturnMsg_data", "strReturnMsg data (String)")
 F.Ticket_Granting_LoginEx_strUserName_len = ProtoField.uint16("Ticket_Granting_LoginEx_strUserName_len", "strUserName length (String)")
 F.Ticket_Granting_LoginEx_strUserName_data = ProtoField.string("Ticket_Granting_LoginEx_strUserName_data", "strUserName data (String)")
+F.Ticket_Granting_LoginEx_oExtraData_data_bytes = ProtoField.bytes("Ticket_Granting_LoginEx_oExtraData_data_bytes", "oExtraData data bytes (bytes)")
+F.Ticket_Granting_LoginEx_oExtraData_type_name_len = ProtoField.uint16("Ticket_Granting_LoginEx_oExtraData_type_name_len", "oExtraData_type_name length (String)")
+F.Ticket_Granting_LoginEx_oExtraData_type_name_data = ProtoField.string("Ticket_Granting_LoginEx_oExtraData_type_name_data", "oExtraData_type_name data (String)")
+F.Ticket_Granting_LoginEx_oExtraData_len_plus_four = ProtoField.uint32("Ticket_Granting_LoginEx_oExtraData_len_plus_four", "oExtraData_len_plus_four (uint32)")
+F.Ticket_Granting_LoginEx_oExtraData_data_len = ProtoField.uint32("Ticket_Granting_LoginEx_oExtraData_data_len", "oExtraData_data_len (uint32)")
 F.Ticket_Granting_LoginEx_retval = ProtoField.uint32("Ticket_Granting_LoginEx_retval", "retval (uint32)")
 F.Ticket_Granting_LoginEx_pidPrincipal = ProtoField.uint32("Ticket_Granting_LoginEx_pidPrincipal", "pidPrincipal (uint32)")
 F.Ticket_Granting_LoginEx_pbufResponse_len = ProtoField.uint32("Ticket_Granting_LoginEx_pbufResponse_len", "pbufResponse length (Buffer)")
@@ -3203,6 +3221,11 @@ F.Ticket_Granting_GetPID_retval = ProtoField.uint32("Ticket_Granting_GetPID_retv
 F.Ticket_Granting_GetName_id = ProtoField.uint32("Ticket_Granting_GetName_id", "id (uint32)")
 F.Ticket_Granting_GetName_retval_len = ProtoField.uint16("Ticket_Granting_GetName_retval_len", "retval length (String)")
 F.Ticket_Granting_GetName_retval_data = ProtoField.string("Ticket_Granting_GetName_retval_data", "retval data (String)")
+F.Ticket_Granting_LoginWithContext_loginData_data_bytes = ProtoField.bytes("Ticket_Granting_LoginWithContext_loginData_data_bytes", "loginData data bytes (bytes)")
+F.Ticket_Granting_LoginWithContext_loginData_type_name_len = ProtoField.uint16("Ticket_Granting_LoginWithContext_loginData_type_name_len", "loginData_type_name length (String)")
+F.Ticket_Granting_LoginWithContext_loginData_type_name_data = ProtoField.string("Ticket_Granting_LoginWithContext_loginData_type_name_data", "loginData_type_name data (String)")
+F.Ticket_Granting_LoginWithContext_loginData_len_plus_four = ProtoField.uint32("Ticket_Granting_LoginWithContext_loginData_len_plus_four", "loginData_len_plus_four (uint32)")
+F.Ticket_Granting_LoginWithContext_loginData_data_len = ProtoField.uint32("Ticket_Granting_LoginWithContext_loginData_data_len", "loginData_data_len (uint32)")
 F.Ticket_Granting_LoginWithContext_retval = ProtoField.uint32("Ticket_Granting_LoginWithContext_retval", "retval (uint32)")
 F.Ticket_Granting_LoginWithContext_pidPrincipal = ProtoField.uint32("Ticket_Granting_LoginWithContext_pidPrincipal", "pidPrincipal (uint32)")
 F.Ticket_Granting_LoginWithContext_pbufResponse_len = ProtoField.uint32("Ticket_Granting_LoginWithContext_pbufResponse_len", "pbufResponse length (Buffer)")
@@ -3515,6 +3538,10 @@ F.Data_Store_GetBufferQueue_pBufferQueue_len = ProtoField.uint32("Data_Store_Get
 F.Data_Store_GetBufferQueue_pBufferQueue_item_len = ProtoField.uint16("Data_Store_GetBufferQueue_pBufferQueue_item_len", "pBufferQueue length (Buffer)")
 F.Data_Store_GetBufferQueue_pBufferQueue_item_data = ProtoField.bytes("Data_Store_GetBufferQueue_pBufferQueue_item_data", "pBufferQueue data (Buffer)")
 F.Data_Store_GetBufferQueues_params_len = ProtoField.uint32("Data_Store_GetBufferQueues_params_len", "params length (uint32)")
+F.Data_Store_GetBufferQueues_pBufferQueueLst_len = ProtoField.uint32("Data_Store_GetBufferQueues_pBufferQueueLst_len", "pBufferQueueLst length (uint32)")
+F.Data_Store_GetBufferQueues_pBufferQueueLst_item_len = ProtoField.uint32("Data_Store_GetBufferQueues_pBufferQueueLst_item_len", "pBufferQueueLst length (uint32)")
+F.Data_Store_GetBufferQueues_pBufferQueueLst_item_item_len = ProtoField.uint16("Data_Store_GetBufferQueues_pBufferQueueLst_item_item_len", "pBufferQueueLst length (Buffer)")
+F.Data_Store_GetBufferQueues_pBufferQueueLst_item_item_data = ProtoField.bytes("Data_Store_GetBufferQueues_pBufferQueueLst_item_item_data", "pBufferQueueLst data (Buffer)")
 F.Data_Store_GetBufferQueues_pResults_len = ProtoField.uint32("Data_Store_GetBufferQueues_pResults_len", "pResults length (uint32)")
 F.Data_Store_GetBufferQueues_pResults_item = ProtoField.uint32("Data_Store_GetBufferQueues_pResults_item", "pResults (uint32)")
 F.Data_Store_ClearBufferQueues_params_len = ProtoField.uint32("Data_Store_ClearBufferQueues_params_len", "params length (uint32)")
@@ -6813,7 +6840,23 @@ local ValidateAndRequestTicketParam_container = tree:add(F.ValidateAndRequestTic
 	off = do_Structure(conn, ValidateAndRequestTicketParam_container, tvb, off, 'ValidateAndRequestTicketParam_Base')
 off, ValidateAndRequestTicketParam_Platform_type_always_3 = do_Uint32(conn, ValidateAndRequestTicketParam_container, tvb, off, 'ValidateAndRequestTicketParam_Platform_type_always_3')
 off, ValidateAndRequestTicketParam_Username = do_String(conn, ValidateAndRequestTicketParam_container, tvb, off, 'ValidateAndRequestTicketParam_Username')
---[[ Stubbed! Missing type Any]]
+
+		local ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_container = ValidateAndRequestTicketParam_container:add(F.Data, tvb(off, 0))
+		ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_container:set_text("Any")
+	off, ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_type_name = do_String(conn, ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_container, tvb, off, 'ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_type_name')
+
+off, ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_len_plus_four = do_Uint32(conn, ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_container, tvb, off, 'ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_len_plus_four')
+
+off, ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_data_len = do_Uint32(conn, ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_container, tvb, off, 'ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_data_len')
+
+local type_func = 'do_'..ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_type_name
+		if _G[type_func] ~= nil then
+			off = _G[type_func](conn, ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_container, tvb, off, "ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_data")
+		else
+			ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_container:add(F.ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_data_bytes, tvb(off, ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_len))
+			off = off + ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_data_len
+		end
+	
 off, ValidateAndRequestTicketParam_Unknown = do_Bool(conn, ValidateAndRequestTicketParam_container, tvb, off, 'ValidateAndRequestTicketParam_Unknown')
 off, ValidateAndRequestTicketParam_NEX_version_e_g__40601 = do_Uint32(conn, ValidateAndRequestTicketParam_container, tvb, off, 'ValidateAndRequestTicketParam_NEX_version_e_g__40601')
 off, ValidateAndRequestTicketParam_Client_version = do_Uint32(conn, ValidateAndRequestTicketParam_container, tvb, off, 'ValidateAndRequestTicketParam_Client_version')
@@ -9692,7 +9735,21 @@ local SMM_GetBufferQueues_params_len = tvb(off, 4):le_uint()
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type (in list) List<qBuffer>]]
+local SMM_GetBufferQueues_pBufferQueueLst_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMM_GetBufferQueues_pBufferQueueLst_len, tvb(off,4))
+	off = off + 4
+	for j=1,SMM_GetBufferQueues_pBufferQueueLst_len do
+	local SMM_GetBufferQueues_pBufferQueueLst_item_len = tvb(off, 4):le_uint()
+	subsubtree = subtree:add_le(F.SMM_GetBufferQueues_pBufferQueueLst_item_len, tvb(off,4))
+	off = off + 4
+	for i=1,SMM_GetBufferQueues_pBufferQueueLst_item_len do
+	off, SMM_GetBufferQueues_pBufferQueueLst_item_item = do_qBuffer(conn, subsubtree, tvb, off, 'SMM_GetBufferQueues_pBufferQueueLst_item_item')
+
+	end
+	
+
+	end
+	
 local SMM_GetBufferQueues_pResults_len = tvb(off, 4):le_uint()
 	subtree = tree:add_le(F.SMM_GetBufferQueues_pResults_len, tvb(off,4))
 	off = off + 4
@@ -10422,7 +10479,21 @@ local Subscriber_GetContentMulti_Param_len = tvb(off, 4):le_uint()
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type (in list) List<SubscriberContent>]]
+local Subscriber_GetContentMulti_Content_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.Subscriber_GetContentMulti_Content_len, tvb(off,4))
+	off = off + 4
+	for j=1,Subscriber_GetContentMulti_Content_len do
+	local Subscriber_GetContentMulti_Content_item_len = tvb(off, 4):le_uint()
+	subsubtree = subtree:add_le(F.Subscriber_GetContentMulti_Content_item_len, tvb(off,4))
+	off = off + 4
+	for i=1,Subscriber_GetContentMulti_Content_item_len do
+	off = do_SubscriberContent(conn, subsubtree, tvb, off, 'Subscriber_GetContentMulti_Content_item_item')
+
+	end
+	
+
+	end
+	
  end
 			},
 			[13] = {
@@ -12586,7 +12657,21 @@ off, Data_Store_GetRatings_accessPassword = do_Uint64(conn, tree, tvb, off, 'Dat
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type (in list) List<DataStoreRatingInfoWithSlot>]]
+local Data_Store_GetRatings_pRatings_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.Data_Store_GetRatings_pRatings_len, tvb(off,4))
+	off = off + 4
+	for j=1,Data_Store_GetRatings_pRatings_len do
+	local Data_Store_GetRatings_pRatings_item_len = tvb(off, 4):le_uint()
+	subsubtree = subtree:add_le(F.Data_Store_GetRatings_pRatings_item_len, tvb(off,4))
+	off = off + 4
+	for i=1,Data_Store_GetRatings_pRatings_item_len do
+	off = do_DataStoreRatingInfoWithSlot(conn, subsubtree, tvb, off, 'Data_Store_GetRatings_pRatings_item_item')
+
+	end
+	
+
+	end
+	
 local Data_Store_GetRatings_pResults_len = tvb(off, 4):le_uint()
 	subtree = tree:add_le(F.Data_Store_GetRatings_pResults_len, tvb(off,4))
 	off = off + 4
@@ -16018,7 +16103,23 @@ off, Ticket_Granting_Login_strReturnMsg = do_String(conn, tree, tvb, off, 'Ticke
 				["request"] = function (conn, tree, tvb)
 	local off = 0
 off, Ticket_Granting_LoginEx_strUserName = do_String(conn, tree, tvb, off, 'Ticket_Granting_LoginEx_strUserName')
---[[ Stubbed! Missing type Any<AuthenticationInfo>]]
+
+		local Ticket_Granting_LoginEx_oExtraData_container = tree:add(F.Data, tvb(off, 0))
+		Ticket_Granting_LoginEx_oExtraData_container:set_text("Any<AuthenticationInfo>")
+	off, Ticket_Granting_LoginEx_oExtraData_type_name = do_String(conn, Ticket_Granting_LoginEx_oExtraData_container, tvb, off, 'Ticket_Granting_LoginEx_oExtraData_type_name')
+
+off, Ticket_Granting_LoginEx_oExtraData_len_plus_four = do_Uint32(conn, Ticket_Granting_LoginEx_oExtraData_container, tvb, off, 'Ticket_Granting_LoginEx_oExtraData_len_plus_four')
+
+off, Ticket_Granting_LoginEx_oExtraData_data_len = do_Uint32(conn, Ticket_Granting_LoginEx_oExtraData_container, tvb, off, 'Ticket_Granting_LoginEx_oExtraData_data_len')
+
+local type_func = 'do_'..Ticket_Granting_LoginEx_oExtraData_type_name
+		if _G[type_func] ~= nil then
+			off = _G[type_func](conn, Ticket_Granting_LoginEx_oExtraData_container, tvb, off, "Ticket_Granting_LoginEx_oExtraData_data")
+		else
+			Ticket_Granting_LoginEx_oExtraData_container:add(F.Ticket_Granting_LoginEx_oExtraData_data_bytes, tvb(off, Ticket_Granting_LoginEx_oExtraData_len))
+			off = off + Ticket_Granting_LoginEx_oExtraData_data_len
+		end
+	
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -16068,7 +16169,23 @@ off, Ticket_Granting_GetName_retval = do_String(conn, tree, tvb, off, 'Ticket_Gr
 				["name"] = "LoginWithContext",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type Any]]
+
+		local Ticket_Granting_LoginWithContext_loginData_container = tree:add(F.Data, tvb(off, 0))
+		Ticket_Granting_LoginWithContext_loginData_container:set_text("Any")
+	off, Ticket_Granting_LoginWithContext_loginData_type_name = do_String(conn, Ticket_Granting_LoginWithContext_loginData_container, tvb, off, 'Ticket_Granting_LoginWithContext_loginData_type_name')
+
+off, Ticket_Granting_LoginWithContext_loginData_len_plus_four = do_Uint32(conn, Ticket_Granting_LoginWithContext_loginData_container, tvb, off, 'Ticket_Granting_LoginWithContext_loginData_len_plus_four')
+
+off, Ticket_Granting_LoginWithContext_loginData_data_len = do_Uint32(conn, Ticket_Granting_LoginWithContext_loginData_container, tvb, off, 'Ticket_Granting_LoginWithContext_loginData_data_len')
+
+local type_func = 'do_'..Ticket_Granting_LoginWithContext_loginData_type_name
+		if _G[type_func] ~= nil then
+			off = _G[type_func](conn, Ticket_Granting_LoginWithContext_loginData_container, tvb, off, "Ticket_Granting_LoginWithContext_loginData_data")
+		else
+			Ticket_Granting_LoginWithContext_loginData_container:add(F.Ticket_Granting_LoginWithContext_loginData_data_bytes, tvb(off, Ticket_Granting_LoginWithContext_loginData_len))
+			off = off + Ticket_Granting_LoginWithContext_loginData_data_len
+		end
+	
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -19157,7 +19274,21 @@ local Data_Store_GetBufferQueues_params_len = tvb(off, 4):le_uint()
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type (in list) List<qBuffer>]]
+local Data_Store_GetBufferQueues_pBufferQueueLst_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.Data_Store_GetBufferQueues_pBufferQueueLst_len, tvb(off,4))
+	off = off + 4
+	for j=1,Data_Store_GetBufferQueues_pBufferQueueLst_len do
+	local Data_Store_GetBufferQueues_pBufferQueueLst_item_len = tvb(off, 4):le_uint()
+	subsubtree = subtree:add_le(F.Data_Store_GetBufferQueues_pBufferQueueLst_item_len, tvb(off,4))
+	off = off + 4
+	for i=1,Data_Store_GetBufferQueues_pBufferQueueLst_item_len do
+	off, Data_Store_GetBufferQueues_pBufferQueueLst_item_item = do_qBuffer(conn, subsubtree, tvb, off, 'Data_Store_GetBufferQueues_pBufferQueueLst_item_item')
+
+	end
+	
+
+	end
+	
 local Data_Store_GetBufferQueues_pResults_len = tvb(off, 4):le_uint()
 	subtree = tree:add_le(F.Data_Store_GetBufferQueues_pResults_len, tvb(off,4))
 	off = off + 4
