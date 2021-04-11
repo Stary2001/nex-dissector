@@ -227,6 +227,13 @@ Structure_info = (
 )
 reg_struct('Structure', Structure_info)
 
+RVConnectionData_info = (
+	('m_urlRegularProtocols', 'StationURL'),
+	('m_lstSpecialProtocols', 'List<byte>'),
+	('m_urlSpecialProtocols', 'StationURL')
+)
+reg_struct('RVConnectionData', RVConnectionData_info)
+
 ResultRange_info = (
 	('m_uiOffset', 'Uint32'),
 	('m_uiSize', 'Uint32')
@@ -430,12 +437,14 @@ def methods_pass(f):
 	
 	cmd = False
 	table = False
+	table_header = []
 	skip_table = False
 
 	for l in f.readlines():
 		l = l.strip()
 		if not table and l.startswith('|'):
 			table = True
+			table_header = list(map(lambda a: a.strip(), filter(None, l.split("|"))))
 			continue # Skip the table header..
 
 		if table:
@@ -456,6 +465,11 @@ def methods_pass(f):
 
 				if skip_table:
 					continue
+
+				if 'Description' in table_header:
+					desc = row[table_header.index("Description")]
+					if 'Only present on Switch' in desc:
+						continue
 
 				if state == 0: # the cmd list is the first table
 					cmd_list.append(row)
