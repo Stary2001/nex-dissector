@@ -59,9 +59,14 @@ if update_keyfile then
 	update_keyfile = false
 end
 
--- F = nex_proto.fields
-F, protos = require("protos")
-nex_proto.fields = F
+function script_path()
+   local str = debug.getinfo(2, "S").source:sub(2)
+   return str:match("(.*/)")
+end
+
+F = nex_proto.fields
+_G["F"] = F -- apparently this isn't global enough >:(
+protos = dofile(script_path() .. "protos.inc")
 F.raw_payload = ProtoField.bytes("nex.rawpayload", "Decrypted PRUDP payload")
 
 F.size = ProtoField.uint32("nex.size", "Big ass size", base.HEX)
