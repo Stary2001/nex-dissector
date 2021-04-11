@@ -25,12 +25,10 @@ F.Bool = ProtoField.bool("Bool", "Bool (bool)")
 F.Float = ProtoField.float("Float", "Float (float)")
 F.Double = ProtoField.double("Double", "Double (double)")
 F.Data = ProtoField.bytes("Data", "Data (Data)")
-F.Data_type_name_len = ProtoField.uint16("Data_type_name_len", "type_name length (String)")
-F.Data_type_name_data = ProtoField.string("Data_type_name_data", "type_name data (String)")
-F.Data_len_plus_four = ProtoField.uint32("Data_len_plus_four", "len_plus_four (uint32)")
-F.Data_data_len = ProtoField.uint32("Data_data_len", "data length (Buffer)")
-F.Data_data_data = ProtoField.bytes("Data_data_data", "data data (Buffer)")
 F.Structure = ProtoField.bytes("Structure", "Structure (Structure)")
+F.Structure_Version = ProtoField.uint8("Structure_Version", "Version (uint8)")
+F.Structure_Length = ProtoField.uint32("Structure_Length", "Length (uint32)")
+F.DataHeader = ProtoField.bytes("DataHeader", "DataHeader (DataHeader)")
 F.RVConnectionData = ProtoField.bytes("RVConnectionData", "RVConnectionData (RVConnectionData)")
 F.RVConnectionData_m_urlRegularProtocols_len = ProtoField.uint16("RVConnectionData_m_urlRegularProtocols_len", "m_urlRegularProtocols length (String)")
 F.RVConnectionData_m_urlRegularProtocols_data = ProtoField.string("RVConnectionData_m_urlRegularProtocols_data", "m_urlRegularProtocols data (String)")
@@ -41,32 +39,6 @@ F.RVConnectionData_m_urlSpecialProtocols_data = ProtoField.string("RVConnectionD
 F.ResultRange = ProtoField.bytes("ResultRange", "ResultRange (ResultRange)")
 F.ResultRange_m_uiOffset = ProtoField.uint32("ResultRange_m_uiOffset", "m_uiOffset (uint32)")
 F.ResultRange_m_uiSize = ProtoField.uint32("ResultRange_m_uiSize", "m_uiSize (uint32)")
-F.CalicoPlayerSimple = ProtoField.bytes("CalicoPlayerSimple", "CalicoPlayerSimple (CalicoPlayerSimple)")
-F.CalicoPlayerSimple_principalId = ProtoField.uint32("CalicoPlayerSimple_principalId", "principalId (uint32)")
-F.CalicoPlayerSimple_name_len = ProtoField.uint16("CalicoPlayerSimple_name_len", "name length (String)")
-F.CalicoPlayerSimple_name_data = ProtoField.string("CalicoPlayerSimple_name_data", "name data (String)")
-F.CalicoPlayerSimple_playerType = ProtoField.uint8("CalicoPlayerSimple_playerType", "playerType (uint8)")
-F.CalicoPlayerSimple_udemae = ProtoField.int32("CalicoPlayerSimple_udemae", "udemae (uint32)")
-F.CalicoPlayerSimple_playerRank = ProtoField.int32("CalicoPlayerSimple_playerRank", "playerRank (uint32)")
-F.CalicoPlayerSimple_starRank = ProtoField.int32("CalicoPlayerSimple_starRank", "starRank (uint32)")
-F.CalicoPlayerSimple_fesGrade = ProtoField.int32("CalicoPlayerSimple_fesGrade", "fesGrade (uint32)")
-F.CalicoPlayerSimple_weaponId = ProtoField.int32("CalicoPlayerSimple_weaponId", "weaponId (uint32)")
-F.CalicoPlayerSimple_headId = ProtoField.int32("CalicoPlayerSimple_headId", "headId (uint32)")
-F.CalicoPlayerSimple_headSkillIds_len = ProtoField.uint32("CalicoPlayerSimple_headSkillIds_len", "headSkillIds length (uint32)")
-F.CalicoPlayerSimple_headSkillIds_item = ProtoField.int32("CalicoPlayerSimple_headSkillIds_item", "headSkillIds (uint32)")
-F.CalicoPlayerSimple_clothesId = ProtoField.int32("CalicoPlayerSimple_clothesId", "clothesId (uint32)")
-F.CalicoPlayerSimple_clothesSkillIds_len = ProtoField.uint32("CalicoPlayerSimple_clothesSkillIds_len", "clothesSkillIds length (uint32)")
-F.CalicoPlayerSimple_clothesSkillIds_item = ProtoField.int32("CalicoPlayerSimple_clothesSkillIds_item", "clothesSkillIds (uint32)")
-F.CalicoPlayerSimple_shoesId = ProtoField.int32("CalicoPlayerSimple_shoesId", "shoesId (uint32)")
-F.CalicoPlayerSimple_shoesSkillIds_len = ProtoField.uint32("CalicoPlayerSimple_shoesSkillIds_len", "shoesSkillIds length (uint32)")
-F.CalicoPlayerSimple_shoesSkillIds_item = ProtoField.int32("CalicoPlayerSimple_shoesSkillIds_item", "shoesSkillIds (uint32)")
-F.CalicoPlayerResult = ProtoField.bytes("CalicoPlayerResult", "CalicoPlayerResult (CalicoPlayerResult)")
-F.CalicoPlayerResult_killCount = ProtoField.int32("CalicoPlayerResult_killCount", "killCount (uint32)")
-F.CalicoPlayerResult_assistCount = ProtoField.int32("CalicoPlayerResult_assistCount", "assistCount (uint32)")
-F.CalicoPlayerResult_deathCount = ProtoField.int32("CalicoPlayerResult_deathCount", "deathCount (uint32)")
-F.CalicoPlayerResult_specialCount = ProtoField.int32("CalicoPlayerResult_specialCount", "specialCount (uint32)")
-F.CalicoPlayerResult_gamePaintPoint = ProtoField.int32("CalicoPlayerResult_gamePaintPoint", "gamePaintPoint (uint32)")
-F.CalicoPlayerResult_sortScore = ProtoField.int32("CalicoPlayerResult_sortScore", "sortScore (uint32)")
 F.DataStoreRatingInitParam = ProtoField.bytes("DataStoreRatingInitParam", "DataStoreRatingInitParam (DataStoreRatingInitParam)")
 F.DataStoreRatingInitParam_flag = ProtoField.uint8("DataStoreRatingInitParam_flag", "flag (uint8)")
 F.DataStoreRatingInitParam_internalFlag = ProtoField.uint8("DataStoreRatingInitParam_internalFlag", "internalFlag (uint8)")
@@ -88,24 +60,8 @@ F.MiiV2_Unknown2 = ProtoField.uint8("MiiV2_Unknown2", "Unknown2 (uint8)")
 F.MiiV2_Mii_data_FFLStoreData_len = ProtoField.uint32("MiiV2_Mii_data_FFLStoreData_len", "Mii_data_FFLStoreData length (Buffer)")
 F.MiiV2_Mii_data_FFLStoreData_data = ProtoField.bytes("MiiV2_Mii_data_FFLStoreData_data", "Mii_data_FFLStoreData data (Buffer)")
 F.MiiV2_Unknown3 = ProtoField.uint64("MiiV2_Unknown3", "Unknown3 (uint64)")
-F.CalicoStatsBase = ProtoField.bytes("CalicoStatsBase", "CalicoStatsBase (CalicoStatsBase)")
-F.CalicoStatsBase_gameMode = ProtoField.uint32("CalicoStatsBase_gameMode", "gameMode (uint32)")
-F.CalicoStatsBase_rule = ProtoField.int32("CalicoStatsBase_rule", "rule (uint32)")
-F.CalicoStatsBase_result = ProtoField.uint8("CalicoStatsBase_result", "result (uint8)")
-F.CalicoStatsBase_stage = ProtoField.int32("CalicoStatsBase_stage", "stage (uint32)")
-F.CalicoStatsBase_myTeamMembers_len = ProtoField.uint32("CalicoStatsBase_myTeamMembers_len", "myTeamMembers length (uint32)")
-F.CalicoStatsBase_otherTeamMembers_len = ProtoField.uint32("CalicoStatsBase_otherTeamMembers_len", "otherTeamMembers length (uint32)")
-F.CalicoStatsBase_weaponPaintPoint = ProtoField.int32("CalicoStatsBase_weaponPaintPoint", "weaponPaintPoint (uint32)")
-F.CalicoStatsBase_startTime = ProtoField.uint64("CalicoStatsBase_startTime", "startTime (uint64)")
-F.CalicoStatsBase_battleNum = ProtoField.uint64("CalicoStatsBase_battleNum", "battleNum (uint64)")
-F.CalicoStatsBase_playerRank = ProtoField.int32("CalicoStatsBase_playerRank", "playerRank (uint32)")
-F.CalicoStatsBase_starRank = ProtoField.int32("CalicoStatsBase_starRank", "starRank (uint32)")
 F.PropertyVariant = ProtoField.bytes("PropertyVariant", "PropertyVariant (PropertyVariant)")
 F.PropertyVariant_ID = ProtoField.uint32("PropertyVariant_ID", "ID (uint32)")
-F.MessageRecipient = ProtoField.bytes("MessageRecipient", "MessageRecipient (MessageRecipient)")
-F.MessageRecipient_m_uiRecipientType = ProtoField.uint32("MessageRecipient_m_uiRecipientType", "m_uiRecipientType (uint32)")
-F.MessageRecipient_m_principalId = ProtoField.uint32("MessageRecipient_m_principalId", "m_principalId (uint32)")
-F.MessageRecipient_m_gatheringId = ProtoField.uint32("MessageRecipient_m_gatheringId", "m_gatheringId (uint32)")
 F.DataStorePermission = ProtoField.bytes("DataStorePermission", "DataStorePermission (DataStorePermission)")
 F.DataStorePermission_permission = ProtoField.uint8("DataStorePermission_permission", "permission (uint8)")
 F.DataStorePermission_recipientIds_len = ProtoField.uint32("DataStorePermission_recipientIds_len", "recipientIds length (uint32)")
@@ -127,22 +83,25 @@ F.PrincipalBasicInfo_Pid = ProtoField.uint32("PrincipalBasicInfo_Pid", "Pid (uin
 F.PrincipalBasicInfo_NNID_len = ProtoField.uint16("PrincipalBasicInfo_NNID_len", "NNID length (String)")
 F.PrincipalBasicInfo_NNID_data = ProtoField.string("PrincipalBasicInfo_NNID_data", "NNID data (String)")
 F.PrincipalBasicInfo_Unknown = ProtoField.uint8("PrincipalBasicInfo_Unknown", "Unknown (uint8)")
-F.CalicoRegularStats = ProtoField.bytes("CalicoRegularStats", "CalicoRegularStats (CalicoRegularStats)")
-F.CalicoRegularStats_myTeamPercentage = ProtoField.int32("CalicoRegularStats_myTeamPercentage", "myTeamPercentage (uint32)")
-F.CalicoRegularStats_otherTeamPercentage = ProtoField.int32("CalicoRegularStats_otherTeamPercentage", "otherTeamPercentage (uint32)")
-F.CalicoRegularStats_winMeter = ProtoField.int32("CalicoRegularStats_winMeter", "winMeter (uint32)")
-F.Gathering = ProtoField.bytes("Gathering", "Gathering (Gathering)")
-F.Gathering_m_idMyself = ProtoField.uint32("Gathering_m_idMyself", "m_idMyself (uint32)")
-F.Gathering_m_pidOwner = ProtoField.uint32("Gathering_m_pidOwner", "m_pidOwner (uint32)")
-F.Gathering_m_pidHost = ProtoField.uint32("Gathering_m_pidHost", "m_pidHost (uint32)")
-F.Gathering_m_uiMinParticipants = ProtoField.uint16("Gathering_m_uiMinParticipants", "m_uiMinParticipants (uint16)")
-F.Gathering_m_uiMaxParticipants = ProtoField.uint16("Gathering_m_uiMaxParticipants", "m_uiMaxParticipants (uint16)")
-F.Gathering_m_uiParticipationPolicy = ProtoField.uint32("Gathering_m_uiParticipationPolicy", "m_uiParticipationPolicy (uint32)")
-F.Gathering_m_uiPolicyArgument = ProtoField.uint32("Gathering_m_uiPolicyArgument", "m_uiPolicyArgument (uint32)")
-F.Gathering_m_uiFlags = ProtoField.uint32("Gathering_m_uiFlags", "m_uiFlags (uint32)")
-F.Gathering_m_uiState = ProtoField.uint32("Gathering_m_uiState", "m_uiState (uint32)")
-F.Gathering_m_strDescription_len = ProtoField.uint16("Gathering_m_strDescription_len", "m_strDescription length (String)")
-F.Gathering_m_strDescription_data = ProtoField.string("Gathering_m_strDescription_data", "m_strDescription data (String)")
+F.CalicoPlayerSimple = ProtoField.bytes("CalicoPlayerSimple", "CalicoPlayerSimple (CalicoPlayerSimple)")
+F.CalicoPlayerSimple_principalId = ProtoField.uint32("CalicoPlayerSimple_principalId", "principalId (uint32)")
+F.CalicoPlayerSimple_name_len = ProtoField.uint16("CalicoPlayerSimple_name_len", "name length (String)")
+F.CalicoPlayerSimple_name_data = ProtoField.string("CalicoPlayerSimple_name_data", "name data (String)")
+F.CalicoPlayerSimple_playerType = ProtoField.uint8("CalicoPlayerSimple_playerType", "playerType (uint8)")
+F.CalicoPlayerSimple_udemae = ProtoField.int32("CalicoPlayerSimple_udemae", "udemae (uint32)")
+F.CalicoPlayerSimple_playerRank = ProtoField.int32("CalicoPlayerSimple_playerRank", "playerRank (uint32)")
+F.CalicoPlayerSimple_starRank = ProtoField.int32("CalicoPlayerSimple_starRank", "starRank (uint32)")
+F.CalicoPlayerSimple_fesGrade = ProtoField.int32("CalicoPlayerSimple_fesGrade", "fesGrade (uint32)")
+F.CalicoPlayerSimple_weaponId = ProtoField.int32("CalicoPlayerSimple_weaponId", "weaponId (uint32)")
+F.CalicoPlayerSimple_headId = ProtoField.int32("CalicoPlayerSimple_headId", "headId (uint32)")
+F.CalicoPlayerSimple_headSkillIds_len = ProtoField.uint32("CalicoPlayerSimple_headSkillIds_len", "headSkillIds length (uint32)")
+F.CalicoPlayerSimple_headSkillIds_item = ProtoField.int32("CalicoPlayerSimple_headSkillIds_item", "headSkillIds (uint32)")
+F.CalicoPlayerSimple_clothesId = ProtoField.int32("CalicoPlayerSimple_clothesId", "clothesId (uint32)")
+F.CalicoPlayerSimple_clothesSkillIds_len = ProtoField.uint32("CalicoPlayerSimple_clothesSkillIds_len", "clothesSkillIds length (uint32)")
+F.CalicoPlayerSimple_clothesSkillIds_item = ProtoField.int32("CalicoPlayerSimple_clothesSkillIds_item", "clothesSkillIds (uint32)")
+F.CalicoPlayerSimple_shoesId = ProtoField.int32("CalicoPlayerSimple_shoesId", "shoesId (uint32)")
+F.CalicoPlayerSimple_shoesSkillIds_len = ProtoField.uint32("CalicoPlayerSimple_shoesSkillIds_len", "shoesSkillIds length (uint32)")
+F.CalicoPlayerSimple_shoesSkillIds_item = ProtoField.int32("CalicoPlayerSimple_shoesSkillIds_item", "shoesSkillIds (uint32)")
 F.MatchmakeParam = ProtoField.bytes("MatchmakeParam", "MatchmakeParam (MatchmakeParam)")
 F.PlayerStatSet = ProtoField.bytes("PlayerStatSet", "PlayerStatSet (PlayerStatSet)")
 F.PlayerStatSet_m_playerPID = ProtoField.uint32("PlayerStatSet_m_playerPID", "m_playerPID (uint32)")
@@ -183,22 +142,10 @@ F.Ranking2CommonData_mii_len = ProtoField.uint16("Ranking2CommonData_mii_len", "
 F.Ranking2CommonData_mii_data = ProtoField.bytes("Ranking2CommonData_mii_data", "mii data (Buffer)")
 F.Ranking2CommonData_binaryData_len = ProtoField.uint16("Ranking2CommonData_binaryData_len", "binaryData length (Buffer)")
 F.Ranking2CommonData_binaryData_data = ProtoField.bytes("Ranking2CommonData_binaryData_data", "binaryData data (Buffer)")
-F.UserMessage = ProtoField.bytes("UserMessage", "UserMessage (UserMessage)")
-F.UserMessage_Base2_data_bytes = ProtoField.bytes("UserMessage_Base2_data_bytes", "Base2 data bytes (bytes)")
-F.UserMessage_Base2_type_name_len = ProtoField.uint16("UserMessage_Base2_type_name_len", "Base2_type_name length (String)")
-F.UserMessage_Base2_type_name_data = ProtoField.string("UserMessage_Base2_type_name_data", "Base2_type_name data (String)")
-F.UserMessage_Base2_len_plus_four = ProtoField.uint32("UserMessage_Base2_len_plus_four", "Base2_len_plus_four (uint32)")
-F.UserMessage_Base2_data_len = ProtoField.uint32("UserMessage_Base2_data_len", "Base2_data_len (uint32)")
-F.UserMessage_m_uiID = ProtoField.uint32("UserMessage_m_uiID", "m_uiID (uint32)")
-F.UserMessage_m_uiParentID = ProtoField.uint32("UserMessage_m_uiParentID", "m_uiParentID (uint32)")
-F.UserMessage_m_pidSender = ProtoField.uint32("UserMessage_m_pidSender", "m_pidSender (uint32)")
-F.UserMessage_m_receptiontime = ProtoField.uint64("UserMessage_m_receptiontime", "m_receptiontime (uint64)")
-F.UserMessage_m_uiLifeTime = ProtoField.uint32("UserMessage_m_uiLifeTime", "m_uiLifeTime (uint32)")
-F.UserMessage_m_uiFlags = ProtoField.uint32("UserMessage_m_uiFlags", "m_uiFlags (uint32)")
-F.UserMessage_m_strSubject_len = ProtoField.uint16("UserMessage_m_strSubject_len", "m_strSubject length (String)")
-F.UserMessage_m_strSubject_data = ProtoField.string("UserMessage_m_strSubject_data", "m_strSubject data (String)")
-F.UserMessage_m_strSender_len = ProtoField.uint16("UserMessage_m_strSender_len", "m_strSender length (String)")
-F.UserMessage_m_strSender_data = ProtoField.string("UserMessage_m_strSender_data", "m_strSender data (String)")
+F.MessageRecipient = ProtoField.bytes("MessageRecipient", "MessageRecipient (MessageRecipient)")
+F.MessageRecipient_m_uiRecipientType = ProtoField.uint32("MessageRecipient_m_uiRecipientType", "m_uiRecipientType (uint32)")
+F.MessageRecipient_m_principalId = ProtoField.uint32("MessageRecipient_m_principalId", "m_principalId (uint32)")
+F.MessageRecipient_m_gatheringId = ProtoField.uint32("MessageRecipient_m_gatheringId", "m_gatheringId (uint32)")
 F.DataStorePreparePostParam = ProtoField.bytes("DataStorePreparePostParam", "DataStorePreparePostParam (DataStorePreparePostParam)")
 F.DataStorePreparePostParam_size = ProtoField.uint32("DataStorePreparePostParam_size", "size (uint32)")
 F.DataStorePreparePostParam_name_len = ProtoField.uint16("DataStorePreparePostParam_name_len", "name length (String)")
@@ -255,21 +202,13 @@ F.DataStoreCustomRankingRatingCondition_maxCount = ProtoField.uint32("DataStoreC
 F.NNAInfo = ProtoField.bytes("NNAInfo", "NNAInfo (NNAInfo)")
 F.NNAInfo_Unknown = ProtoField.uint8("NNAInfo_Unknown", "Unknown (uint8)")
 F.NNAInfo_Unknown2 = ProtoField.uint8("NNAInfo_Unknown2", "Unknown2 (uint8)")
-F.CalicoFesStats = ProtoField.bytes("CalicoFesStats", "CalicoFesStats (CalicoFesStats)")
-F.CalicoFesStats_fesId = ProtoField.uint32("CalicoFesStats_fesId", "fesId (uint32)")
-F.CalicoFesStats_themeId = ProtoField.uint8("CalicoFesStats_themeId", "themeId (uint8)")
-F.CalicoFesStats_fesGrade = ProtoField.int32("CalicoFesStats_fesGrade", "fesGrade (uint32)")
-F.CalicoFesStats_fesPoint = ProtoField.int32("CalicoFesStats_fesPoint", "fesPoint (uint32)")
-F.CalicoFesStats_fesPower = ProtoField.uint32("CalicoFesStats_fesPower", "fesPower (uint32)")
-F.CalicoFesStats_maxFesPower = ProtoField.uint32("CalicoFesStats_maxFesPower", "maxFesPower (uint32)")
-F.CalicoFesStats_myEstimateFesPower = ProtoField.int32("CalicoFesStats_myEstimateFesPower", "myEstimateFesPower (uint32)")
-F.CalicoFesStats_otherEstimateFesPower = ProtoField.int32("CalicoFesStats_otherEstimateFesPower", "otherEstimateFesPower (uint32)")
-F.CalicoGachiStats = ProtoField.bytes("CalicoGachiStats", "CalicoGachiStats (CalicoGachiStats)")
-F.CalicoGachiStats_elapsedTime = ProtoField.int32("CalicoGachiStats_elapsedTime", "elapsedTime (uint32)")
-F.CalicoGachiStats_myTeamCount = ProtoField.int8("CalicoGachiStats_myTeamCount", "myTeamCount (uint8)")
-F.CalicoGachiStats_otherTeamCount = ProtoField.int8("CalicoGachiStats_otherTeamCount", "otherTeamCount (uint8)")
-F.CalicoGachiStats_udemae = ProtoField.int32("CalicoGachiStats_udemae", "udemae (uint32)")
-F.CalicoGachiStats_estimateGachiPower = ProtoField.int32("CalicoGachiStats_estimateGachiPower", "estimateGachiPower (uint32)")
+F.CalicoPlayerResult = ProtoField.bytes("CalicoPlayerResult", "CalicoPlayerResult (CalicoPlayerResult)")
+F.CalicoPlayerResult_killCount = ProtoField.int32("CalicoPlayerResult_killCount", "killCount (uint32)")
+F.CalicoPlayerResult_assistCount = ProtoField.int32("CalicoPlayerResult_assistCount", "assistCount (uint32)")
+F.CalicoPlayerResult_deathCount = ProtoField.int32("CalicoPlayerResult_deathCount", "deathCount (uint32)")
+F.CalicoPlayerResult_specialCount = ProtoField.int32("CalicoPlayerResult_specialCount", "specialCount (uint32)")
+F.CalicoPlayerResult_gamePaintPoint = ProtoField.int32("CalicoPlayerResult_gamePaintPoint", "gamePaintPoint (uint32)")
+F.CalicoPlayerResult_sortScore = ProtoField.int32("CalicoPlayerResult_sortScore", "sortScore (uint32)")
 F.CoconutMeta = ProtoField.bytes("CoconutMeta", "CoconutMeta (CoconutMeta)")
 F.CoconutMeta_dataId = ProtoField.uint64("CoconutMeta_dataId", "dataId (uint64)")
 F.CoconutMeta_tweetId = ProtoField.uint64("CoconutMeta_tweetId", "tweetId (uint64)")
@@ -611,6 +550,17 @@ F.TrackingTag_attributes_data = ProtoField.string("TrackingTag_attributes_data",
 F.TrackingTag_deltaTime = ProtoField.uint32("TrackingTag_deltaTime", "deltaTime (uint32)")
 F.TrackingTag_newUserId_len = ProtoField.uint16("TrackingTag_newUserId_len", "newUserId length (String)")
 F.TrackingTag_newUserId_data = ProtoField.string("TrackingTag_newUserId_data", "newUserId data (String)")
+F.UserMessage = ProtoField.bytes("UserMessage", "UserMessage (UserMessage)")
+F.UserMessage_m_uiID = ProtoField.uint32("UserMessage_m_uiID", "m_uiID (uint32)")
+F.UserMessage_m_uiParentID = ProtoField.uint32("UserMessage_m_uiParentID", "m_uiParentID (uint32)")
+F.UserMessage_m_pidSender = ProtoField.uint32("UserMessage_m_pidSender", "m_pidSender (uint32)")
+F.UserMessage_m_receptiontime = ProtoField.uint64("UserMessage_m_receptiontime", "m_receptiontime (uint64)")
+F.UserMessage_m_uiLifeTime = ProtoField.uint32("UserMessage_m_uiLifeTime", "m_uiLifeTime (uint32)")
+F.UserMessage_m_uiFlags = ProtoField.uint32("UserMessage_m_uiFlags", "m_uiFlags (uint32)")
+F.UserMessage_m_strSubject_len = ProtoField.uint16("UserMessage_m_strSubject_len", "m_strSubject length (String)")
+F.UserMessage_m_strSubject_data = ProtoField.string("UserMessage_m_strSubject_data", "m_strSubject data (String)")
+F.UserMessage_m_strSender_len = ProtoField.uint16("UserMessage_m_strSender_len", "m_strSender length (String)")
+F.UserMessage_m_strSender_data = ProtoField.string("UserMessage_m_strSender_data", "m_strSender data (String)")
 F.TextMessage = ProtoField.bytes("TextMessage", "TextMessage (TextMessage)")
 F.TextMessage_m_strTextBody_len = ProtoField.uint16("TextMessage_m_strTextBody_len", "m_strTextBody length (String)")
 F.TextMessage_m_strTextBody_data = ProtoField.string("TextMessage_m_strTextBody_data", "m_strTextBody data (String)")
@@ -722,8 +672,23 @@ F.NintendoCreateAccountData_NEX_token_len = ProtoField.uint16("NintendoCreateAcc
 F.NintendoCreateAccountData_NEX_token_data = ProtoField.string("NintendoCreateAccountData_NEX_token_data", "NEX_token data (String)")
 F.NintendoCreateAccountData_Birthday = ProtoField.uint64("NintendoCreateAccountData_Birthday", "Birthday (uint64)")
 F.NintendoCreateAccountData_Unknown = ProtoField.uint64("NintendoCreateAccountData_Unknown", "Unknown (uint64)")
+F.CalicoFesStats = ProtoField.bytes("CalicoFesStats", "CalicoFesStats (CalicoFesStats)")
+F.CalicoFesStats_fesId = ProtoField.uint32("CalicoFesStats_fesId", "fesId (uint32)")
+F.CalicoFesStats_themeId = ProtoField.uint8("CalicoFesStats_themeId", "themeId (uint8)")
+F.CalicoFesStats_fesGrade = ProtoField.int32("CalicoFesStats_fesGrade", "fesGrade (uint32)")
+F.CalicoFesStats_fesPoint = ProtoField.int32("CalicoFesStats_fesPoint", "fesPoint (uint32)")
+F.CalicoFesStats_fesPower = ProtoField.uint32("CalicoFesStats_fesPower", "fesPower (uint32)")
+F.CalicoFesStats_maxFesPower = ProtoField.uint32("CalicoFesStats_maxFesPower", "maxFesPower (uint32)")
+F.CalicoFesStats_myEstimateFesPower = ProtoField.int32("CalicoFesStats_myEstimateFesPower", "myEstimateFesPower (uint32)")
+F.CalicoFesStats_otherEstimateFesPower = ProtoField.int32("CalicoFesStats_otherEstimateFesPower", "otherEstimateFesPower (uint32)")
 F.CalicoFesStatsV2 = ProtoField.bytes("CalicoFesStatsV2", "CalicoFesStatsV2 (CalicoFesStatsV2)")
 F.CalicoFesStatsV2_otherThemeId = ProtoField.uint8("CalicoFesStatsV2_otherThemeId", "otherThemeId (uint8)")
+F.CalicoGachiStats = ProtoField.bytes("CalicoGachiStats", "CalicoGachiStats (CalicoGachiStats)")
+F.CalicoGachiStats_elapsedTime = ProtoField.int32("CalicoGachiStats_elapsedTime", "elapsedTime (uint32)")
+F.CalicoGachiStats_myTeamCount = ProtoField.int8("CalicoGachiStats_myTeamCount", "myTeamCount (uint8)")
+F.CalicoGachiStats_otherTeamCount = ProtoField.int8("CalicoGachiStats_otherTeamCount", "otherTeamCount (uint8)")
+F.CalicoGachiStats_udemae = ProtoField.int32("CalicoGachiStats_udemae", "udemae (uint32)")
+F.CalicoGachiStats_estimateGachiPower = ProtoField.int32("CalicoGachiStats_estimateGachiPower", "estimateGachiPower (uint32)")
 F.CalicoLeagueStats = ProtoField.bytes("CalicoLeagueStats", "CalicoLeagueStats (CalicoLeagueStats)")
 F.CalicoLeagueStats_leagueId_len = ProtoField.uint16("CalicoLeagueStats_leagueId_len", "leagueId length (String)")
 F.CalicoLeagueStats_leagueId_data = ProtoField.string("CalicoLeagueStats_leagueId_data", "leagueId data (String)")
@@ -732,6 +697,22 @@ F.CalicoLeagueStats_leaguePoint = ProtoField.int32("CalicoLeagueStats_leaguePoin
 F.CalicoLeagueStats_maxLeaguePoint = ProtoField.int32("CalicoLeagueStats_maxLeaguePoint", "maxLeaguePoint (uint32)")
 F.CalicoLeagueStats_myEstimateLeaguePoint = ProtoField.int32("CalicoLeagueStats_myEstimateLeaguePoint", "myEstimateLeaguePoint (uint32)")
 F.CalicoLeagueStats_otherEstimateLeaguePoint = ProtoField.int32("CalicoLeagueStats_otherEstimateLeaguePoint", "otherEstimateLeaguePoint (uint32)")
+F.CalicoRegularStats = ProtoField.bytes("CalicoRegularStats", "CalicoRegularStats (CalicoRegularStats)")
+F.CalicoRegularStats_myTeamPercentage = ProtoField.int32("CalicoRegularStats_myTeamPercentage", "myTeamPercentage (uint32)")
+F.CalicoRegularStats_otherTeamPercentage = ProtoField.int32("CalicoRegularStats_otherTeamPercentage", "otherTeamPercentage (uint32)")
+F.CalicoRegularStats_winMeter = ProtoField.int32("CalicoRegularStats_winMeter", "winMeter (uint32)")
+F.CalicoStatsBase = ProtoField.bytes("CalicoStatsBase", "CalicoStatsBase (CalicoStatsBase)")
+F.CalicoStatsBase_gameMode = ProtoField.uint32("CalicoStatsBase_gameMode", "gameMode (uint32)")
+F.CalicoStatsBase_rule = ProtoField.int32("CalicoStatsBase_rule", "rule (uint32)")
+F.CalicoStatsBase_result = ProtoField.uint8("CalicoStatsBase_result", "result (uint8)")
+F.CalicoStatsBase_stage = ProtoField.int32("CalicoStatsBase_stage", "stage (uint32)")
+F.CalicoStatsBase_myTeamMembers_len = ProtoField.uint32("CalicoStatsBase_myTeamMembers_len", "myTeamMembers length (uint32)")
+F.CalicoStatsBase_otherTeamMembers_len = ProtoField.uint32("CalicoStatsBase_otherTeamMembers_len", "otherTeamMembers length (uint32)")
+F.CalicoStatsBase_weaponPaintPoint = ProtoField.int32("CalicoStatsBase_weaponPaintPoint", "weaponPaintPoint (uint32)")
+F.CalicoStatsBase_startTime = ProtoField.uint64("CalicoStatsBase_startTime", "startTime (uint64)")
+F.CalicoStatsBase_battleNum = ProtoField.uint64("CalicoStatsBase_battleNum", "battleNum (uint64)")
+F.CalicoStatsBase_playerRank = ProtoField.int32("CalicoStatsBase_playerRank", "playerRank (uint32)")
+F.CalicoStatsBase_starRank = ProtoField.int32("CalicoStatsBase_starRank", "starRank (uint32)")
 F.CoconutGetInfo = ProtoField.bytes("CoconutGetInfo", "CoconutGetInfo (CoconutGetInfo)")
 F.CoconutGetParam = ProtoField.bytes("CoconutGetParam", "CoconutGetParam (CoconutGetParam)")
 F.CoconutGetParam_uniqueIds_len = ProtoField.uint32("CoconutGetParam_uniqueIds_len", "uniqueIds length (uint32)")
@@ -764,6 +745,18 @@ F.StageTimeAttackWeapon = ProtoField.bytes("StageTimeAttackWeapon", "StageTimeAt
 F.StageTimeAttackWeapon_weaponLevel = ProtoField.int32("StageTimeAttackWeapon_weaponLevel", "weaponLevel (uint32)")
 F.StageTimeAttackWeapon_clearTime = ProtoField.int32("StageTimeAttackWeapon_clearTime", "clearTime (uint32)")
 F.TimeAttackInfo = ProtoField.bytes("TimeAttackInfo", "TimeAttackInfo (TimeAttackInfo)")
+F.Gathering = ProtoField.bytes("Gathering", "Gathering (Gathering)")
+F.Gathering_m_idMyself = ProtoField.uint32("Gathering_m_idMyself", "m_idMyself (uint32)")
+F.Gathering_m_pidOwner = ProtoField.uint32("Gathering_m_pidOwner", "m_pidOwner (uint32)")
+F.Gathering_m_pidHost = ProtoField.uint32("Gathering_m_pidHost", "m_pidHost (uint32)")
+F.Gathering_m_uiMinParticipants = ProtoField.uint16("Gathering_m_uiMinParticipants", "m_uiMinParticipants (uint16)")
+F.Gathering_m_uiMaxParticipants = ProtoField.uint16("Gathering_m_uiMaxParticipants", "m_uiMaxParticipants (uint16)")
+F.Gathering_m_uiParticipationPolicy = ProtoField.uint32("Gathering_m_uiParticipationPolicy", "m_uiParticipationPolicy (uint32)")
+F.Gathering_m_uiPolicyArgument = ProtoField.uint32("Gathering_m_uiPolicyArgument", "m_uiPolicyArgument (uint32)")
+F.Gathering_m_uiFlags = ProtoField.uint32("Gathering_m_uiFlags", "m_uiFlags (uint32)")
+F.Gathering_m_uiState = ProtoField.uint32("Gathering_m_uiState", "m_uiState (uint32)")
+F.Gathering_m_strDescription_len = ProtoField.uint16("Gathering_m_strDescription_len", "m_strDescription length (String)")
+F.Gathering_m_strDescription_data = ProtoField.string("Gathering_m_strDescription_data", "m_strDescription data (String)")
 F.PersistentGathering = ProtoField.bytes("PersistentGathering", "PersistentGathering (PersistentGathering)")
 F.PersistentGathering_m_CommunityType = ProtoField.uint32("PersistentGathering_m_CommunityType", "m_CommunityType (uint32)")
 F.PersistentGathering_m_Password_len = ProtoField.uint16("PersistentGathering_m_Password_len", "m_Password length (String)")
@@ -1348,11 +1341,6 @@ F.NintendoLoginData___AccountExtraInfo = ProtoField.bytes("NintendoLoginData___A
 F.NintendoLoginData___AccountExtraInfo_Token_received_from_the_account_server_len = ProtoField.uint16("NintendoLoginData___AccountExtraInfo_Token_received_from_the_account_server_len", "Token_received_from_the_account_server length (String)")
 F.NintendoLoginData___AccountExtraInfo_Token_received_from_the_account_server_data = ProtoField.string("NintendoLoginData___AccountExtraInfo_Token_received_from_the_account_server_data", "Token_received_from_the_account_server data (String)")
 F.AuthenticationInfo = ProtoField.bytes("AuthenticationInfo", "AuthenticationInfo (AuthenticationInfo)")
-F.AuthenticationInfo_Base2_data_bytes = ProtoField.bytes("AuthenticationInfo_Base2_data_bytes", "Base2 data bytes (bytes)")
-F.AuthenticationInfo_Base2_type_name_len = ProtoField.uint16("AuthenticationInfo_Base2_type_name_len", "Base2_type_name length (String)")
-F.AuthenticationInfo_Base2_type_name_data = ProtoField.string("AuthenticationInfo_Base2_type_name_data", "Base2_type_name data (String)")
-F.AuthenticationInfo_Base2_len_plus_four = ProtoField.uint32("AuthenticationInfo_Base2_len_plus_four", "Base2_len_plus_four (uint32)")
-F.AuthenticationInfo_Base2_data_len = ProtoField.uint32("AuthenticationInfo_Base2_data_len", "Base2_data_len (uint32)")
 F.AuthenticationInfo_m_authToken_len = ProtoField.uint16("AuthenticationInfo_m_authToken_len", "m_authToken length (String)")
 F.AuthenticationInfo_m_authToken_data = ProtoField.string("AuthenticationInfo_m_authToken_data", "m_authToken data (String)")
 F.AuthenticationInfo_m_ngsVersion = ProtoField.uint32("AuthenticationInfo_m_ngsVersion", "m_ngsVersion (uint32)")
@@ -3761,19 +3749,27 @@ end
 function do_Data(conn, tree, tvb, off, field_name)
 local Data_container = tree:add(F.Data, tvb(off, 0))
 	Data_container:set_text("Data")
-	off, Data_type_name = do_String(conn, Data_container, tvb, off, 'Data_type_name')
-off, Data_len_plus_four = do_Uint32(conn, Data_container, tvb, off, 'Data_len_plus_four')
-off, Data_data = do_Buffer(conn, Data_container, tvb, off, 'Data_data')
-
+	
 return off
 end
 
 			function do_Structure(conn, tree, tvb, off, field_name)
 				local Structure_container = tree:add(F.Structure, tvb(off, 0))
 				Structure_container:set_text("Structure")
-				return off + conn['struct_header_len']
+				if conn['has_struct_headers'] then
+					off, a = do_Uint8(conn, Structure_container, tvb, off, 'Structure_Version')
+					off, b = do_Uint32(conn, Structure_container, tvb, off, 'Structure_Length')
+				end
+				return off
 			end
-		function do_RVConnectionData(conn, tree, tvb, off, field_name)
+		function do_DataHeader(conn, tree, tvb, off, field_name)
+local DataHeader_container = tree:add(F.DataHeader, tvb(off, 0))
+	DataHeader_container:set_text("DataHeader")
+	off = do_Structure(conn, DataHeader_container, tvb, off, 'DataHeader_Base')
+
+return off
+end
+function do_RVConnectionData(conn, tree, tvb, off, field_name)
 local RVConnectionData_container = tree:add(F.RVConnectionData, tvb(off, 0))
 	RVConnectionData_container:set_text("RVConnectionData")
 	off = do_Structure(conn, RVConnectionData_container, tvb, off, 'RVConnectionData_Base')
@@ -3799,62 +3795,6 @@ local ResultRange_container = tree:add(F.ResultRange, tvb(off, 0))
 	ResultRange_container:set_text("ResultRange")
 	off, ResultRange_m_uiOffset = do_Uint32(conn, ResultRange_container, tvb, off, 'ResultRange_m_uiOffset')
 off, ResultRange_m_uiSize = do_Uint32(conn, ResultRange_container, tvb, off, 'ResultRange_m_uiSize')
-
-return off
-end
-function do_CalicoPlayerSimple(conn, tree, tvb, off, field_name)
-local CalicoPlayerSimple_container = tree:add(F.CalicoPlayerSimple, tvb(off, 0))
-	CalicoPlayerSimple_container:set_text("CalicoPlayerSimple")
-	off = do_Structure(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_Base')
-off, CalicoPlayerSimple_principalId = do_PID(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_principalId')
-off, CalicoPlayerSimple_name = do_String(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_name')
-off, CalicoPlayerSimple_playerType = do_Uint8(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_playerType')
-off, CalicoPlayerSimple_udemae = do_Sint32(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_udemae')
-off, CalicoPlayerSimple_playerRank = do_Sint32(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_playerRank')
-off, CalicoPlayerSimple_starRank = do_Sint32(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_starRank')
-off, CalicoPlayerSimple_fesGrade = do_Sint32(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_fesGrade')
-off, CalicoPlayerSimple_weaponId = do_Sint32(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_weaponId')
-off, CalicoPlayerSimple_headId = do_Sint32(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_headId')
-local CalicoPlayerSimple_headSkillIds_len = tvb(off, 4):le_uint()
-	subCalicoPlayerSimple_container = CalicoPlayerSimple_container:add_le(F.CalicoPlayerSimple_headSkillIds_len, tvb(off,4))
-	off = off + 4
-	for i=1,CalicoPlayerSimple_headSkillIds_len do
-	off, CalicoPlayerSimple_headSkillIds_item = do_Sint32(conn, subCalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_headSkillIds_item')
-
-	end
-	
-off, CalicoPlayerSimple_clothesId = do_Sint32(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_clothesId')
-local CalicoPlayerSimple_clothesSkillIds_len = tvb(off, 4):le_uint()
-	subCalicoPlayerSimple_container = CalicoPlayerSimple_container:add_le(F.CalicoPlayerSimple_clothesSkillIds_len, tvb(off,4))
-	off = off + 4
-	for i=1,CalicoPlayerSimple_clothesSkillIds_len do
-	off, CalicoPlayerSimple_clothesSkillIds_item = do_Sint32(conn, subCalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_clothesSkillIds_item')
-
-	end
-	
-off, CalicoPlayerSimple_shoesId = do_Sint32(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_shoesId')
-local CalicoPlayerSimple_shoesSkillIds_len = tvb(off, 4):le_uint()
-	subCalicoPlayerSimple_container = CalicoPlayerSimple_container:add_le(F.CalicoPlayerSimple_shoesSkillIds_len, tvb(off,4))
-	off = off + 4
-	for i=1,CalicoPlayerSimple_shoesSkillIds_len do
-	off, CalicoPlayerSimple_shoesSkillIds_item = do_Sint32(conn, subCalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_shoesSkillIds_item')
-
-	end
-	
-
-return off
-end
-function do_CalicoPlayerResult(conn, tree, tvb, off, field_name)
-local CalicoPlayerResult_container = tree:add(F.CalicoPlayerResult, tvb(off, 0))
-	CalicoPlayerResult_container:set_text("CalicoPlayerResult")
-	off = do_Structure(conn, CalicoPlayerResult_container, tvb, off, 'CalicoPlayerResult_Base')
-off = do_CalicoPlayerSimple(conn, CalicoPlayerResult_container, tvb, off, 'CalicoPlayerResult_playerSimple')
-off, CalicoPlayerResult_killCount = do_Sint32(conn, CalicoPlayerResult_container, tvb, off, 'CalicoPlayerResult_killCount')
-off, CalicoPlayerResult_assistCount = do_Sint32(conn, CalicoPlayerResult_container, tvb, off, 'CalicoPlayerResult_assistCount')
-off, CalicoPlayerResult_deathCount = do_Sint32(conn, CalicoPlayerResult_container, tvb, off, 'CalicoPlayerResult_deathCount')
-off, CalicoPlayerResult_specialCount = do_Sint32(conn, CalicoPlayerResult_container, tvb, off, 'CalicoPlayerResult_specialCount')
-off, CalicoPlayerResult_gamePaintPoint = do_Sint32(conn, CalicoPlayerResult_container, tvb, off, 'CalicoPlayerResult_gamePaintPoint')
-off, CalicoPlayerResult_sortScore = do_Sint32(conn, CalicoPlayerResult_container, tvb, off, 'CalicoPlayerResult_sortScore')
 
 return off
 end
@@ -3894,55 +3834,12 @@ off, MiiV2_Unknown3 = do_DateTime(conn, MiiV2_container, tvb, off, 'MiiV2_Unknow
 
 return off
 end
-function do_CalicoStatsBase(conn, tree, tvb, off, field_name)
-local CalicoStatsBase_container = tree:add(F.CalicoStatsBase, tvb(off, 0))
-	CalicoStatsBase_container:set_text("CalicoStatsBase")
-	off = do_Structure(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_Base')
-off, CalicoStatsBase_gameMode = do_Uint32(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_gameMode')
-off, CalicoStatsBase_rule = do_Sint32(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_rule')
-off, CalicoStatsBase_result = do_Uint8(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_result')
-off, CalicoStatsBase_stage = do_Sint32(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_stage')
-off = do_CalicoPlayerResult(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_playerResult')
-local CalicoStatsBase_myTeamMembers_len = tvb(off, 4):le_uint()
-	subCalicoStatsBase_container = CalicoStatsBase_container:add_le(F.CalicoStatsBase_myTeamMembers_len, tvb(off,4))
-	off = off + 4
-	for i=1,CalicoStatsBase_myTeamMembers_len do
-	off = do_CalicoPlayerResult(conn, subCalicoStatsBase_container, tvb, off, 'CalicoStatsBase_myTeamMembers_item')
-
-	end
-	
-local CalicoStatsBase_otherTeamMembers_len = tvb(off, 4):le_uint()
-	subCalicoStatsBase_container = CalicoStatsBase_container:add_le(F.CalicoStatsBase_otherTeamMembers_len, tvb(off,4))
-	off = off + 4
-	for i=1,CalicoStatsBase_otherTeamMembers_len do
-	off = do_CalicoPlayerResult(conn, subCalicoStatsBase_container, tvb, off, 'CalicoStatsBase_otherTeamMembers_item')
-
-	end
-	
-off, CalicoStatsBase_weaponPaintPoint = do_Sint32(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_weaponPaintPoint')
-off, CalicoStatsBase_startTime = do_DateTime(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_startTime')
-off, CalicoStatsBase_battleNum = do_Uint64(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_battleNum')
-off, CalicoStatsBase_playerRank = do_Sint32(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_playerRank')
-off, CalicoStatsBase_starRank = do_Sint32(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_starRank')
-
-return off
-end
 function do_PropertyVariant(conn, tree, tvb, off, field_name)
 local PropertyVariant_container = tree:add(F.PropertyVariant, tvb(off, 0))
 	PropertyVariant_container:set_text("PropertyVariant")
 	off = do_Structure(conn, PropertyVariant_container, tvb, off, 'PropertyVariant_Base')
 off, PropertyVariant_ID = do_Uint32(conn, PropertyVariant_container, tvb, off, 'PropertyVariant_ID')
 --[[ Stubbed! Missing type Variant]]
-
-return off
-end
-function do_MessageRecipient(conn, tree, tvb, off, field_name)
-local MessageRecipient_container = tree:add(F.MessageRecipient, tvb(off, 0))
-	MessageRecipient_container:set_text("MessageRecipient")
-	off = do_Structure(conn, MessageRecipient_container, tvb, off, 'MessageRecipient_Base')
-off, MessageRecipient_m_uiRecipientType = do_Uint32(conn, MessageRecipient_container, tvb, off, 'MessageRecipient_m_uiRecipientType')
-off, MessageRecipient_m_principalId = do_PID(conn, MessageRecipient_container, tvb, off, 'MessageRecipient_m_principalId')
-off, MessageRecipient_m_gatheringId = do_Uint32(conn, MessageRecipient_container, tvb, off, 'MessageRecipient_m_gatheringId')
 
 return off
 end
@@ -4008,31 +3905,45 @@ off, PrincipalBasicInfo_Unknown = do_Uint8(conn, PrincipalBasicInfo_container, t
 
 return off
 end
-function do_CalicoRegularStats(conn, tree, tvb, off, field_name)
-local CalicoRegularStats_container = tree:add(F.CalicoRegularStats, tvb(off, 0))
-	CalicoRegularStats_container:set_text("CalicoRegularStats")
-	off = do_Structure(conn, CalicoRegularStats_container, tvb, off, 'CalicoRegularStats_Base')
-off = do_CalicoStatsBase(conn, CalicoRegularStats_container, tvb, off, 'CalicoRegularStats_Base2')
-off, CalicoRegularStats_myTeamPercentage = do_Sint32(conn, CalicoRegularStats_container, tvb, off, 'CalicoRegularStats_myTeamPercentage')
-off, CalicoRegularStats_otherTeamPercentage = do_Sint32(conn, CalicoRegularStats_container, tvb, off, 'CalicoRegularStats_otherTeamPercentage')
-off, CalicoRegularStats_winMeter = do_Sint32(conn, CalicoRegularStats_container, tvb, off, 'CalicoRegularStats_winMeter')
+function do_CalicoPlayerSimple(conn, tree, tvb, off, field_name)
+local CalicoPlayerSimple_container = tree:add(F.CalicoPlayerSimple, tvb(off, 0))
+	CalicoPlayerSimple_container:set_text("CalicoPlayerSimple")
+	off = do_Structure(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_Base')
+off, CalicoPlayerSimple_principalId = do_PID(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_principalId')
+off, CalicoPlayerSimple_name = do_String(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_name')
+off, CalicoPlayerSimple_playerType = do_Uint8(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_playerType')
+off, CalicoPlayerSimple_udemae = do_Sint32(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_udemae')
+off, CalicoPlayerSimple_playerRank = do_Sint32(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_playerRank')
+off, CalicoPlayerSimple_starRank = do_Sint32(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_starRank')
+off, CalicoPlayerSimple_fesGrade = do_Sint32(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_fesGrade')
+off, CalicoPlayerSimple_weaponId = do_Sint32(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_weaponId')
+off, CalicoPlayerSimple_headId = do_Sint32(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_headId')
+local CalicoPlayerSimple_headSkillIds_len = tvb(off, 4):le_uint()
+	subCalicoPlayerSimple_container = CalicoPlayerSimple_container:add_le(F.CalicoPlayerSimple_headSkillIds_len, tvb(off,4))
+	off = off + 4
+	for i=1,CalicoPlayerSimple_headSkillIds_len do
+	off, CalicoPlayerSimple_headSkillIds_item = do_Sint32(conn, subCalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_headSkillIds_item')
 
-return off
-end
-function do_Gathering(conn, tree, tvb, off, field_name)
-local Gathering_container = tree:add(F.Gathering, tvb(off, 0))
-	Gathering_container:set_text("Gathering")
-	off = do_Structure(conn, Gathering_container, tvb, off, 'Gathering_Base')
-off, Gathering_m_idMyself = do_Uint32(conn, Gathering_container, tvb, off, 'Gathering_m_idMyself')
-off, Gathering_m_pidOwner = do_PID(conn, Gathering_container, tvb, off, 'Gathering_m_pidOwner')
-off, Gathering_m_pidHost = do_PID(conn, Gathering_container, tvb, off, 'Gathering_m_pidHost')
-off, Gathering_m_uiMinParticipants = do_Uint16(conn, Gathering_container, tvb, off, 'Gathering_m_uiMinParticipants')
-off, Gathering_m_uiMaxParticipants = do_Uint16(conn, Gathering_container, tvb, off, 'Gathering_m_uiMaxParticipants')
-off, Gathering_m_uiParticipationPolicy = do_Uint32(conn, Gathering_container, tvb, off, 'Gathering_m_uiParticipationPolicy')
-off, Gathering_m_uiPolicyArgument = do_Uint32(conn, Gathering_container, tvb, off, 'Gathering_m_uiPolicyArgument')
-off, Gathering_m_uiFlags = do_Uint32(conn, Gathering_container, tvb, off, 'Gathering_m_uiFlags')
-off, Gathering_m_uiState = do_Uint32(conn, Gathering_container, tvb, off, 'Gathering_m_uiState')
-off, Gathering_m_strDescription = do_String(conn, Gathering_container, tvb, off, 'Gathering_m_strDescription')
+	end
+	
+off, CalicoPlayerSimple_clothesId = do_Sint32(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_clothesId')
+local CalicoPlayerSimple_clothesSkillIds_len = tvb(off, 4):le_uint()
+	subCalicoPlayerSimple_container = CalicoPlayerSimple_container:add_le(F.CalicoPlayerSimple_clothesSkillIds_len, tvb(off,4))
+	off = off + 4
+	for i=1,CalicoPlayerSimple_clothesSkillIds_len do
+	off, CalicoPlayerSimple_clothesSkillIds_item = do_Sint32(conn, subCalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_clothesSkillIds_item')
+
+	end
+	
+off, CalicoPlayerSimple_shoesId = do_Sint32(conn, CalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_shoesId')
+local CalicoPlayerSimple_shoesSkillIds_len = tvb(off, 4):le_uint()
+	subCalicoPlayerSimple_container = CalicoPlayerSimple_container:add_le(F.CalicoPlayerSimple_shoesSkillIds_len, tvb(off,4))
+	off = off + 4
+	for i=1,CalicoPlayerSimple_shoesSkillIds_len do
+	off, CalicoPlayerSimple_shoesSkillIds_item = do_Sint32(conn, subCalicoPlayerSimple_container, tvb, off, 'CalicoPlayerSimple_shoesSkillIds_item')
+
+	end
+	
 
 return off
 end
@@ -4105,36 +4016,13 @@ off, Ranking2CommonData_binaryData = do_qBuffer(conn, Ranking2CommonData_contain
 
 return off
 end
-function do_UserMessage(conn, tree, tvb, off, field_name)
-local UserMessage_container = tree:add(F.UserMessage, tvb(off, 0))
-	UserMessage_container:set_text("UserMessage")
-	off = do_Structure(conn, UserMessage_container, tvb, off, 'UserMessage_Base')
-
-		local UserMessage_Base2_container = UserMessage_container:add(F.Data, tvb(off, 0))
-		UserMessage_Base2_container:set_text("Data")
-	off, UserMessage_Base2_type_name = do_String(conn, UserMessage_Base2_container, tvb, off, 'UserMessage_Base2_type_name')
-
-off, UserMessage_Base2_len_plus_four = do_Uint32(conn, UserMessage_Base2_container, tvb, off, 'UserMessage_Base2_len_plus_four')
-
-off, UserMessage_Base2_data_len = do_Uint32(conn, UserMessage_Base2_container, tvb, off, 'UserMessage_Base2_data_len')
-
-local type_func = 'do_'..UserMessage_Base2_type_name
-		if _G[type_func] ~= nil then
-			off = _G[type_func](conn, UserMessage_Base2_container, tvb, off, "UserMessage_Base2_data")
-		else
-			UserMessage_Base2_container:add(F.UserMessage_Base2_data_bytes, tvb(off, UserMessage_Base2_len))
-			off = off + UserMessage_Base2_data_len
-		end
-	
-off, UserMessage_m_uiID = do_Uint32(conn, UserMessage_container, tvb, off, 'UserMessage_m_uiID')
-off, UserMessage_m_uiParentID = do_Uint32(conn, UserMessage_container, tvb, off, 'UserMessage_m_uiParentID')
-off, UserMessage_m_pidSender = do_PID(conn, UserMessage_container, tvb, off, 'UserMessage_m_pidSender')
-off, UserMessage_m_receptiontime = do_DateTime(conn, UserMessage_container, tvb, off, 'UserMessage_m_receptiontime')
-off, UserMessage_m_uiLifeTime = do_Uint32(conn, UserMessage_container, tvb, off, 'UserMessage_m_uiLifeTime')
-off, UserMessage_m_uiFlags = do_Uint32(conn, UserMessage_container, tvb, off, 'UserMessage_m_uiFlags')
-off, UserMessage_m_strSubject = do_String(conn, UserMessage_container, tvb, off, 'UserMessage_m_strSubject')
-off, UserMessage_m_strSender = do_String(conn, UserMessage_container, tvb, off, 'UserMessage_m_strSender')
-off = do_MessageRecipient(conn, UserMessage_container, tvb, off, 'UserMessage_m_messageRecipient')
+function do_MessageRecipient(conn, tree, tvb, off, field_name)
+local MessageRecipient_container = tree:add(F.MessageRecipient, tvb(off, 0))
+	MessageRecipient_container:set_text("MessageRecipient")
+	off = do_Structure(conn, MessageRecipient_container, tvb, off, 'MessageRecipient_Base')
+off, MessageRecipient_m_uiRecipientType = do_Uint32(conn, MessageRecipient_container, tvb, off, 'MessageRecipient_m_uiRecipientType')
+off, MessageRecipient_m_principalId = do_PID(conn, MessageRecipient_container, tvb, off, 'MessageRecipient_m_principalId')
+off, MessageRecipient_m_gatheringId = do_Uint32(conn, MessageRecipient_container, tvb, off, 'MessageRecipient_m_gatheringId')
 
 return off
 end
@@ -4259,32 +4147,17 @@ off, NNAInfo_Unknown2 = do_Uint8(conn, NNAInfo_container, tvb, off, 'NNAInfo_Unk
 
 return off
 end
-function do_CalicoFesStats(conn, tree, tvb, off, field_name)
-local CalicoFesStats_container = tree:add(F.CalicoFesStats, tvb(off, 0))
-	CalicoFesStats_container:set_text("CalicoFesStats")
-	off = do_Structure(conn, CalicoFesStats_container, tvb, off, 'CalicoFesStats_Base')
-off = do_CalicoRegularStats(conn, CalicoFesStats_container, tvb, off, 'CalicoFesStats_Base2')
-off, CalicoFesStats_fesId = do_Uint32(conn, CalicoFesStats_container, tvb, off, 'CalicoFesStats_fesId')
-off, CalicoFesStats_themeId = do_Uint8(conn, CalicoFesStats_container, tvb, off, 'CalicoFesStats_themeId')
-off, CalicoFesStats_fesGrade = do_Sint32(conn, CalicoFesStats_container, tvb, off, 'CalicoFesStats_fesGrade')
-off, CalicoFesStats_fesPoint = do_Sint32(conn, CalicoFesStats_container, tvb, off, 'CalicoFesStats_fesPoint')
-off, CalicoFesStats_fesPower = do_Uint32(conn, CalicoFesStats_container, tvb, off, 'CalicoFesStats_fesPower')
-off, CalicoFesStats_maxFesPower = do_Uint32(conn, CalicoFesStats_container, tvb, off, 'CalicoFesStats_maxFesPower')
-off, CalicoFesStats_myEstimateFesPower = do_Sint32(conn, CalicoFesStats_container, tvb, off, 'CalicoFesStats_myEstimateFesPower')
-off, CalicoFesStats_otherEstimateFesPower = do_Sint32(conn, CalicoFesStats_container, tvb, off, 'CalicoFesStats_otherEstimateFesPower')
-
-return off
-end
-function do_CalicoGachiStats(conn, tree, tvb, off, field_name)
-local CalicoGachiStats_container = tree:add(F.CalicoGachiStats, tvb(off, 0))
-	CalicoGachiStats_container:set_text("CalicoGachiStats")
-	off = do_Structure(conn, CalicoGachiStats_container, tvb, off, 'CalicoGachiStats_Base')
-off = do_CalicoStatsBase(conn, CalicoGachiStats_container, tvb, off, 'CalicoGachiStats_Base2')
-off, CalicoGachiStats_elapsedTime = do_Sint32(conn, CalicoGachiStats_container, tvb, off, 'CalicoGachiStats_elapsedTime')
-off, CalicoGachiStats_myTeamCount = do_Sint8(conn, CalicoGachiStats_container, tvb, off, 'CalicoGachiStats_myTeamCount')
-off, CalicoGachiStats_otherTeamCount = do_Sint8(conn, CalicoGachiStats_container, tvb, off, 'CalicoGachiStats_otherTeamCount')
-off, CalicoGachiStats_udemae = do_Sint32(conn, CalicoGachiStats_container, tvb, off, 'CalicoGachiStats_udemae')
-off, CalicoGachiStats_estimateGachiPower = do_Sint32(conn, CalicoGachiStats_container, tvb, off, 'CalicoGachiStats_estimateGachiPower')
+function do_CalicoPlayerResult(conn, tree, tvb, off, field_name)
+local CalicoPlayerResult_container = tree:add(F.CalicoPlayerResult, tvb(off, 0))
+	CalicoPlayerResult_container:set_text("CalicoPlayerResult")
+	off = do_Structure(conn, CalicoPlayerResult_container, tvb, off, 'CalicoPlayerResult_Base')
+off = do_CalicoPlayerSimple(conn, CalicoPlayerResult_container, tvb, off, 'CalicoPlayerResult_playerSimple')
+off, CalicoPlayerResult_killCount = do_Sint32(conn, CalicoPlayerResult_container, tvb, off, 'CalicoPlayerResult_killCount')
+off, CalicoPlayerResult_assistCount = do_Sint32(conn, CalicoPlayerResult_container, tvb, off, 'CalicoPlayerResult_assistCount')
+off, CalicoPlayerResult_deathCount = do_Sint32(conn, CalicoPlayerResult_container, tvb, off, 'CalicoPlayerResult_deathCount')
+off, CalicoPlayerResult_specialCount = do_Sint32(conn, CalicoPlayerResult_container, tvb, off, 'CalicoPlayerResult_specialCount')
+off, CalicoPlayerResult_gamePaintPoint = do_Sint32(conn, CalicoPlayerResult_container, tvb, off, 'CalicoPlayerResult_gamePaintPoint')
+off, CalicoPlayerResult_sortScore = do_Sint32(conn, CalicoPlayerResult_container, tvb, off, 'CalicoPlayerResult_sortScore')
 
 return off
 end
@@ -4318,7 +4191,6 @@ function do_MatchmakeSession(conn, tree, tvb, off, field_name)
 local MatchmakeSession_container = tree:add(F.MatchmakeSession, tvb(off, 0))
 	MatchmakeSession_container:set_text("MatchmakeSession")
 	off = do_Structure(conn, MatchmakeSession_container, tvb, off, 'MatchmakeSession_Base')
-off = do_Gathering(conn, MatchmakeSession_container, tvb, off, 'MatchmakeSession_Base2')
 off, MatchmakeSession_m_GameMode = do_Uint32(conn, MatchmakeSession_container, tvb, off, 'MatchmakeSession_m_GameMode')
 local MatchmakeSession_m_Attribs_len = tvb(off, 4):le_uint()
 	subMatchmakeSession_container = MatchmakeSession_container:add_le(F.MatchmakeSession_m_Attribs_len, tvb(off,4))
@@ -4870,11 +4742,27 @@ off, TrackingTag_newUserId = do_String(conn, TrackingTag_container, tvb, off, 'T
 
 return off
 end
+function do_UserMessage(conn, tree, tvb, off, field_name)
+local UserMessage_container = tree:add(F.UserMessage, tvb(off, 0))
+	UserMessage_container:set_text("UserMessage")
+	off = do_Structure(conn, UserMessage_container, tvb, off, 'UserMessage_Base')
+off = do_DataHeader(conn, UserMessage_container, tvb, off, 'UserMessage_Base2')
+off, UserMessage_m_uiID = do_Uint32(conn, UserMessage_container, tvb, off, 'UserMessage_m_uiID')
+off, UserMessage_m_uiParentID = do_Uint32(conn, UserMessage_container, tvb, off, 'UserMessage_m_uiParentID')
+off, UserMessage_m_pidSender = do_PID(conn, UserMessage_container, tvb, off, 'UserMessage_m_pidSender')
+off, UserMessage_m_receptiontime = do_DateTime(conn, UserMessage_container, tvb, off, 'UserMessage_m_receptiontime')
+off, UserMessage_m_uiLifeTime = do_Uint32(conn, UserMessage_container, tvb, off, 'UserMessage_m_uiLifeTime')
+off, UserMessage_m_uiFlags = do_Uint32(conn, UserMessage_container, tvb, off, 'UserMessage_m_uiFlags')
+off, UserMessage_m_strSubject = do_String(conn, UserMessage_container, tvb, off, 'UserMessage_m_strSubject')
+off, UserMessage_m_strSender = do_String(conn, UserMessage_container, tvb, off, 'UserMessage_m_strSender')
+off = do_MessageRecipient(conn, UserMessage_container, tvb, off, 'UserMessage_m_messageRecipient')
+
+return off
+end
 function do_TextMessage(conn, tree, tvb, off, field_name)
 local TextMessage_container = tree:add(F.TextMessage, tvb(off, 0))
 	TextMessage_container:set_text("TextMessage")
 	off = do_Structure(conn, TextMessage_container, tvb, off, 'TextMessage_Base')
-off = do_UserMessage(conn, TextMessage_container, tvb, off, 'TextMessage_Base2')
 off, TextMessage_m_strTextBody = do_String(conn, TextMessage_container, tvb, off, 'TextMessage_m_strTextBody')
 
 return off
@@ -4883,7 +4771,6 @@ function do_BinaryMessage(conn, tree, tvb, off, field_name)
 local BinaryMessage_container = tree:add(F.BinaryMessage, tvb(off, 0))
 	BinaryMessage_container:set_text("BinaryMessage")
 	off = do_Structure(conn, BinaryMessage_container, tvb, off, 'BinaryMessage_Base')
-off = do_UserMessage(conn, BinaryMessage_container, tvb, off, 'BinaryMessage_Base2')
 off, BinaryMessage_m_binaryBody = do_qBuffer(conn, BinaryMessage_container, tvb, off, 'BinaryMessage_m_binaryBody')
 
 return off
@@ -5140,12 +5027,38 @@ off, NintendoCreateAccountData_Unknown = do_Uint64(conn, NintendoCreateAccountDa
 
 return off
 end
+function do_CalicoFesStats(conn, tree, tvb, off, field_name)
+local CalicoFesStats_container = tree:add(F.CalicoFesStats, tvb(off, 0))
+	CalicoFesStats_container:set_text("CalicoFesStats")
+	off = do_Structure(conn, CalicoFesStats_container, tvb, off, 'CalicoFesStats_Base')
+off, CalicoFesStats_fesId = do_Uint32(conn, CalicoFesStats_container, tvb, off, 'CalicoFesStats_fesId')
+off, CalicoFesStats_themeId = do_Uint8(conn, CalicoFesStats_container, tvb, off, 'CalicoFesStats_themeId')
+off, CalicoFesStats_fesGrade = do_Sint32(conn, CalicoFesStats_container, tvb, off, 'CalicoFesStats_fesGrade')
+off, CalicoFesStats_fesPoint = do_Sint32(conn, CalicoFesStats_container, tvb, off, 'CalicoFesStats_fesPoint')
+off, CalicoFesStats_fesPower = do_Uint32(conn, CalicoFesStats_container, tvb, off, 'CalicoFesStats_fesPower')
+off, CalicoFesStats_maxFesPower = do_Uint32(conn, CalicoFesStats_container, tvb, off, 'CalicoFesStats_maxFesPower')
+off, CalicoFesStats_myEstimateFesPower = do_Sint32(conn, CalicoFesStats_container, tvb, off, 'CalicoFesStats_myEstimateFesPower')
+off, CalicoFesStats_otherEstimateFesPower = do_Sint32(conn, CalicoFesStats_container, tvb, off, 'CalicoFesStats_otherEstimateFesPower')
+
+return off
+end
 function do_CalicoFesStatsV2(conn, tree, tvb, off, field_name)
 local CalicoFesStatsV2_container = tree:add(F.CalicoFesStatsV2, tvb(off, 0))
 	CalicoFesStatsV2_container:set_text("CalicoFesStatsV2")
 	off = do_Structure(conn, CalicoFesStatsV2_container, tvb, off, 'CalicoFesStatsV2_Base')
-off = do_CalicoFesStats(conn, CalicoFesStatsV2_container, tvb, off, 'CalicoFesStatsV2_Base2')
 off, CalicoFesStatsV2_otherThemeId = do_Uint8(conn, CalicoFesStatsV2_container, tvb, off, 'CalicoFesStatsV2_otherThemeId')
+
+return off
+end
+function do_CalicoGachiStats(conn, tree, tvb, off, field_name)
+local CalicoGachiStats_container = tree:add(F.CalicoGachiStats, tvb(off, 0))
+	CalicoGachiStats_container:set_text("CalicoGachiStats")
+	off = do_Structure(conn, CalicoGachiStats_container, tvb, off, 'CalicoGachiStats_Base')
+off, CalicoGachiStats_elapsedTime = do_Sint32(conn, CalicoGachiStats_container, tvb, off, 'CalicoGachiStats_elapsedTime')
+off, CalicoGachiStats_myTeamCount = do_Sint8(conn, CalicoGachiStats_container, tvb, off, 'CalicoGachiStats_myTeamCount')
+off, CalicoGachiStats_otherTeamCount = do_Sint8(conn, CalicoGachiStats_container, tvb, off, 'CalicoGachiStats_otherTeamCount')
+off, CalicoGachiStats_udemae = do_Sint32(conn, CalicoGachiStats_container, tvb, off, 'CalicoGachiStats_udemae')
+off, CalicoGachiStats_estimateGachiPower = do_Sint32(conn, CalicoGachiStats_container, tvb, off, 'CalicoGachiStats_estimateGachiPower')
 
 return off
 end
@@ -5153,13 +5066,55 @@ function do_CalicoLeagueStats(conn, tree, tvb, off, field_name)
 local CalicoLeagueStats_container = tree:add(F.CalicoLeagueStats, tvb(off, 0))
 	CalicoLeagueStats_container:set_text("CalicoLeagueStats")
 	off = do_Structure(conn, CalicoLeagueStats_container, tvb, off, 'CalicoLeagueStats_Base')
-off = do_CalicoGachiStats(conn, CalicoLeagueStats_container, tvb, off, 'CalicoLeagueStats_Base2')
 off, CalicoLeagueStats_leagueId = do_String(conn, CalicoLeagueStats_container, tvb, off, 'CalicoLeagueStats_leagueId')
 off, CalicoLeagueStats_tagId = do_Uint64(conn, CalicoLeagueStats_container, tvb, off, 'CalicoLeagueStats_tagId')
 off, CalicoLeagueStats_leaguePoint = do_Sint32(conn, CalicoLeagueStats_container, tvb, off, 'CalicoLeagueStats_leaguePoint')
 off, CalicoLeagueStats_maxLeaguePoint = do_Sint32(conn, CalicoLeagueStats_container, tvb, off, 'CalicoLeagueStats_maxLeaguePoint')
 off, CalicoLeagueStats_myEstimateLeaguePoint = do_Sint32(conn, CalicoLeagueStats_container, tvb, off, 'CalicoLeagueStats_myEstimateLeaguePoint')
 off, CalicoLeagueStats_otherEstimateLeaguePoint = do_Sint32(conn, CalicoLeagueStats_container, tvb, off, 'CalicoLeagueStats_otherEstimateLeaguePoint')
+
+return off
+end
+function do_CalicoRegularStats(conn, tree, tvb, off, field_name)
+local CalicoRegularStats_container = tree:add(F.CalicoRegularStats, tvb(off, 0))
+	CalicoRegularStats_container:set_text("CalicoRegularStats")
+	off = do_Structure(conn, CalicoRegularStats_container, tvb, off, 'CalicoRegularStats_Base')
+off, CalicoRegularStats_myTeamPercentage = do_Sint32(conn, CalicoRegularStats_container, tvb, off, 'CalicoRegularStats_myTeamPercentage')
+off, CalicoRegularStats_otherTeamPercentage = do_Sint32(conn, CalicoRegularStats_container, tvb, off, 'CalicoRegularStats_otherTeamPercentage')
+off, CalicoRegularStats_winMeter = do_Sint32(conn, CalicoRegularStats_container, tvb, off, 'CalicoRegularStats_winMeter')
+
+return off
+end
+function do_CalicoStatsBase(conn, tree, tvb, off, field_name)
+local CalicoStatsBase_container = tree:add(F.CalicoStatsBase, tvb(off, 0))
+	CalicoStatsBase_container:set_text("CalicoStatsBase")
+	off = do_Structure(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_Base')
+off, CalicoStatsBase_gameMode = do_Uint32(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_gameMode')
+off, CalicoStatsBase_rule = do_Sint32(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_rule')
+off, CalicoStatsBase_result = do_Uint8(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_result')
+off, CalicoStatsBase_stage = do_Sint32(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_stage')
+off = do_CalicoPlayerResult(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_playerResult')
+local CalicoStatsBase_myTeamMembers_len = tvb(off, 4):le_uint()
+	subCalicoStatsBase_container = CalicoStatsBase_container:add_le(F.CalicoStatsBase_myTeamMembers_len, tvb(off,4))
+	off = off + 4
+	for i=1,CalicoStatsBase_myTeamMembers_len do
+	off = do_CalicoPlayerResult(conn, subCalicoStatsBase_container, tvb, off, 'CalicoStatsBase_myTeamMembers_item')
+
+	end
+	
+local CalicoStatsBase_otherTeamMembers_len = tvb(off, 4):le_uint()
+	subCalicoStatsBase_container = CalicoStatsBase_container:add_le(F.CalicoStatsBase_otherTeamMembers_len, tvb(off,4))
+	off = off + 4
+	for i=1,CalicoStatsBase_otherTeamMembers_len do
+	off = do_CalicoPlayerResult(conn, subCalicoStatsBase_container, tvb, off, 'CalicoStatsBase_otherTeamMembers_item')
+
+	end
+	
+off, CalicoStatsBase_weaponPaintPoint = do_Sint32(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_weaponPaintPoint')
+off, CalicoStatsBase_startTime = do_DateTime(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_startTime')
+off, CalicoStatsBase_battleNum = do_Uint64(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_battleNum')
+off, CalicoStatsBase_playerRank = do_Sint32(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_playerRank')
+off, CalicoStatsBase_starRank = do_Sint32(conn, CalicoStatsBase_container, tvb, off, 'CalicoStatsBase_starRank')
 
 return off
 end
@@ -5265,11 +5220,27 @@ local TimeAttackInfo_container = tree:add(F.TimeAttackInfo, tvb(off, 0))
 
 return off
 end
+function do_Gathering(conn, tree, tvb, off, field_name)
+local Gathering_container = tree:add(F.Gathering, tvb(off, 0))
+	Gathering_container:set_text("Gathering")
+	off = do_Structure(conn, Gathering_container, tvb, off, 'Gathering_Base')
+off, Gathering_m_idMyself = do_Uint32(conn, Gathering_container, tvb, off, 'Gathering_m_idMyself')
+off, Gathering_m_pidOwner = do_PID(conn, Gathering_container, tvb, off, 'Gathering_m_pidOwner')
+off, Gathering_m_pidHost = do_PID(conn, Gathering_container, tvb, off, 'Gathering_m_pidHost')
+off, Gathering_m_uiMinParticipants = do_Uint16(conn, Gathering_container, tvb, off, 'Gathering_m_uiMinParticipants')
+off, Gathering_m_uiMaxParticipants = do_Uint16(conn, Gathering_container, tvb, off, 'Gathering_m_uiMaxParticipants')
+off, Gathering_m_uiParticipationPolicy = do_Uint32(conn, Gathering_container, tvb, off, 'Gathering_m_uiParticipationPolicy')
+off, Gathering_m_uiPolicyArgument = do_Uint32(conn, Gathering_container, tvb, off, 'Gathering_m_uiPolicyArgument')
+off, Gathering_m_uiFlags = do_Uint32(conn, Gathering_container, tvb, off, 'Gathering_m_uiFlags')
+off, Gathering_m_uiState = do_Uint32(conn, Gathering_container, tvb, off, 'Gathering_m_uiState')
+off, Gathering_m_strDescription = do_String(conn, Gathering_container, tvb, off, 'Gathering_m_strDescription')
+
+return off
+end
 function do_PersistentGathering(conn, tree, tvb, off, field_name)
 local PersistentGathering_container = tree:add(F.PersistentGathering, tvb(off, 0))
 	PersistentGathering_container:set_text("PersistentGathering")
 	off = do_Structure(conn, PersistentGathering_container, tvb, off, 'PersistentGathering_Base')
-off = do_Gathering(conn, PersistentGathering_container, tvb, off, 'PersistentGathering_Base2')
 off, PersistentGathering_m_CommunityType = do_Uint32(conn, PersistentGathering_container, tvb, off, 'PersistentGathering_m_CommunityType')
 off, PersistentGathering_m_Password = do_String(conn, PersistentGathering_container, tvb, off, 'PersistentGathering_m_Password')
 local PersistentGathering_m_Attribs_len = tvb(off, 4):le_uint()
@@ -6810,23 +6781,7 @@ function do_AuthenticationInfo(conn, tree, tvb, off, field_name)
 local AuthenticationInfo_container = tree:add(F.AuthenticationInfo, tvb(off, 0))
 	AuthenticationInfo_container:set_text("AuthenticationInfo")
 	off = do_Structure(conn, AuthenticationInfo_container, tvb, off, 'AuthenticationInfo_Base')
-
-		local AuthenticationInfo_Base2_container = AuthenticationInfo_container:add(F.Data, tvb(off, 0))
-		AuthenticationInfo_Base2_container:set_text("Data")
-	off, AuthenticationInfo_Base2_type_name = do_String(conn, AuthenticationInfo_Base2_container, tvb, off, 'AuthenticationInfo_Base2_type_name')
-
-off, AuthenticationInfo_Base2_len_plus_four = do_Uint32(conn, AuthenticationInfo_Base2_container, tvb, off, 'AuthenticationInfo_Base2_len_plus_four')
-
-off, AuthenticationInfo_Base2_data_len = do_Uint32(conn, AuthenticationInfo_Base2_container, tvb, off, 'AuthenticationInfo_Base2_data_len')
-
-local type_func = 'do_'..AuthenticationInfo_Base2_type_name
-		if _G[type_func] ~= nil then
-			off = _G[type_func](conn, AuthenticationInfo_Base2_container, tvb, off, "AuthenticationInfo_Base2_data")
-		else
-			AuthenticationInfo_Base2_container:add(F.AuthenticationInfo_Base2_data_bytes, tvb(off, AuthenticationInfo_Base2_len))
-			off = off + AuthenticationInfo_Base2_data_len
-		end
-	
+off = do_DataHeader(conn, AuthenticationInfo_container, tvb, off, 'AuthenticationInfo_Base2')
 off, AuthenticationInfo_m_authToken = do_String(conn, AuthenticationInfo_container, tvb, off, 'AuthenticationInfo_m_authToken')
 off, AuthenticationInfo_m_ngsVersion = do_Uint32(conn, AuthenticationInfo_container, tvb, off, 'AuthenticationInfo_m_ngsVersion')
 off, AuthenticationInfo_m_authTokenType = do_Uint8(conn, AuthenticationInfo_container, tvb, off, 'AuthenticationInfo_m_authTokenType')

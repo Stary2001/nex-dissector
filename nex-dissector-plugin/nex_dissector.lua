@@ -199,12 +199,12 @@ function nex_proto.dissector(buf, pinfo, tree)
 						print("Secure key is fucked!")
 					end
 				end
-				print("We got struct header len", partial_conn['struct_header_len'])
+				print("We got struct header len", partial_conn['has_struct_headers'])
 				CONNECTIONS[conn_id] = {
 					[PORT_SERVER] = rc4.new_ks(secure_key),
 					[PORT_CLIENT] = rc4.new_ks(secure_key),
 					['nonsecure_pid'] = partial_conn['nonsecure_pid'],
-					['struct_header_len'] = partial_conn['struct_header_len'],
+					['has_struct_headers'] = partial_conn['has_struct_headers'],
 					['version'] = partial_conn['version']
 				}
 				SECURE_KEYS[conn_id] = secure_key
@@ -212,12 +212,12 @@ function nex_proto.dissector(buf, pinfo, tree)
 				SECURE_KEYS[partial_conn_id] = nil
 			else
 				print("Secure connection CONNECT without payload?")
-				print("We got struct header len", partial_conn['struct_header_len'])
+				print("We got struct header len", partial_conn['has_struct_headers'])
 				CONNECTIONS[conn_id] = {
 					[PORT_SERVER] = rc4.new_ks("CD&ML"),
 					[PORT_CLIENT] = rc4.new_ks("CD&ML"),
 					['nonsecure_pid'] = partial_conn['nonsecure_pid'],
-					['struct_header_len'] = partial_conn['struct_header_len'],
+					['has_struct_headers'] = partial_conn['has_struct_headers'],
 					['version'] = partial_conn['version']
 				}
 				SECURE_KEYS[conn_id] = secure_key
@@ -295,20 +295,20 @@ function nex_proto.dissector(buf, pinfo, tree)
 					secure_key = string.fromhex(tostring(ticket(0, 32)))
 
 					if pkt_method_id == 1 or pkt_method_id == 2 then -- 1: Login, 2: LoginEx
-
 						struct_header_len = 0
+						has_struct_headers = false
 						secure_url_len = nex_data(12 + struct_header_len + buffer_len, 2):le_uint()
 
 						-- Time for a shitty heuristic!
 						if 14 + secure_url_len > nex_data:len() then
 							struct_header_len = 5
+							has_struct_headers = true
 							secure_url_len = nex_data(12 + struct_header_len + buffer_len, 2):le_uint()
 						end
-						conn['struct_header_len'] = struct_header_len
+						conn['has_struct_headers'] = has_struct_headers
 						conn['version'] = version
 
 						secure_url = nex_data(14 + struct_header_len + buffer_len, secure_url_len):string()
-
 
 						addr = string.match(secure_url, "address=([^;]+)")
 						port = string.match(secure_url, "port=([^;]+)")
@@ -321,7 +321,7 @@ function nex_proto.dissector(buf, pinfo, tree)
 							[PORT_SERVER] = rc4.new_ks(secure_key),
 							[PORT_CLIENT] = rc4.new_ks(secure_key),
 							['nonsecure_pid'] = pid,
-							['struct_header_len'] = conn['struct_header_len'],
+							['has_struct_headers'] = conn['has_struct_headers'],
 							['version'] = conn['version']
 						}
 
@@ -333,7 +333,7 @@ function nex_proto.dissector(buf, pinfo, tree)
 							[PORT_SERVER] = rc4.new_ks(secure_key),
 							[PORT_CLIENT] = rc4.new_ks(secure_key),
 							['nonsecure_pid'] = pid,
-							['struct_header_len'] = conn['struct_header_len'],
+							['has_struct_headers'] = conn['has_struct_headers'],
 							['version'] = conn['version']
 						}
 					end

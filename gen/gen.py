@@ -213,6 +213,7 @@ def dispatch_type(field_unique_name, arg_name, arg_type):
 				return "--[[ Stubbed! Missing type (in list) {}]]\n".format(list_type)
 		return do_list(field_unique_name, arg_name, list_type, in_list) + "\n"
 	elif arg_type == 'Data' or arg_type.startswith("Data<"):
+		print(arg_type, field_unique_name)
 		if len(arg_type) > 4:
 			data_type = arg_type[5:-1]
 			if not data_type in types:
@@ -235,14 +236,19 @@ def dispatch_type(field_unique_name, arg_name, arg_type):
 			return types[arg_type](field_unique_name, arg_name) + "\n"
 
 Data_info = (
-	('type_name', 'String'),
-	('len_plus_four', 'Uint32'),
-	('data', 'Buffer')
 )
 reg_struct('Data', Data_info)
+
 Structure_info = (
+	("Version", "Uint8"),
+	("Length", "Uint32")
 )
 reg_struct('Structure', Structure_info)
+
+DataHeader_info = (
+	("Base", "Structure"),
+)
+reg_struct('DataHeader', DataHeader_info)
 
 RVConnectionData_info = (
 	('m_urlRegularProtocols', 'StationURL'),
@@ -340,8 +346,13 @@ def types_pass(f):
 			if 'This structure inherits from' in l:
 				print(current_type, should_parse_type)
 				base = delink(re.search("This structure inherits from ([^|]+) \|", l)[1])
-				current_type.base = base # lol
-				current_type.fields.append(('Base2', base, None))
+
+				if base == 'Data':
+					base = 'DataHeader'
+
+					current_type.base = base # lol
+					current_type.fields.append(('Base2', base, None))
+
 				table = True
 				skip_table = True
 				print("We got some weird inheritance!", base)
@@ -640,7 +651,11 @@ for struct_name in struct_funcs:
 			function do_Structure(conn, tree, tvb, off, field_name)
 				local Structure_container = tree:add(F.Structure, tvb(off, 0))
 				Structure_container:set_text("Structure")
-				return off + conn['struct_header_len']
+				if conn['has_struct_headers'] then
+					off, a = do_Uint8(conn, Structure_container, tvb, off, 'Structure_Version')
+					off, b = do_Uint32(conn, Structure_container, tvb, off, 'Structure_Length')
+				end
+				return off
 			end
 		""")
 	elif struct_name == "RVConnectionData":
