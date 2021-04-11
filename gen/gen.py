@@ -213,7 +213,6 @@ def dispatch_type(field_unique_name, arg_name, arg_type):
 				return "--[[ Stubbed! Missing type (in list) {}]]\n".format(list_type)
 		return do_list(field_unique_name, arg_name, list_type, in_list) + "\n"
 	elif arg_type == 'Data' or arg_type.startswith("Data<"):
-		print(arg_type, field_unique_name)
 		if len(arg_type) > 4:
 			data_type = arg_type[5:-1]
 			if not data_type in types:
@@ -287,9 +286,20 @@ def lua_build_method(method_prefix, info):
 
 def lua_build_proto(header, cmds, method_infos, nested):
 	result = re.search("([A-Za-z0-9 ]+) \\(([0-9A-Fa-fx?]+)\\)", header)
+	# this gets the id reliably, but not the name
+	# ie Data Store (0x73) > Splatoon 2
+	# vs Data Store > SSBB4 (115)
+
 	proto_name = result[1].strip()
 	proto_name_safe = proto_name.replace(' ', '_')
 	proto_id = result[2].strip()
+
+	if nested:
+		probably_name = header.split(">")[-1]
+		result = re.search("([A-Za-z0-9 ]+)(?: \\(([0-9A-Fa-fx?]+)\\))?", probably_name)
+		proto_name = result[1].strip()
+		proto_name_safe = proto_name.replace(' ', '_')
+
 	if proto_id == '0x??':
 		return ""
 
@@ -686,14 +696,22 @@ end
 
 out_file.write("""
 local info = {}
+local nested_info = {}
 function add_proto(id, tab)
 	if not tab["nested"] then
 		info[id] = tab
+	else
+		name = tab["name"]
+		if not nested_info[name] then
+			nested_info[name] = {}
+		end
+
+		nested_info[name][id] = tab
 	end
 end
 	""")
 
 #out_file.write("local info = {\n")
 out_file.write(proto_info)
-out_file.write("\nreturn info")
+out_file.write("\nreturn info, nested_info")
 out_file.close()

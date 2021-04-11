@@ -46,6 +46,15 @@ function int_from_bytes(bytearr)
 	return out
 end
 
+-- needs to be LE
+function raw_bytes_from_int(i)
+	return (string.format("%02x", bit.band(i, 0xff)) ..
+		    string.format("%02x", bit.rshift(bit.band(i, 0xff00),8)) ..
+		    string.format("%02x", bit.rshift(bit.band(i, 0xff0000),16)) ..
+	        string.format("%02x", bit.rshift(bit.band(i, 0xff000000),24))
+	        ):fromhex()
+end
+
 PORT_SERVER, PORT_CLIENT = 0xa1, 0xaf
 TYPE_SYN, TYPE_CONNECT, TYPE_DATA, TYPE_DISCONNECT, TYPE_PING = 0, 1, 2, 3, 4
 

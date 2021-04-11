@@ -3,8 +3,27 @@ local common = require("common")
 
 require("prudp_v0_dissector")
 require("prudp_v1_dissector")
+local hmac = require("hmac")
+local md5 = require("md5")
 
 -- See: https://github.com/Kinnay/NintendoClients/wiki/RMC-Protocol
+
+local access_key_table = {
+	["9f2b4678"] = "SMM",
+	-- todo: for other game specific protocols...
+}
+
+function sig_v1(access_key, packet_header, secure_key, conn_sig, optional_data, raw_payload)
+	access_key_sum = 0
+	for i=1,#access_key do
+		access_key_sum = access_key_sum + access_key:byte(i)
+	end
+
+	local data = packet_header:raw() .. secure_key .. raw_bytes_from_int(access_key_sum) .. conn_sig:raw() .. optional_data .. raw_payload:raw()
+
+	local key = md5.sum(access_key)
+	return hmac.compute(key, data, md5.sum, 64)
+end
 
 local nex_proto = Proto("nex", "NEX")
 local prudp_proto
@@ -66,7 +85,8 @@ end
 
 F = nex_proto.fields
 _G["F"] = F -- apparently this isn't global enough >:(
-protos = dofile(script_path() .. "protos.inc")
+protos, nested_protos = dofile(script_path() .. "protos.inc")
+
 F.raw_payload = ProtoField.bytes("nex.rawpayload", "Decrypted PRUDP payload")
 
 F.size = ProtoField.uint32("nex.size", "Big ass size", base.HEX)
@@ -83,6 +103,8 @@ local f_seq_v0 = Field.new("prudpv0.seq")
 local f_payload_v0 = Field.new("prudpv0.payload")
 local f_session_id_v0 = Field.new("prudpv0.session")
 local f_packet_sig_v0 = Field.new("prudpv0.packet_sig")
+local f_fragment_v0 = Field.new("prudpv0.fragment")
+local f_conn_sig_v0 = Field.new("prudpv0.conn_sig")
 
 local f_src_v1 = Field.new("prudpv1.src")
 local f_type_v1 = Field.new("prudpv1.type")
@@ -93,8 +115,10 @@ local f_payload_v1 = Field.new("prudpv1.payload")
 local f_defragmented_payload_v1 = Field.new("prudpv1.defragmented_payload")
 local f_session_id_v1 = Field.new("prudpv1.session")
 local f_packet_sig_v1 = Field.new("prudpv1.packet_sig")
+local f_fragment_v1 = Field.new("prudpv1.fragment")
+local f_conn_sig_v1 = Field.new("prudpv1.connection_signature")
 
-function resolve(proto_id, method_id)
+function resolve(conn, proto_id, method_id)
 	local proto_name, method_name
 	p = protos[proto_id]
 	if p ~= nil then
@@ -102,7 +126,21 @@ function resolve(proto_id, method_id)
 		if p['methods'][method_id] ~= nil then
 			method_name = p['methods'][method_id]['name']
 		else
-			method_name = "Unknown_"..string.format("0x%04x", method_id)
+			if conn['game'] ~= nil and nested_protos[conn['game']] ~= nil then
+				game_proto = nested_protos[conn['game']][proto_id]
+				if game_proto ~= nil then
+					proto_name = proto_name .. "(" .. game_proto['name'] .. ")"
+					if game_proto['methods'][method_id] ~= nil then
+						method_name = game_proto['methods'][method_id]['name']
+					else
+						method_name = "Unknown_"..string.format("0x%04x", method_id)
+					end
+				else
+					method_name = "Unknown_"..string.format("0x%04x", method_id)
+				end
+			else
+				method_name = "Unknown_"..string.format("0x%04x", method_id)
+			end
 		end
 	else
 		proto_name = string.format("0x%02x", proto_id)
@@ -116,6 +154,15 @@ function dissect_req(conn, tree, tvb, proto_id, method_id)
 		p = protos[proto_id]
 		if p['methods'][method_id] ~= nil and p['methods'][method_id]['request'] ~= nil then
 			p['methods'][method_id]['request'](conn, tree, tvb)
+		else
+			if conn['game'] ~= nil and nested_protos[conn['game']] ~= nil then
+				game_proto = nested_protos[conn['game']][proto_id]
+				if game_proto ~= nil then
+					if game_proto['methods'][method_id] ~= nil and game_proto['methods'][method_id]['request'] ~= nil then
+						game_proto['methods'][method_id]['request'](conn, tree, tvb)
+					end
+				end
+			end
 		end
 	end
 end
@@ -125,6 +172,15 @@ function dissect_resp(conn, tree, tvb, proto_id, method_id)
 		p = protos[proto_id]
 		if p['methods'][method_id] ~= nil and p['methods'][method_id]['response'] ~= nil then
 			p['methods'][method_id]['response'](conn, tree, tvb)
+		else
+			if conn['game'] ~= nil and nested_protos[conn['game']] ~= nil then
+				game_proto = nested_protos[conn['game']][proto_id]
+				if game_proto ~= nil then
+					if game_proto['methods'][method_id] ~= nil and game_proto['methods'][method_id]['response'] ~= nil then
+						game_proto['methods'][method_id]['response'](conn, tree, tvb)
+					end
+				end
+			end
 		end
 	end
 end
@@ -157,6 +213,10 @@ function nex_proto.dissector(buf, pinfo, tree)
 		else
 			payload_field_info = f_payload_v1()
 		end
+
+		if f_conn_sig_v1() then
+			pkt_conn_sig = f_conn_sig_v1()()
+		end
 	else
 		Dissector.get("prudpv0"):call(buf, pinfo, tree)
 		pkt_src = f_src_v0()()
@@ -167,12 +227,23 @@ function nex_proto.dissector(buf, pinfo, tree)
 		pkt_session_id = f_session_id_v0()()
 		pkt_signature = f_packet_sig_v0()()
 		payload_field_info = f_payload_v0()
+
+		if f_conn_sig_v0() then
+			pkt_conn_sig = f_conn_sig_v0()()
+		end
 	end
 
 	if payload_field_info then
 		raw_payload = payload_field_info.range
 	end
 
+	if pkt_type == TYPE_SYN and pkt_flag_ack then
+		local partial_conn_id = tostring(pinfo.src) .. "-" .. tostring(pinfo.src_port) .. "-" .. tostring(pinfo.dst)
+		if CONNECTIONS[partial_conn_id] then
+			CONNECTIONS[partial_conn_id]['server_conn_sig'] = pkt_conn_sig
+		end
+	end
+	
 	if pkt_type == TYPE_CONNECT and not pkt_flag_ack then
 		-- This should be client->server. We knew the servers's IP and port, as well as the client's IP.
 		local partial_conn_id = tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port) .. "-" .. tostring(pinfo.src)
@@ -199,26 +270,29 @@ function nex_proto.dissector(buf, pinfo, tree)
 						print("Secure key is fucked!")
 					end
 				end
-				print("We got struct header len", partial_conn['has_struct_headers'])
+
 				CONNECTIONS[conn_id] = {
 					[PORT_SERVER] = rc4.new_ks(secure_key),
 					[PORT_CLIENT] = rc4.new_ks(secure_key),
 					['nonsecure_pid'] = partial_conn['nonsecure_pid'],
 					['has_struct_headers'] = partial_conn['has_struct_headers'],
-					['version'] = partial_conn['version']
+					['version'] = partial_conn['version'],
+					['server_conn_sig'] = partial_conn['server_conn_sig'],
+					['client_conn_sig'] = pkt_conn_sig,
 				}
 				SECURE_KEYS[conn_id] = secure_key
 				CONNECTIONS[partial_conn_id] = nil
 				SECURE_KEYS[partial_conn_id] = nil
 			else
 				print("Secure connection CONNECT without payload?")
-				print("We got struct header len", partial_conn['has_struct_headers'])
 				CONNECTIONS[conn_id] = {
 					[PORT_SERVER] = rc4.new_ks("CD&ML"),
 					[PORT_CLIENT] = rc4.new_ks("CD&ML"),
 					['nonsecure_pid'] = partial_conn['nonsecure_pid'],
 					['has_struct_headers'] = partial_conn['has_struct_headers'],
-					['version'] = partial_conn['version']
+					['version'] = partial_conn['version'],
+					['server_conn_sig'] = partial_conn['server_conn_sig'],
+					['client_conn_sig'] = pkt_conn_sig,
 				}
 				SECURE_KEYS[conn_id] = secure_key
 				CONNECTIONS[partial_conn_id] = nil
@@ -227,7 +301,8 @@ function nex_proto.dissector(buf, pinfo, tree)
 		else
 			set_connection(pinfo, {
 					[PORT_SERVER] = rc4.new_ks("CD&ML"),
-					[PORT_CLIENT] = rc4.new_ks("CD&ML")
+					[PORT_CLIENT] = rc4.new_ks("CD&ML"),
+					['client_conn_sig'] = pkt_conn_sig,
 				})
 		end
 	end
@@ -282,10 +357,10 @@ function nex_proto.dissector(buf, pinfo, tree)
 						end
 					end
 
-					ticket = ticket_buff(0, buffer_len-16)
-					hmac = ticket_buff(buffer_len-16, 16)
+					local ticket = ticket_buff(0, buffer_len-16)
+					local hmac = ticket_buff(buffer_len-16, 16)
 
-					kerb_key = KERB_KEYS[pid]
+					local kerb_key = KERB_KEYS[pid]
 
 					if kerb_key == nil then
 						error("Kerberos key for PID " .. tostring(pid) .. " not found! Please add it (or the NEX password) to the config file.")
@@ -339,6 +414,28 @@ function nex_proto.dissector(buf, pinfo, tree)
 					end
 				end
 			end
+
+			-- game detection
+			if pkt_src == PORT_CLIENT and conn['game'] == nil and conn['nonsecure_pid'] ~= nil then
+				for access_key, game_name in pairs(access_key_table) do
+					if version == 0 then
+						if pkt_signature:raw() == sig_v0(access_key, SECURE_KEYS[conn_id], pkt_seq, f_fragment_v0()()) then
+							conn['game'] = game_name
+							break
+						end
+					elseif version == 1 then
+						-- for data..
+						optional_data = "\x02\x01" .. string.char(f_fragment_v1()())
+						if pkt_signature:raw() == sig_v1(access_key, buf:bytes(2+4, 8), SECURE_KEYS[conn_id], conn['server_conn_sig'], optional_data, raw_payload) then
+							conn['game'] = game_name
+							break
+						end
+					end
+				end
+				if conn['game'] == nil then
+					conn['game'] = 'Unknown'
+				end
+			end
 		end
 	end
 
@@ -363,6 +460,8 @@ function nex_proto.dissector(buf, pinfo, tree)
 	pkt_proto_id = bit.band(pkt_proto_id, bit.bnot(0x80))
 
 	local info
+	local conn, conn_id = find_connection(pinfo)
+
 	if request then
 		info = "Request"
 
@@ -376,11 +475,11 @@ function nex_proto.dissector(buf, pinfo, tree)
 			local tvb = payload(0xd)
 			local t = subtreeitem:add(F.payload, tvb)
 
-			local conn, conn_id = find_connection(pinfo)
+			
 			dissect_req(conn, t, tvb, pkt_proto_id, pkt_method_id)
 		end
 
-		local proto_name, method_name = resolve(pkt_proto_id, pkt_method_id)
+		local proto_name, method_name = resolve(conn, pkt_proto_id, pkt_method_id)
 		info = info .. string.format(" %s->%s, call=0x%08x", proto_name, method_name, pkt_call_id)
 	else
 		info = "Response"
@@ -395,11 +494,11 @@ function nex_proto.dissector(buf, pinfo, tree)
 			if payload:len() > 0xe then
 				local tvb = payload(0xe)
 				local t = subtreeitem:add(F.payload, tvb)
-				local conn, conn_id = find_connection(pinfo)
+				
 				dissect_resp(conn, t, tvb, pkt_proto_id, pkt_method_id)
 			end
 
-			local proto_name, method_name = resolve(pkt_proto_id, pkt_method_id)
+			local proto_name, method_name = resolve(conn, pkt_proto_id, pkt_method_id)
 			info = info .. string.format(" Success %s->%s call=%08x", proto_name, method_name, pkt_call_id)
 		else
 			local pkt_err = payload(6,4):le_uint()

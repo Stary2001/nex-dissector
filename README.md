@@ -1,6 +1,14 @@
 # How to install?
 
-If you have an existing `init.lua` file to load Wireshark plugins in your desired order, merge it with the `init.lua` from this repository.
+## Windows
+
+- Copy the `nex-dissector-plugin` folder to `%appdata%\Wireshark\plugins`.
+- Create `%appdata%\Wireshark\nex-keys.txt` and (optionally) add your pid/password.
+
+## OSX/Linux
+
+- Copy the `nex-dissector-plugin` folder to `~/.local/lib/wireshark/plugins/` (you may need to create this folder).
+- Create `~/.config/wireshark/nex-keys.txt` and (optionally) add your pid/password.
 
 You will need to add your NEX PID and your NEX password (for your device) in `nex-keys.txt` in the Wireshark folder - the dissector will automatically derive the needed key from the PID/password and write it back to the file. The format is `nexpid:nexpassword`.
 
@@ -24,17 +32,6 @@ Date: xxx
 </nex_token>
 </xml>
 ```
-
-## Windows
-
-- Copy the `nex-dissector-plugin` folder to `%appdata%\Wireshark\plugins`.
-- Create `%appdata%\Wireshark\nex-keys.txt` and (optionally) add your pid/password.
-
-## OSX/Linux
-
-- Copy the `nex-dissector-plugin` folder to `~/.local/lib/wireshark/plugins/` (you may need to create this folder).
-- Create `~/.config/wireshark/nex-keys.txt` and (optionally) add your pid/password.
-
 # What does it do
 * Dissection of PRUDP v0 (3DS, WiiU friends)
 * Dissection of PRUDP v1 (Some 3DS games, most Wii U uses)

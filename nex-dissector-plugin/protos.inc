@@ -2509,16 +2509,16 @@ F.Account_Management_LookupOrCreateAccount_pid = ProtoField.uint32("Account_Mana
 F.Account_Management_DisconnectPrincipal_idPrincipal = ProtoField.uint32("Account_Management_DisconnectPrincipal_idPrincipal", "idPrincipal (uint32)")
 F.Account_Management_DisconnectPrincipal_retval = ProtoField.bool("Account_Management_DisconnectPrincipal_retval", "retval (bool)")
 F.Account_Management_DisconnectAllPrincipals_retval = ProtoField.bool("Account_Management_DisconnectAllPrincipals_retval", "retval (bool)")
-F.Data_Store_CoconutRegisterMeta_url_len = ProtoField.uint16("Data_Store_CoconutRegisterMeta_url_len", "url length (String)")
-F.Data_Store_CoconutRegisterMeta_url_data = ProtoField.string("Data_Store_CoconutRegisterMeta_url_data", "url data (String)")
-F.Data_Store_CoconutRatePost_dataId = ProtoField.uint64("Data_Store_CoconutRatePost_dataId", "dataId (uint64)")
-F.Data_Store_CoconutGetObjectInfos_pInfos_len = ProtoField.uint32("Data_Store_CoconutGetObjectInfos_pInfos_len", "pInfos length (uint32)")
-F.Data_Store_CoconutGetObjectInfos_pResults_len = ProtoField.uint32("Data_Store_CoconutGetObjectInfos_pResults_len", "pResults length (uint32)")
-F.Data_Store_CoconutGetObjectInfos_pResults_item = ProtoField.uint32("Data_Store_CoconutGetObjectInfos_pResults_item", "pResults (uint32)")
-F.Data_Store_CoconutRegisterMetaByParam_snsName_len = ProtoField.uint16("Data_Store_CoconutRegisterMetaByParam_snsName_len", "snsName length (String)")
-F.Data_Store_CoconutRegisterMetaByParam_snsName_data = ProtoField.string("Data_Store_CoconutRegisterMetaByParam_snsName_data", "snsName data (String)")
-F.Data_Store_CoconutRegisterMetaByParam_postId_len = ProtoField.uint16("Data_Store_CoconutRegisterMetaByParam_postId_len", "postId length (String)")
-F.Data_Store_CoconutRegisterMetaByParam_postId_data = ProtoField.string("Data_Store_CoconutRegisterMetaByParam_postId_data", "postId data (String)")
+F.Splatoon_2_CoconutRegisterMeta_url_len = ProtoField.uint16("Splatoon_2_CoconutRegisterMeta_url_len", "url length (String)")
+F.Splatoon_2_CoconutRegisterMeta_url_data = ProtoField.string("Splatoon_2_CoconutRegisterMeta_url_data", "url data (String)")
+F.Splatoon_2_CoconutRatePost_dataId = ProtoField.uint64("Splatoon_2_CoconutRatePost_dataId", "dataId (uint64)")
+F.Splatoon_2_CoconutGetObjectInfos_pInfos_len = ProtoField.uint32("Splatoon_2_CoconutGetObjectInfos_pInfos_len", "pInfos length (uint32)")
+F.Splatoon_2_CoconutGetObjectInfos_pResults_len = ProtoField.uint32("Splatoon_2_CoconutGetObjectInfos_pResults_len", "pResults length (uint32)")
+F.Splatoon_2_CoconutGetObjectInfos_pResults_item = ProtoField.uint32("Splatoon_2_CoconutGetObjectInfos_pResults_item", "pResults (uint32)")
+F.Splatoon_2_CoconutRegisterMetaByParam_snsName_len = ProtoField.uint16("Splatoon_2_CoconutRegisterMetaByParam_snsName_len", "snsName length (String)")
+F.Splatoon_2_CoconutRegisterMetaByParam_snsName_data = ProtoField.string("Splatoon_2_CoconutRegisterMetaByParam_snsName_data", "snsName data (String)")
+F.Splatoon_2_CoconutRegisterMetaByParam_postId_len = ProtoField.uint16("Splatoon_2_CoconutRegisterMetaByParam_postId_len", "postId length (String)")
+F.Splatoon_2_CoconutRegisterMetaByParam_postId_data = ProtoField.string("Splatoon_2_CoconutRegisterMetaByParam_postId_data", "postId data (String)")
 F.Player_Stats_WriteStats_playerStatUpdates_len = ProtoField.uint32("Player_Stats_WriteStats_playerStatUpdates_len", "playerStatUpdates length (uint32)")
 F.Player_Stats_ReadStatsByPlayers_playerPIDs_len = ProtoField.uint32("Player_Stats_ReadStatsByPlayers_playerPIDs_len", "playerPIDs length (uint32)")
 F.Player_Stats_ReadStatsByPlayers_playerPIDs_item = ProtoField.uint32("Player_Stats_ReadStatsByPlayers_playerPIDs_item", "playerPIDs (uint32)")
@@ -3222,42 +3222,42 @@ F.AA_User_RegisterApplication_Title_id = ProtoField.uint64("AA_User_RegisterAppl
 F.AA_User_UnregisterApplication_Title_id = ProtoField.uint64("AA_User_UnregisterApplication_Title_id", "Title id (uint64)")
 F.AA_User_SetApplicationInfo_Application_info_len = ProtoField.uint32("AA_User_SetApplicationInfo_Application_info_len", "Application info length (uint32)")
 F.AA_User_GetApplicationInfo_Application_info_len = ProtoField.uint32("AA_User_GetApplicationInfo_Application_info_len", "Application info length (uint32)")
-F.Data_Store_GetUsers_Result_codes_len = ProtoField.uint32("Data_Store_GetUsers_Result_codes_len", "Result codes length (uint32)")
-F.Data_Store_GetUsers_Result_codes_item = ProtoField.uint32("Data_Store_GetUsers_Result_codes_item", "Result codes (uint32)")
-F.Data_Store_SearchUsersUserPoint_Ranks_len = ProtoField.uint32("Data_Store_SearchUsersUserPoint_Ranks_len", "Ranks length (uint32)")
-F.Data_Store_SearchUsersUserPoint_Ranks_item = ProtoField.uint32("Data_Store_SearchUsersUserPoint_Ranks_item", "Ranks (uint32)")
-F.Data_Store_SearchUsersUserPoint_Result = ProtoField.bool("Data_Store_SearchUsersUserPoint_Result", "Result (bool)")
-F.Data_Store_SearchUsersEndlessMode_Unknown_len = ProtoField.uint32("Data_Store_SearchUsersEndlessMode_Unknown_len", "Unknown length (uint32)")
-F.Data_Store_SearchUsersEndlessMode_Unknown_item = ProtoField.uint32("Data_Store_SearchUsersEndlessMode_Unknown_item", "Unknown (uint32)")
-F.Data_Store_SearchUsersEndlessMode_Unknown = ProtoField.bool("Data_Store_SearchUsersEndlessMode_Unknown", "Unknown (bool)")
-F.Data_Store_SearchUsersBattleMode_Unknown_len = ProtoField.uint32("Data_Store_SearchUsersBattleMode_Unknown_len", "Unknown length (uint32)")
-F.Data_Store_SearchUsersBattleMode_Unknown_item = ProtoField.uint32("Data_Store_SearchUsersBattleMode_Unknown_item", "Unknown (uint32)")
-F.Data_Store_SearchUsersBattleMode_Unknown = ProtoField.bool("Data_Store_SearchUsersBattleMode_Unknown", "Unknown (bool)")
-F.Data_Store_SearchUsersFollowee_Unknown = ProtoField.bool("Data_Store_SearchUsersFollowee_Unknown", "Unknown (bool)")
-F.Data_Store_SearchUsersClearRanking_Unknown_len = ProtoField.uint32("Data_Store_SearchUsersClearRanking_Unknown_len", "Unknown length (uint32)")
-F.Data_Store_SearchUsersClearRanking_Unknown_item = ProtoField.uint32("Data_Store_SearchUsersClearRanking_Unknown_item", "Unknown (uint32)")
-F.Data_Store_SearchUsersClearRanking_Unknown = ProtoField.bool("Data_Store_SearchUsersClearRanking_Unknown", "Unknown (bool)")
-F.Data_Store_CanPostCourse_Unknown = ProtoField.bool("Data_Store_CanPostCourse_Unknown", "Unknown (bool)")
-F.Data_Store_CanPostCourse_Unknown = ProtoField.uint32("Data_Store_CanPostCourse_Unknown", "Unknown (uint32)")
-F.Data_Store_UpdateMiiClothes_Param_len = ProtoField.uint32("Data_Store_UpdateMiiClothes_Param_len", "Param length (uint32)")
-F.Data_Store_GetMiiClothes_Mii_clothes_len = ProtoField.uint32("Data_Store_GetMiiClothes_Mii_clothes_len", "Mii clothes length (uint32)")
-F.Data_Store_GetUserNameNgType_Type = ProtoField.uint8("Data_Store_GetUserNameNgType_Type", "Type (uint8)")
-F.Data_Store_GetCourses_Result_codes_len = ProtoField.uint32("Data_Store_GetCourses_Result_codes_len", "Result codes length (uint32)")
-F.Data_Store_GetCourses_Result_codes_item = ProtoField.uint32("Data_Store_GetCourses_Result_codes_item", "Result codes (uint32)")
-F.Data_Store_SearchCoursesPointRanking_Ranks_len = ProtoField.uint32("Data_Store_SearchCoursesPointRanking_Ranks_len", "Ranks length (uint32)")
-F.Data_Store_SearchCoursesPointRanking_Ranks_item = ProtoField.uint32("Data_Store_SearchCoursesPointRanking_Ranks_item", "Ranks (uint32)")
-F.Data_Store_SearchCoursesPointRanking_Result = ProtoField.bool("Data_Store_SearchCoursesPointRanking_Result", "Result (bool)")
-F.Data_Store_SearchCoursesLatest_Result = ProtoField.bool("Data_Store_SearchCoursesLatest_Result", "Result (bool)")
-F.Data_Store_SearchCoursesPostedBy_Result = ProtoField.bool("Data_Store_SearchCoursesPostedBy_Result", "Result (bool)")
-F.Data_Store_GetCoursesEvent_Results_len = ProtoField.uint32("Data_Store_GetCoursesEvent_Results_len", "Results length (uint32)")
-F.Data_Store_GetCoursesEvent_Results_item = ProtoField.uint32("Data_Store_GetCoursesEvent_Results_item", "Results (uint32)")
-F.Data_Store_SearchComments_Data_id = ProtoField.uint64("Data_Store_SearchComments_Data_id", "Data id (uint64)")
-F.Data_Store_SearchComments_Comments_len = ProtoField.uint32("Data_Store_SearchComments_Comments_len", "Comments length (uint32)")
-F.Data_Store_GetBattleModeRating_Unknown = ProtoField.bool("Data_Store_GetBattleModeRating_Unknown", "Unknown (bool)")
-F.Data_Store_GetReqGetInfoHeadersInfo_Data_type = ProtoField.uint8("Data_Store_GetReqGetInfoHeadersInfo_Data_type", "Data type (uint8)")
-F.Data_Store_GetEventCourseStamp_Stamps = ProtoField.uint32("Data_Store_GetEventCourseStamp_Stamps", "Stamps (uint32)")
-F.Data_Store_ReadEventCourseResult_Unknown = ProtoField.uint64("Data_Store_ReadEventCourseResult_Unknown", "Unknown (uint64)")
-F.Data_Store_GetEventCourseGhost_Ghosts_len = ProtoField.uint32("Data_Store_GetEventCourseGhost_Ghosts_len", "Ghosts length (uint32)")
+F.SMM_2_GetUsers_Result_codes_len = ProtoField.uint32("SMM_2_GetUsers_Result_codes_len", "Result codes length (uint32)")
+F.SMM_2_GetUsers_Result_codes_item = ProtoField.uint32("SMM_2_GetUsers_Result_codes_item", "Result codes (uint32)")
+F.SMM_2_SearchUsersUserPoint_Ranks_len = ProtoField.uint32("SMM_2_SearchUsersUserPoint_Ranks_len", "Ranks length (uint32)")
+F.SMM_2_SearchUsersUserPoint_Ranks_item = ProtoField.uint32("SMM_2_SearchUsersUserPoint_Ranks_item", "Ranks (uint32)")
+F.SMM_2_SearchUsersUserPoint_Result = ProtoField.bool("SMM_2_SearchUsersUserPoint_Result", "Result (bool)")
+F.SMM_2_SearchUsersEndlessMode_Unknown_len = ProtoField.uint32("SMM_2_SearchUsersEndlessMode_Unknown_len", "Unknown length (uint32)")
+F.SMM_2_SearchUsersEndlessMode_Unknown_item = ProtoField.uint32("SMM_2_SearchUsersEndlessMode_Unknown_item", "Unknown (uint32)")
+F.SMM_2_SearchUsersEndlessMode_Unknown = ProtoField.bool("SMM_2_SearchUsersEndlessMode_Unknown", "Unknown (bool)")
+F.SMM_2_SearchUsersBattleMode_Unknown_len = ProtoField.uint32("SMM_2_SearchUsersBattleMode_Unknown_len", "Unknown length (uint32)")
+F.SMM_2_SearchUsersBattleMode_Unknown_item = ProtoField.uint32("SMM_2_SearchUsersBattleMode_Unknown_item", "Unknown (uint32)")
+F.SMM_2_SearchUsersBattleMode_Unknown = ProtoField.bool("SMM_2_SearchUsersBattleMode_Unknown", "Unknown (bool)")
+F.SMM_2_SearchUsersFollowee_Unknown = ProtoField.bool("SMM_2_SearchUsersFollowee_Unknown", "Unknown (bool)")
+F.SMM_2_SearchUsersClearRanking_Unknown_len = ProtoField.uint32("SMM_2_SearchUsersClearRanking_Unknown_len", "Unknown length (uint32)")
+F.SMM_2_SearchUsersClearRanking_Unknown_item = ProtoField.uint32("SMM_2_SearchUsersClearRanking_Unknown_item", "Unknown (uint32)")
+F.SMM_2_SearchUsersClearRanking_Unknown = ProtoField.bool("SMM_2_SearchUsersClearRanking_Unknown", "Unknown (bool)")
+F.SMM_2_CanPostCourse_Unknown = ProtoField.bool("SMM_2_CanPostCourse_Unknown", "Unknown (bool)")
+F.SMM_2_CanPostCourse_Unknown = ProtoField.uint32("SMM_2_CanPostCourse_Unknown", "Unknown (uint32)")
+F.SMM_2_UpdateMiiClothes_Param_len = ProtoField.uint32("SMM_2_UpdateMiiClothes_Param_len", "Param length (uint32)")
+F.SMM_2_GetMiiClothes_Mii_clothes_len = ProtoField.uint32("SMM_2_GetMiiClothes_Mii_clothes_len", "Mii clothes length (uint32)")
+F.SMM_2_GetUserNameNgType_Type = ProtoField.uint8("SMM_2_GetUserNameNgType_Type", "Type (uint8)")
+F.SMM_2_GetCourses_Result_codes_len = ProtoField.uint32("SMM_2_GetCourses_Result_codes_len", "Result codes length (uint32)")
+F.SMM_2_GetCourses_Result_codes_item = ProtoField.uint32("SMM_2_GetCourses_Result_codes_item", "Result codes (uint32)")
+F.SMM_2_SearchCoursesPointRanking_Ranks_len = ProtoField.uint32("SMM_2_SearchCoursesPointRanking_Ranks_len", "Ranks length (uint32)")
+F.SMM_2_SearchCoursesPointRanking_Ranks_item = ProtoField.uint32("SMM_2_SearchCoursesPointRanking_Ranks_item", "Ranks (uint32)")
+F.SMM_2_SearchCoursesPointRanking_Result = ProtoField.bool("SMM_2_SearchCoursesPointRanking_Result", "Result (bool)")
+F.SMM_2_SearchCoursesLatest_Result = ProtoField.bool("SMM_2_SearchCoursesLatest_Result", "Result (bool)")
+F.SMM_2_SearchCoursesPostedBy_Result = ProtoField.bool("SMM_2_SearchCoursesPostedBy_Result", "Result (bool)")
+F.SMM_2_GetCoursesEvent_Results_len = ProtoField.uint32("SMM_2_GetCoursesEvent_Results_len", "Results length (uint32)")
+F.SMM_2_GetCoursesEvent_Results_item = ProtoField.uint32("SMM_2_GetCoursesEvent_Results_item", "Results (uint32)")
+F.SMM_2_SearchComments_Data_id = ProtoField.uint64("SMM_2_SearchComments_Data_id", "Data id (uint64)")
+F.SMM_2_SearchComments_Comments_len = ProtoField.uint32("SMM_2_SearchComments_Comments_len", "Comments length (uint32)")
+F.SMM_2_GetBattleModeRating_Unknown = ProtoField.bool("SMM_2_GetBattleModeRating_Unknown", "Unknown (bool)")
+F.SMM_2_GetReqGetInfoHeadersInfo_Data_type = ProtoField.uint8("SMM_2_GetReqGetInfoHeadersInfo_Data_type", "Data type (uint8)")
+F.SMM_2_GetEventCourseStamp_Stamps = ProtoField.uint32("SMM_2_GetEventCourseStamp_Stamps", "Stamps (uint32)")
+F.SMM_2_ReadEventCourseResult_Unknown = ProtoField.uint64("SMM_2_ReadEventCourseResult_Unknown", "Unknown (uint64)")
+F.SMM_2_GetEventCourseGhost_Ghosts_len = ProtoField.uint32("SMM_2_GetEventCourseGhost_Ghosts_len", "Ghosts length (uint32)")
 F.MK8_Deluxe_GetCommonDataByPIDList_Pids_len = ProtoField.uint32("MK8_Deluxe_GetCommonDataByPIDList_Pids_len", "Pids length (uint32)")
 F.MK8_Deluxe_GetCommonDataByPIDList_Pids_item = ProtoField.uint32("MK8_Deluxe_GetCommonDataByPIDList_Pids_item", "Pids (uint32)")
 F.Friends_Wii_U_UpdateAndGetAllInformation_Birthday = ProtoField.uint64("Friends_Wii_U_UpdateAndGetAllInformation_Birthday", "Birthday (uint64)")
@@ -3514,28 +3514,28 @@ F.Debug_GetApiCalls_Api_calls_len = ProtoField.uint32("Debug_GetApiCalls_Api_cal
 F.Splatoon_2_AcquireTagId_nexUniqueIds_len = ProtoField.uint32("Splatoon_2_AcquireTagId_nexUniqueIds_len", "nexUniqueIds length (uint32)")
 F.Splatoon_2_AcquireTagId_nexUniqueIds_item = ProtoField.uint64("Splatoon_2_AcquireTagId_nexUniqueIds_item", "nexUniqueIds (uint64)")
 F.Splatoon_2_AcquireTagId_pTagId = ProtoField.uint64("Splatoon_2_AcquireTagId_pTagId", "pTagId (uint64)")
-F.Data_Store_AddToBufferQueue_buffer_len = ProtoField.uint16("Data_Store_AddToBufferQueue_buffer_len", "buffer length (Buffer)")
-F.Data_Store_AddToBufferQueue_buffer_data = ProtoField.bytes("Data_Store_AddToBufferQueue_buffer_data", "buffer data (Buffer)")
-F.Data_Store_AddToBufferQueues_params_len = ProtoField.uint32("Data_Store_AddToBufferQueues_params_len", "params length (uint32)")
-F.Data_Store_AddToBufferQueues_buffers_len = ProtoField.uint32("Data_Store_AddToBufferQueues_buffers_len", "buffers length (uint32)")
-F.Data_Store_AddToBufferQueues_buffers_item_len = ProtoField.uint16("Data_Store_AddToBufferQueues_buffers_item_len", "buffers length (Buffer)")
-F.Data_Store_AddToBufferQueues_buffers_item_data = ProtoField.bytes("Data_Store_AddToBufferQueues_buffers_item_data", "buffers data (Buffer)")
-F.Data_Store_AddToBufferQueues_pResults_len = ProtoField.uint32("Data_Store_AddToBufferQueues_pResults_len", "pResults length (uint32)")
-F.Data_Store_AddToBufferQueues_pResults_item = ProtoField.uint32("Data_Store_AddToBufferQueues_pResults_item", "pResults (uint32)")
-F.Data_Store_GetBufferQueue_pBufferQueue_len = ProtoField.uint32("Data_Store_GetBufferQueue_pBufferQueue_len", "pBufferQueue length (uint32)")
-F.Data_Store_GetBufferQueue_pBufferQueue_item_len = ProtoField.uint16("Data_Store_GetBufferQueue_pBufferQueue_item_len", "pBufferQueue length (Buffer)")
-F.Data_Store_GetBufferQueue_pBufferQueue_item_data = ProtoField.bytes("Data_Store_GetBufferQueue_pBufferQueue_item_data", "pBufferQueue data (Buffer)")
-F.Data_Store_GetBufferQueues_params_len = ProtoField.uint32("Data_Store_GetBufferQueues_params_len", "params length (uint32)")
-F.Data_Store_GetBufferQueues_pBufferQueueLst_len = ProtoField.uint32("Data_Store_GetBufferQueues_pBufferQueueLst_len", "pBufferQueueLst length (uint32)")
-F.Data_Store_GetBufferQueues_pBufferQueueLst_item_len = ProtoField.uint32("Data_Store_GetBufferQueues_pBufferQueueLst_item_len", "pBufferQueueLst length (uint32)")
-F.Data_Store_GetBufferQueues_pBufferQueueLst_item_item_len = ProtoField.uint16("Data_Store_GetBufferQueues_pBufferQueueLst_item_item_len", "pBufferQueueLst length (Buffer)")
-F.Data_Store_GetBufferQueues_pBufferQueueLst_item_item_data = ProtoField.bytes("Data_Store_GetBufferQueues_pBufferQueueLst_item_item_data", "pBufferQueueLst data (Buffer)")
-F.Data_Store_GetBufferQueues_pResults_len = ProtoField.uint32("Data_Store_GetBufferQueues_pResults_len", "pResults length (uint32)")
-F.Data_Store_GetBufferQueues_pResults_item = ProtoField.uint32("Data_Store_GetBufferQueues_pResults_item", "pResults (uint32)")
-F.Data_Store_ClearBufferQueues_params_len = ProtoField.uint32("Data_Store_ClearBufferQueues_params_len", "params length (uint32)")
-F.Data_Store_ClearBufferQueues_pResults_len = ProtoField.uint32("Data_Store_ClearBufferQueues_pResults_len", "pResults length (uint32)")
-F.Data_Store_ClearBufferQueues_pResults_item = ProtoField.uint32("Data_Store_ClearBufferQueues_pResults_item", "pResults (uint32)")
-F.Data_Store_SearchBalloon_pResults_len = ProtoField.uint32("Data_Store_SearchBalloon_pResults_len", "pResults length (uint32)")
+F.SMO_AddToBufferQueue_buffer_len = ProtoField.uint16("SMO_AddToBufferQueue_buffer_len", "buffer length (Buffer)")
+F.SMO_AddToBufferQueue_buffer_data = ProtoField.bytes("SMO_AddToBufferQueue_buffer_data", "buffer data (Buffer)")
+F.SMO_AddToBufferQueues_params_len = ProtoField.uint32("SMO_AddToBufferQueues_params_len", "params length (uint32)")
+F.SMO_AddToBufferQueues_buffers_len = ProtoField.uint32("SMO_AddToBufferQueues_buffers_len", "buffers length (uint32)")
+F.SMO_AddToBufferQueues_buffers_item_len = ProtoField.uint16("SMO_AddToBufferQueues_buffers_item_len", "buffers length (Buffer)")
+F.SMO_AddToBufferQueues_buffers_item_data = ProtoField.bytes("SMO_AddToBufferQueues_buffers_item_data", "buffers data (Buffer)")
+F.SMO_AddToBufferQueues_pResults_len = ProtoField.uint32("SMO_AddToBufferQueues_pResults_len", "pResults length (uint32)")
+F.SMO_AddToBufferQueues_pResults_item = ProtoField.uint32("SMO_AddToBufferQueues_pResults_item", "pResults (uint32)")
+F.SMO_GetBufferQueue_pBufferQueue_len = ProtoField.uint32("SMO_GetBufferQueue_pBufferQueue_len", "pBufferQueue length (uint32)")
+F.SMO_GetBufferQueue_pBufferQueue_item_len = ProtoField.uint16("SMO_GetBufferQueue_pBufferQueue_item_len", "pBufferQueue length (Buffer)")
+F.SMO_GetBufferQueue_pBufferQueue_item_data = ProtoField.bytes("SMO_GetBufferQueue_pBufferQueue_item_data", "pBufferQueue data (Buffer)")
+F.SMO_GetBufferQueues_params_len = ProtoField.uint32("SMO_GetBufferQueues_params_len", "params length (uint32)")
+F.SMO_GetBufferQueues_pBufferQueueLst_len = ProtoField.uint32("SMO_GetBufferQueues_pBufferQueueLst_len", "pBufferQueueLst length (uint32)")
+F.SMO_GetBufferQueues_pBufferQueueLst_item_len = ProtoField.uint32("SMO_GetBufferQueues_pBufferQueueLst_item_len", "pBufferQueueLst length (uint32)")
+F.SMO_GetBufferQueues_pBufferQueueLst_item_item_len = ProtoField.uint16("SMO_GetBufferQueues_pBufferQueueLst_item_item_len", "pBufferQueueLst length (Buffer)")
+F.SMO_GetBufferQueues_pBufferQueueLst_item_item_data = ProtoField.bytes("SMO_GetBufferQueues_pBufferQueueLst_item_item_data", "pBufferQueueLst data (Buffer)")
+F.SMO_GetBufferQueues_pResults_len = ProtoField.uint32("SMO_GetBufferQueues_pResults_len", "pResults length (uint32)")
+F.SMO_GetBufferQueues_pResults_item = ProtoField.uint32("SMO_GetBufferQueues_pResults_item", "pResults (uint32)")
+F.SMO_ClearBufferQueues_params_len = ProtoField.uint32("SMO_ClearBufferQueues_params_len", "params length (uint32)")
+F.SMO_ClearBufferQueues_pResults_len = ProtoField.uint32("SMO_ClearBufferQueues_pResults_len", "pResults length (uint32)")
+F.SMO_ClearBufferQueues_pResults_item = ProtoField.uint32("SMO_ClearBufferQueues_pResults_item", "pResults (uint32)")
+F.SMO_SearchBalloon_pResults_len = ProtoField.uint32("SMO_SearchBalloon_pResults_len", "pResults length (uint32)")
 F.Remote_Log_Device_Log_Message_len = ProtoField.uint16("Remote_Log_Device_Log_Message_len", "Message length (String)")
 F.Remote_Log_Device_Log_Message_data = ProtoField.string("Remote_Log_Device_Log_Message_data", "Message data (String)")
 F.Privileges_GetPrivileges_localeCode_len = ProtoField.uint16("Privileges_GetPrivileges_localeCode_len", "localeCode length (String)")
@@ -8199,9 +8199,17 @@ return off
 end
 
 local info = {}
+local nested_info = {}
 function add_proto(id, tab)
 	if not tab["nested"] then
 		info[id] = tab
+	else
+		name = tab["name"]
+		if not nested_info[name] then
+			nested_info[name] = {}
+		end
+
+		nested_info[name][id] = tab
 	end
 end
 	add_proto(21,
@@ -11549,14 +11557,14 @@ add_proto(109,
 add_proto(0x73,
 	{
 		["nested"] = true,
-		["name"] = "Data Store",
+		["name"] = "Splatoon 2",
 		["methods"] = {
 [47] = {
 				["name"] = "CoconutRegisterMeta",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_CoconutMeta(conn, tree, tvb, off, 'Data_Store_CoconutRegisterMeta_meta')
-off, Data_Store_CoconutRegisterMeta_url = do_String(conn, tree, tvb, off, 'Data_Store_CoconutRegisterMeta_url')
+off = do_CoconutMeta(conn, tree, tvb, off, 'Splatoon_2_CoconutRegisterMeta_meta')
+off, Splatoon_2_CoconutRegisterMeta_url = do_String(conn, tree, tvb, off, 'Splatoon_2_CoconutRegisterMeta_url')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -11566,7 +11574,7 @@ off, Data_Store_CoconutRegisterMeta_url = do_String(conn, tree, tvb, off, 'Data_
 				["name"] = "CoconutRatePost",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off, Data_Store_CoconutRatePost_dataId = do_Uint64(conn, tree, tvb, off, 'Data_Store_CoconutRatePost_dataId')
+off, Splatoon_2_CoconutRatePost_dataId = do_Uint64(conn, tree, tvb, off, 'Splatoon_2_CoconutRatePost_dataId')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -11576,23 +11584,23 @@ off, Data_Store_CoconutRatePost_dataId = do_Uint64(conn, tree, tvb, off, 'Data_S
 				["name"] = "CoconutGetObjectInfos",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_CoconutGetParam(conn, tree, tvb, off, 'Data_Store_CoconutGetObjectInfos_param')
+off = do_CoconutGetParam(conn, tree, tvb, off, 'Splatoon_2_CoconutGetObjectInfos_param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-local Data_Store_CoconutGetObjectInfos_pInfos_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_CoconutGetObjectInfos_pInfos_len, tvb(off,4))
+local Splatoon_2_CoconutGetObjectInfos_pInfos_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.Splatoon_2_CoconutGetObjectInfos_pInfos_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_CoconutGetObjectInfos_pInfos_len do
-	off = do_CoconutGetInfo(conn, subtree, tvb, off, 'Data_Store_CoconutGetObjectInfos_pInfos_item')
+	for i=1,Splatoon_2_CoconutGetObjectInfos_pInfos_len do
+	off = do_CoconutGetInfo(conn, subtree, tvb, off, 'Splatoon_2_CoconutGetObjectInfos_pInfos_item')
 
 	end
 	
-local Data_Store_CoconutGetObjectInfos_pResults_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_CoconutGetObjectInfos_pResults_len, tvb(off,4))
+local Splatoon_2_CoconutGetObjectInfos_pResults_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.Splatoon_2_CoconutGetObjectInfos_pResults_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_CoconutGetObjectInfos_pResults_len do
-	off, Data_Store_CoconutGetObjectInfos_pResults_item = do_Result(conn, subtree, tvb, off, 'Data_Store_CoconutGetObjectInfos_pResults_item')
+	for i=1,Splatoon_2_CoconutGetObjectInfos_pResults_len do
+	off, Splatoon_2_CoconutGetObjectInfos_pResults_item = do_Result(conn, subtree, tvb, off, 'Splatoon_2_CoconutGetObjectInfos_pResults_item')
 
 	end
 	
@@ -11602,7 +11610,7 @@ local Data_Store_CoconutGetObjectInfos_pResults_len = tvb(off, 4):le_uint()
 				["name"] = "CoconutReportViolation",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_CoconutViolation(conn, tree, tvb, off, 'Data_Store_CoconutReportViolation_violation')
+off = do_CoconutViolation(conn, tree, tvb, off, 'Splatoon_2_CoconutReportViolation_violation')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -11612,7 +11620,7 @@ off = do_CoconutViolation(conn, tree, tvb, off, 'Data_Store_CoconutReportViolati
 				["name"] = "UploadRegularMatchResult",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_CalicoRegularStats(conn, tree, tvb, off, 'Data_Store_UploadRegularMatchResult_stats')
+off = do_CalicoRegularStats(conn, tree, tvb, off, 'Splatoon_2_UploadRegularMatchResult_stats')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -11622,7 +11630,7 @@ off = do_CalicoRegularStats(conn, tree, tvb, off, 'Data_Store_UploadRegularMatch
 				["name"] = "UploadGachiMatchResult",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_CalicoGachiStats(conn, tree, tvb, off, 'Data_Store_UploadGachiMatchResult_stats')
+off = do_CalicoGachiStats(conn, tree, tvb, off, 'Splatoon_2_UploadGachiMatchResult_stats')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -11632,7 +11640,7 @@ off = do_CalicoGachiStats(conn, tree, tvb, off, 'Data_Store_UploadGachiMatchResu
 				["name"] = "UploadLeagueMatchResult",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_CalicoLeagueStats(conn, tree, tvb, off, 'Data_Store_UploadLeagueMatchResult_stats')
+off = do_CalicoLeagueStats(conn, tree, tvb, off, 'Splatoon_2_UploadLeagueMatchResult_stats')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -11642,7 +11650,7 @@ off = do_CalicoLeagueStats(conn, tree, tvb, off, 'Data_Store_UploadLeagueMatchRe
 				["name"] = "UploadFesMatchResult",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_CalicoFesStats(conn, tree, tvb, off, 'Data_Store_UploadFesMatchResult_stats')
+off = do_CalicoFesStats(conn, tree, tvb, off, 'Splatoon_2_UploadFesMatchResult_stats')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -11655,14 +11663,14 @@ off = do_CalicoFesStats(conn, tree, tvb, off, 'Data_Store_UploadFesMatchResult_s
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-off = do_OrderedInfo(conn, tree, tvb, off, 'Data_Store_GetOrderedGear_info')
+off = do_OrderedInfo(conn, tree, tvb, off, 'Splatoon_2_GetOrderedGear_info')
  end
 			},
 			[56] = {
 				["name"] = "PurchaseGear",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_OrderedInfo(conn, tree, tvb, off, 'Data_Store_PurchaseGear_info')
+off = do_OrderedInfo(conn, tree, tvb, off, 'Splatoon_2_PurchaseGear_info')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -11672,7 +11680,7 @@ off = do_OrderedInfo(conn, tree, tvb, off, 'Data_Store_PurchaseGear_info')
 				["name"] = "UploadTimeAttack",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_TimeAttackInfo(conn, tree, tvb, off, 'Data_Store_UploadTimeAttack_info')
+off = do_TimeAttackInfo(conn, tree, tvb, off, 'Splatoon_2_UploadTimeAttack_info')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -11682,9 +11690,9 @@ off = do_TimeAttackInfo(conn, tree, tvb, off, 'Data_Store_UploadTimeAttack_info'
 				["name"] = "CoconutRegisterMetaByParam",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_CoconutMeta(conn, tree, tvb, off, 'Data_Store_CoconutRegisterMetaByParam_meta')
-off, Data_Store_CoconutRegisterMetaByParam_snsName = do_String(conn, tree, tvb, off, 'Data_Store_CoconutRegisterMetaByParam_snsName')
-off, Data_Store_CoconutRegisterMetaByParam_postId = do_String(conn, tree, tvb, off, 'Data_Store_CoconutRegisterMetaByParam_postId')
+off = do_CoconutMeta(conn, tree, tvb, off, 'Splatoon_2_CoconutRegisterMetaByParam_meta')
+off, Splatoon_2_CoconutRegisterMetaByParam_snsName = do_String(conn, tree, tvb, off, 'Splatoon_2_CoconutRegisterMetaByParam_snsName')
+off, Splatoon_2_CoconutRegisterMetaByParam_postId = do_String(conn, tree, tvb, off, 'Splatoon_2_CoconutRegisterMetaByParam_postId')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -11694,7 +11702,7 @@ off, Data_Store_CoconutRegisterMetaByParam_postId = do_String(conn, tree, tvb, o
 				["name"] = "UploadFesMatchResultV2",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_CalicoFesStatsV2(conn, tree, tvb, off, 'Data_Store_UploadFesMatchResultV2_stats')
+off = do_CalicoFesStatsV2(conn, tree, tvb, off, 'Splatoon_2_UploadFesMatchResultV2_stats')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -11734,22 +11742,22 @@ off = do_CalicoFesStatsV2(conn, tree, tvb, off, 'Data_Store_UploadFesMatchResult
 				["name"] = "PreparePostPlayLog",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_PlayLogPreparePostParam(conn, tree, tvb, off, 'Data_Store_PreparePostPlayLog_Param')
+off = do_PlayLogPreparePostParam(conn, tree, tvb, off, 'Splatoon_2_PreparePostPlayLog_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-off = do_DataStoreReqPostInfo(conn, tree, tvb, off, 'Data_Store_PreparePostPlayLog_POST_request_info')
+off = do_DataStoreReqPostInfo(conn, tree, tvb, off, 'Splatoon_2_PreparePostPlayLog_POST_request_info')
  end
 			},
 			[67] = {
 				["name"] = "PrepareGetPlayLog",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_PlayLogPrepareGetParam(conn, tree, tvb, off, 'Data_Store_PrepareGetPlayLog_Param')
+off = do_PlayLogPrepareGetParam(conn, tree, tvb, off, 'Splatoon_2_PrepareGetPlayLog_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-off = do_DataStoreReqGetInfo(conn, tree, tvb, off, 'Data_Store_PrepareGetPlayLog_GET_request_info')
+off = do_DataStoreReqGetInfo(conn, tree, tvb, off, 'Splatoon_2_PrepareGetPlayLog_GET_request_info')
  end
 			},
 			[68] = {
@@ -16274,13 +16282,13 @@ add_proto(109,
 add_proto(0x73,
 	{
 		["nested"] = true,
-		["name"] = "Data Store",
+		["name"] = "SMM 2",
 		["methods"] = {
 [47] = {
 				["name"] = "RegisterUser",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_RegisterUserParam(conn, tree, tvb, off, 'Data_Store_RegisterUser_Param')
+off = do_RegisterUserParam(conn, tree, tvb, off, 'SMM_2_RegisterUser_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -16290,16 +16298,16 @@ off = do_RegisterUserParam(conn, tree, tvb, off, 'Data_Store_RegisterUser_Param'
 				["name"] = "GetUsers",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_GetUsersParam(conn, tree, tvb, off, 'Data_Store_GetUsers_Param')
+off = do_GetUsersParam(conn, tree, tvb, off, 'SMM_2_GetUsers_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
 --[[ Stubbed! Missing type (in list) UserInfo]]
-local Data_Store_GetUsers_Result_codes_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_GetUsers_Result_codes_len, tvb(off,4))
+local SMM_2_GetUsers_Result_codes_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMM_2_GetUsers_Result_codes_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_GetUsers_Result_codes_len do
-	off, Data_Store_GetUsers_Result_codes_item = do_Result(conn, subtree, tvb, off, 'Data_Store_GetUsers_Result_codes_item')
+	for i=1,SMM_2_GetUsers_Result_codes_len do
+	off, SMM_2_GetUsers_Result_codes_item = do_Result(conn, subtree, tvb, off, 'SMM_2_GetUsers_Result_codes_item')
 
 	end
 	
@@ -16309,78 +16317,78 @@ local Data_Store_GetUsers_Result_codes_len = tvb(off, 4):le_uint()
 				["name"] = "SyncUserProfile",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_SyncUserProfileParam(conn, tree, tvb, off, 'Data_Store_SyncUserProfile_Param')
+off = do_SyncUserProfileParam(conn, tree, tvb, off, 'SMM_2_SyncUserProfile_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-off = do_SyncUserProfileResult(conn, tree, tvb, off, 'Data_Store_SyncUserProfile_Result')
+off = do_SyncUserProfileResult(conn, tree, tvb, off, 'SMM_2_SyncUserProfile_Result')
  end
 			},
 			[50] = {
 				["name"] = "SearchUsersUserPoint",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_SearchUsersUserPointParam(conn, tree, tvb, off, 'Data_Store_SearchUsersUserPoint_Param')
+off = do_SearchUsersUserPointParam(conn, tree, tvb, off, 'SMM_2_SearchUsersUserPoint_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
 --[[ Stubbed! Missing type (in list) UserInfo]]
-local Data_Store_SearchUsersUserPoint_Ranks_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_SearchUsersUserPoint_Ranks_len, tvb(off,4))
+local SMM_2_SearchUsersUserPoint_Ranks_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMM_2_SearchUsersUserPoint_Ranks_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_SearchUsersUserPoint_Ranks_len do
-	off, Data_Store_SearchUsersUserPoint_Ranks_item = do_Uint32(conn, subtree, tvb, off, 'Data_Store_SearchUsersUserPoint_Ranks_item')
+	for i=1,SMM_2_SearchUsersUserPoint_Ranks_len do
+	off, SMM_2_SearchUsersUserPoint_Ranks_item = do_Uint32(conn, subtree, tvb, off, 'SMM_2_SearchUsersUserPoint_Ranks_item')
 
 	end
 	
-off, Data_Store_SearchUsersUserPoint_Result = do_Bool(conn, tree, tvb, off, 'Data_Store_SearchUsersUserPoint_Result')
+off, SMM_2_SearchUsersUserPoint_Result = do_Bool(conn, tree, tvb, off, 'SMM_2_SearchUsersUserPoint_Result')
  end
 			},
 			[51] = {
 				["name"] = "SearchUsersEndlessMode",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_SearchUsersEndlessModeParam(conn, tree, tvb, off, 'Data_Store_SearchUsersEndlessMode_Param')
+off = do_SearchUsersEndlessModeParam(conn, tree, tvb, off, 'SMM_2_SearchUsersEndlessMode_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
 --[[ Stubbed! Missing type (in list) UserInfo]]
-local Data_Store_SearchUsersEndlessMode_Unknown_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_SearchUsersEndlessMode_Unknown_len, tvb(off,4))
+local SMM_2_SearchUsersEndlessMode_Unknown_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMM_2_SearchUsersEndlessMode_Unknown_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_SearchUsersEndlessMode_Unknown_len do
-	off, Data_Store_SearchUsersEndlessMode_Unknown_item = do_Uint32(conn, subtree, tvb, off, 'Data_Store_SearchUsersEndlessMode_Unknown_item')
+	for i=1,SMM_2_SearchUsersEndlessMode_Unknown_len do
+	off, SMM_2_SearchUsersEndlessMode_Unknown_item = do_Uint32(conn, subtree, tvb, off, 'SMM_2_SearchUsersEndlessMode_Unknown_item')
 
 	end
 	
-off, Data_Store_SearchUsersEndlessMode_Unknown = do_Bool(conn, tree, tvb, off, 'Data_Store_SearchUsersEndlessMode_Unknown')
+off, SMM_2_SearchUsersEndlessMode_Unknown = do_Bool(conn, tree, tvb, off, 'SMM_2_SearchUsersEndlessMode_Unknown')
  end
 			},
 			[52] = {
 				["name"] = "SearchUsersBattleMode",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_SearchUsersBattleModeParam(conn, tree, tvb, off, 'Data_Store_SearchUsersBattleMode_Param')
+off = do_SearchUsersBattleModeParam(conn, tree, tvb, off, 'SMM_2_SearchUsersBattleMode_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
 --[[ Stubbed! Missing type (in list) UserInfo]]
-local Data_Store_SearchUsersBattleMode_Unknown_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_SearchUsersBattleMode_Unknown_len, tvb(off,4))
+local SMM_2_SearchUsersBattleMode_Unknown_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMM_2_SearchUsersBattleMode_Unknown_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_SearchUsersBattleMode_Unknown_len do
-	off, Data_Store_SearchUsersBattleMode_Unknown_item = do_Uint32(conn, subtree, tvb, off, 'Data_Store_SearchUsersBattleMode_Unknown_item')
+	for i=1,SMM_2_SearchUsersBattleMode_Unknown_len do
+	off, SMM_2_SearchUsersBattleMode_Unknown_item = do_Uint32(conn, subtree, tvb, off, 'SMM_2_SearchUsersBattleMode_Unknown_item')
 
 	end
 	
-off, Data_Store_SearchUsersBattleMode_Unknown = do_Bool(conn, tree, tvb, off, 'Data_Store_SearchUsersBattleMode_Unknown')
+off, SMM_2_SearchUsersBattleMode_Unknown = do_Bool(conn, tree, tvb, off, 'SMM_2_SearchUsersBattleMode_Unknown')
  end
 			},
 			[53] = {
 				["name"] = "SearchUsersPlayedCourse",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_SearchUsersPlayedCourseParam(conn, tree, tvb, off, 'Data_Store_SearchUsersPlayedCourse_Param')
+off = do_SearchUsersPlayedCourseParam(conn, tree, tvb, off, 'SMM_2_SearchUsersPlayedCourse_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -16391,7 +16399,7 @@ off = do_SearchUsersPlayedCourseParam(conn, tree, tvb, off, 'Data_Store_SearchUs
 				["name"] = "SearchUsersClearedCourse",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_SearchUsersClearedCourseParam(conn, tree, tvb, off, 'Data_Store_SearchUsersClearedCourse_Param')
+off = do_SearchUsersClearedCourseParam(conn, tree, tvb, off, 'SMM_2_SearchUsersClearedCourse_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -16413,32 +16421,32 @@ off = do_SearchUsersClearedCourseParam(conn, tree, tvb, off, 'Data_Store_SearchU
 				["name"] = "SearchUsersFollowee",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_SearchUsersFolloweeParam(conn, tree, tvb, off, 'Data_Store_SearchUsersFollowee_Param')
+off = do_SearchUsersFolloweeParam(conn, tree, tvb, off, 'SMM_2_SearchUsersFollowee_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
 --[[ Stubbed! Missing type (in list) UserInfo]]
-off, Data_Store_SearchUsersFollowee_Unknown = do_Bool(conn, tree, tvb, off, 'Data_Store_SearchUsersFollowee_Unknown')
+off, SMM_2_SearchUsersFollowee_Unknown = do_Bool(conn, tree, tvb, off, 'SMM_2_SearchUsersFollowee_Unknown')
  end
 			},
 			[57] = {
 				["name"] = "SearchUsersClearRanking",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_SearchUsersClearRankingParam(conn, tree, tvb, off, 'Data_Store_SearchUsersClearRanking_Param')
+off = do_SearchUsersClearRankingParam(conn, tree, tvb, off, 'SMM_2_SearchUsersClearRanking_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
 --[[ Stubbed! Missing type (in list) UserInfo]]
-local Data_Store_SearchUsersClearRanking_Unknown_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_SearchUsersClearRanking_Unknown_len, tvb(off,4))
+local SMM_2_SearchUsersClearRanking_Unknown_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMM_2_SearchUsersClearRanking_Unknown_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_SearchUsersClearRanking_Unknown_len do
-	off, Data_Store_SearchUsersClearRanking_Unknown_item = do_Uint32(conn, subtree, tvb, off, 'Data_Store_SearchUsersClearRanking_Unknown_item')
+	for i=1,SMM_2_SearchUsersClearRanking_Unknown_len do
+	off, SMM_2_SearchUsersClearRanking_Unknown_item = do_Uint32(conn, subtree, tvb, off, 'SMM_2_SearchUsersClearRanking_Unknown_item')
 
 	end
 	
-off, Data_Store_SearchUsersClearRanking_Unknown = do_Bool(conn, tree, tvb, off, 'Data_Store_SearchUsersClearRanking_Unknown')
+off, SMM_2_SearchUsersClearRanking_Unknown = do_Bool(conn, tree, tvb, off, 'SMM_2_SearchUsersClearRanking_Unknown')
  end
 			},
 			[58] = {
@@ -16462,30 +16470,30 @@ off, Data_Store_SearchUsersClearRanking_Unknown = do_Bool(conn, tree, tvb, off, 
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-off, Data_Store_CanPostCourse_Unknown = do_Bool(conn, tree, tvb, off, 'Data_Store_CanPostCourse_Unknown')
-off, Data_Store_CanPostCourse_Unknown = do_Uint32(conn, tree, tvb, off, 'Data_Store_CanPostCourse_Unknown')
+off, SMM_2_CanPostCourse_Unknown = do_Bool(conn, tree, tvb, off, 'SMM_2_CanPostCourse_Unknown')
+off, SMM_2_CanPostCourse_Unknown = do_Uint32(conn, tree, tvb, off, 'SMM_2_CanPostCourse_Unknown')
  end
 			},
 			[61] = {
 				["name"] = "CanPostRatingAndComment",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_CanPostRatingAndCommentParam(conn, tree, tvb, off, 'Data_Store_CanPostRatingAndComment_Param')
+off = do_CanPostRatingAndCommentParam(conn, tree, tvb, off, 'SMM_2_CanPostRatingAndComment_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-off = do_CanPostRatingAndCommentResult(conn, tree, tvb, off, 'Data_Store_CanPostRatingAndComment_Result')
+off = do_CanPostRatingAndCommentResult(conn, tree, tvb, off, 'SMM_2_CanPostRatingAndComment_Result')
  end
 			},
 			[62] = {
 				["name"] = "UpdateMiiClothes",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-local Data_Store_UpdateMiiClothes_Param_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_UpdateMiiClothes_Param_len, tvb(off,4))
+local SMM_2_UpdateMiiClothes_Param_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMM_2_UpdateMiiClothes_Param_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_UpdateMiiClothes_Param_len do
-	off = do_UpdateMiiClothesParam(conn, subtree, tvb, off, 'Data_Store_UpdateMiiClothes_Param_item')
+	for i=1,SMM_2_UpdateMiiClothes_Param_len do
+	off = do_UpdateMiiClothesParam(conn, subtree, tvb, off, 'SMM_2_UpdateMiiClothes_Param_item')
 
 	end
 	
@@ -16501,11 +16509,11 @@ local Data_Store_UpdateMiiClothes_Param_len = tvb(off, 4):le_uint()
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-local Data_Store_GetMiiClothes_Mii_clothes_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_GetMiiClothes_Mii_clothes_len, tvb(off,4))
+local SMM_2_GetMiiClothes_Mii_clothes_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMM_2_GetMiiClothes_Mii_clothes_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_GetMiiClothes_Mii_clothes_len do
-	off = do_MiiClothes(conn, subtree, tvb, off, 'Data_Store_GetMiiClothes_Mii_clothes_item')
+	for i=1,SMM_2_GetMiiClothes_Mii_clothes_len do
+	off = do_MiiClothes(conn, subtree, tvb, off, 'SMM_2_GetMiiClothes_Mii_clothes_item')
 
 	end
 	
@@ -16523,18 +16531,18 @@ local Data_Store_GetMiiClothes_Mii_clothes_len = tvb(off, 4):le_uint()
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-off, Data_Store_GetUserNameNgType_Type = do_Uint8(conn, tree, tvb, off, 'Data_Store_GetUserNameNgType_Type')
+off, SMM_2_GetUserNameNgType_Type = do_Uint8(conn, tree, tvb, off, 'SMM_2_GetUserNameNgType_Type')
  end
 			},
 			[66] = {
 				["name"] = "PreparePostObjectCourse",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_PreparePostCourseParam(conn, tree, tvb, off, 'Data_Store_PreparePostObjectCourse_Param')
+off = do_PreparePostCourseParam(conn, tree, tvb, off, 'SMM_2_PreparePostObjectCourse_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-off = do_DataStoreReqPostInfo(conn, tree, tvb, off, 'Data_Store_PreparePostObjectCourse_Info')
+off = do_DataStoreReqPostInfo(conn, tree, tvb, off, 'SMM_2_PreparePostObjectCourse_Info')
  end
 			},
 			[67] = {
@@ -16546,7 +16554,7 @@ off = do_DataStoreReqPostInfo(conn, tree, tvb, off, 'Data_Store_PreparePostObjec
 				["name"] = "CompletePostObjectsCourse",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_CompletePostObjectsCourseParam(conn, tree, tvb, off, 'Data_Store_CompletePostObjectsCourse_Param')
+off = do_CompletePostObjectsCourseParam(conn, tree, tvb, off, 'SMM_2_CompletePostObjectsCourse_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -16556,7 +16564,7 @@ off = do_CompletePostObjectsCourseParam(conn, tree, tvb, off, 'Data_Store_Comple
 				["name"] = "UpdateCourseTag",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_UpdateCourseTagParam(conn, tree, tvb, off, 'Data_Store_UpdateCourseTag_Param')
+off = do_UpdateCourseTagParam(conn, tree, tvb, off, 'SMM_2_UpdateCourseTag_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -16566,16 +16574,16 @@ off = do_UpdateCourseTagParam(conn, tree, tvb, off, 'Data_Store_UpdateCourseTag_
 				["name"] = "GetCourses",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_GetCoursesParam(conn, tree, tvb, off, 'Data_Store_GetCourses_Param')
+off = do_GetCoursesParam(conn, tree, tvb, off, 'SMM_2_GetCourses_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
 --[[ Stubbed! Missing type (in list) CourseInfo]]
-local Data_Store_GetCourses_Result_codes_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_GetCourses_Result_codes_len, tvb(off,4))
+local SMM_2_GetCourses_Result_codes_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMM_2_GetCourses_Result_codes_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_GetCourses_Result_codes_len do
-	off, Data_Store_GetCourses_Result_codes_item = do_Result(conn, subtree, tvb, off, 'Data_Store_GetCourses_Result_codes_item')
+	for i=1,SMM_2_GetCourses_Result_codes_len do
+	off, SMM_2_GetCourses_Result_codes_item = do_Result(conn, subtree, tvb, off, 'SMM_2_GetCourses_Result_codes_item')
 
 	end
 	
@@ -16585,20 +16593,20 @@ local Data_Store_GetCourses_Result_codes_len = tvb(off, 4):le_uint()
 				["name"] = "SearchCoursesPointRanking",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_SearchCoursesPointRankingParam(conn, tree, tvb, off, 'Data_Store_SearchCoursesPointRanking_Param')
+off = do_SearchCoursesPointRankingParam(conn, tree, tvb, off, 'SMM_2_SearchCoursesPointRanking_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
 --[[ Stubbed! Missing type (in list) CourseInfo]]
-local Data_Store_SearchCoursesPointRanking_Ranks_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_SearchCoursesPointRanking_Ranks_len, tvb(off,4))
+local SMM_2_SearchCoursesPointRanking_Ranks_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMM_2_SearchCoursesPointRanking_Ranks_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_SearchCoursesPointRanking_Ranks_len do
-	off, Data_Store_SearchCoursesPointRanking_Ranks_item = do_Uint32(conn, subtree, tvb, off, 'Data_Store_SearchCoursesPointRanking_Ranks_item')
+	for i=1,SMM_2_SearchCoursesPointRanking_Ranks_len do
+	off, SMM_2_SearchCoursesPointRanking_Ranks_item = do_Uint32(conn, subtree, tvb, off, 'SMM_2_SearchCoursesPointRanking_Ranks_item')
 
 	end
 	
-off, Data_Store_SearchCoursesPointRanking_Result = do_Bool(conn, tree, tvb, off, 'Data_Store_SearchCoursesPointRanking_Result')
+off, SMM_2_SearchCoursesPointRanking_Result = do_Bool(conn, tree, tvb, off, 'SMM_2_SearchCoursesPointRanking_Result')
  end
 			},
 			[72] = {
@@ -16610,24 +16618,24 @@ off, Data_Store_SearchCoursesPointRanking_Result = do_Bool(conn, tree, tvb, off,
 				["name"] = "SearchCoursesLatest",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_SearchCoursesLatestParam(conn, tree, tvb, off, 'Data_Store_SearchCoursesLatest_Param')
+off = do_SearchCoursesLatestParam(conn, tree, tvb, off, 'SMM_2_SearchCoursesLatest_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
 --[[ Stubbed! Missing type (in list) CourseInfo]]
-off, Data_Store_SearchCoursesLatest_Result = do_Bool(conn, tree, tvb, off, 'Data_Store_SearchCoursesLatest_Result')
+off, SMM_2_SearchCoursesLatest_Result = do_Bool(conn, tree, tvb, off, 'SMM_2_SearchCoursesLatest_Result')
  end
 			},
 			[74] = {
 				["name"] = "SearchCoursesPostedBy",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_SearchCoursesPostedByParam(conn, tree, tvb, off, 'Data_Store_SearchCoursesPostedBy_Param')
+off = do_SearchCoursesPostedByParam(conn, tree, tvb, off, 'SMM_2_SearchCoursesPostedBy_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
 --[[ Stubbed! Missing type (in list) CourseInfo]]
-off, Data_Store_SearchCoursesPostedBy_Result = do_Bool(conn, tree, tvb, off, 'Data_Store_SearchCoursesPostedBy_Result')
+off, SMM_2_SearchCoursesPostedBy_Result = do_Bool(conn, tree, tvb, off, 'SMM_2_SearchCoursesPostedBy_Result')
  end
 			},
 			[75] = {
@@ -16654,7 +16662,7 @@ off, Data_Store_SearchCoursesPostedBy_Result = do_Bool(conn, tree, tvb, off, 'Da
 				["name"] = "SearchCoursesEndlessMode",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_SearchCoursesEndlessModeParam(conn, tree, tvb, off, 'Data_Store_SearchCoursesEndlessMode_Param')
+off = do_SearchCoursesEndlessModeParam(conn, tree, tvb, off, 'SMM_2_SearchCoursesEndlessMode_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -16685,7 +16693,7 @@ off = do_SearchCoursesEndlessModeParam(conn, tree, tvb, off, 'Data_Store_SearchC
 				["name"] = "SearchCoursesPickUp",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_SearchCoursesPickUpParam(conn, tree, tvb, off, 'Data_Store_SearchCoursesPickUp_Param')
+off = do_SearchCoursesPickUpParam(conn, tree, tvb, off, 'SMM_2_SearchCoursesPickUp_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -16696,17 +16704,17 @@ off = do_SearchCoursesPickUpParam(conn, tree, tvb, off, 'Data_Store_SearchCourse
 				["name"] = "GetCoursesEvent",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_GetCoursesParam(conn, tree, tvb, off, 'Data_Store_GetCoursesEvent_Course_param')
+off = do_GetCoursesParam(conn, tree, tvb, off, 'SMM_2_GetCoursesEvent_Course_param')
 --[[ Stubbed! Missing type GetCoursesEventParam]]
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
 --[[ Stubbed! Missing type (in list) EventCourseInfo]]
-local Data_Store_GetCoursesEvent_Results_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_GetCoursesEvent_Results_len, tvb(off,4))
+local SMM_2_GetCoursesEvent_Results_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMM_2_GetCoursesEvent_Results_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_GetCoursesEvent_Results_len do
-	off, Data_Store_GetCoursesEvent_Results_item = do_Result(conn, subtree, tvb, off, 'Data_Store_GetCoursesEvent_Results_item')
+	for i=1,SMM_2_GetCoursesEvent_Results_len do
+	off, SMM_2_GetCoursesEvent_Results_item = do_Result(conn, subtree, tvb, off, 'SMM_2_GetCoursesEvent_Results_item')
 
 	end
 	
@@ -16716,7 +16724,7 @@ local Data_Store_GetCoursesEvent_Results_len = tvb(off, 4):le_uint()
 				["name"] = "SearchCoursesEvent",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_SearchCoursesEventParam(conn, tree, tvb, off, 'Data_Store_SearchCoursesEvent_Event_param')
+off = do_SearchCoursesEventParam(conn, tree, tvb, off, 'SMM_2_SearchCoursesEvent_Event_param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -16727,7 +16735,7 @@ off = do_SearchCoursesEventParam(conn, tree, tvb, off, 'Data_Store_SearchCourses
 				["name"] = "ReadEventCourseList",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_ReadEventCourseListParam(conn, tree, tvb, off, 'Data_Store_ReadEventCourseList_Param')
+off = do_ReadEventCourseListParam(conn, tree, tvb, off, 'SMM_2_ReadEventCourseList_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -16772,15 +16780,15 @@ off = do_ReadEventCourseListParam(conn, tree, tvb, off, 'Data_Store_ReadEventCou
 				["name"] = "SearchComments",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off, Data_Store_SearchComments_Data_id = do_Uint64(conn, tree, tvb, off, 'Data_Store_SearchComments_Data_id')
+off, SMM_2_SearchComments_Data_id = do_Uint64(conn, tree, tvb, off, 'SMM_2_SearchComments_Data_id')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-local Data_Store_SearchComments_Comments_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_SearchComments_Comments_len, tvb(off,4))
+local SMM_2_SearchComments_Comments_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMM_2_SearchComments_Comments_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_SearchComments_Comments_len do
-	off = do_CommentInfo(conn, subtree, tvb, off, 'Data_Store_SearchComments_Comments_item')
+	for i=1,SMM_2_SearchComments_Comments_len do
+	off = do_CommentInfo(conn, subtree, tvb, off, 'SMM_2_SearchComments_Comments_item')
 
 	end
 	
@@ -16853,7 +16861,7 @@ local Data_Store_SearchComments_Comments_len = tvb(off, 4):le_uint()
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-off = do_EndlessModeStatus(conn, tree, tvb, off, 'Data_Store_GetEndlessModeStatus_Result')
+off = do_EndlessModeStatus(conn, tree, tvb, off, 'SMM_2_GetEndlessModeStatus_Result')
  end
 			},
 			[109] = {
@@ -16903,9 +16911,9 @@ off = do_EndlessModeStatus(conn, tree, tvb, off, 'Data_Store_GetEndlessModeStatu
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-off, Data_Store_GetBattleModeRating_Unknown = do_Bool(conn, tree, tvb, off, 'Data_Store_GetBattleModeRating_Unknown')
-off = do_BattleModeRating(conn, tree, tvb, off, 'Data_Store_GetBattleModeRating_Rating_1')
-off = do_BattleModeRating(conn, tree, tvb, off, 'Data_Store_GetBattleModeRating_Rating_2')
+off, SMM_2_GetBattleModeRating_Unknown = do_Bool(conn, tree, tvb, off, 'SMM_2_GetBattleModeRating_Unknown')
+off = do_BattleModeRating(conn, tree, tvb, off, 'SMM_2_GetBattleModeRating_Rating_1')
+off = do_BattleModeRating(conn, tree, tvb, off, 'SMM_2_GetBattleModeRating_Rating_2')
  end
 			},
 			[118] = {
@@ -16977,7 +16985,7 @@ off = do_BattleModeRating(conn, tree, tvb, off, 'Data_Store_GetBattleModeRating_
 				["name"] = "GetUserOrCourse",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_GetUserOrCourseParam(conn, tree, tvb, off, 'Data_Store_GetUserOrCourse_Param')
+off = do_GetUserOrCourseParam(conn, tree, tvb, off, 'SMM_2_GetUserOrCourse_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -16989,11 +16997,11 @@ off = do_GetUserOrCourseParam(conn, tree, tvb, off, 'Data_Store_GetUserOrCourse_
 				["name"] = "PreparePostRelationObject",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_PreparePostRelationObjectParam(conn, tree, tvb, off, 'Data_Store_PreparePostRelationObject_Info')
+off = do_PreparePostRelationObjectParam(conn, tree, tvb, off, 'SMM_2_PreparePostRelationObject_Info')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-off = do_RelationObjectReqPostInfo(conn, tree, tvb, off, 'Data_Store_PreparePostRelationObject_Param')
+off = do_RelationObjectReqPostInfo(conn, tree, tvb, off, 'SMM_2_PreparePostRelationObject_Param')
  end
 			},
 			[133] = {
@@ -17005,11 +17013,11 @@ off = do_RelationObjectReqPostInfo(conn, tree, tvb, off, 'Data_Store_PreparePost
 				["name"] = "GetReqGetInfoHeadersInfo",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off, Data_Store_GetReqGetInfoHeadersInfo_Data_type = do_Uint8(conn, tree, tvb, off, 'Data_Store_GetReqGetInfoHeadersInfo_Data_type')
+off, SMM_2_GetReqGetInfoHeadersInfo_Data_type = do_Uint8(conn, tree, tvb, off, 'SMM_2_GetReqGetInfoHeadersInfo_Data_type')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-off = do_ReqGetInfoHeadersInfo(conn, tree, tvb, off, 'Data_Store_GetReqGetInfoHeadersInfo_Info')
+off = do_ReqGetInfoHeadersInfo(conn, tree, tvb, off, 'SMM_2_GetReqGetInfoHeadersInfo_Info')
  end
 			},
 			[135] = {
@@ -17109,7 +17117,7 @@ off = do_ReqGetInfoHeadersInfo(conn, tree, tvb, off, 'Data_Store_GetReqGetInfoHe
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-off, Data_Store_GetEventCourseStamp_Stamps = do_Uint32(conn, tree, tvb, off, 'Data_Store_GetEventCourseStamp_Stamps')
+off, SMM_2_GetEventCourseStamp_Stamps = do_Uint32(conn, tree, tvb, off, 'SMM_2_GetEventCourseStamp_Stamps')
  end
 			},
 			[154] = {
@@ -17119,14 +17127,14 @@ off, Data_Store_GetEventCourseStamp_Stamps = do_Uint32(conn, tree, tvb, off, 'Da
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-off = do_EventCourseStatusInfo(conn, tree, tvb, off, 'Data_Store_GetEventCourseStatus_Status_info')
+off = do_EventCourseStatusInfo(conn, tree, tvb, off, 'SMM_2_GetEventCourseStatus_Status_info')
  end
 			},
 			[155] = {
 				["name"] = "ReadEventCourseResult",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off, Data_Store_ReadEventCourseResult_Unknown = do_Uint64(conn, tree, tvb, off, 'Data_Store_ReadEventCourseResult_Unknown')
+off, SMM_2_ReadEventCourseResult_Unknown = do_Uint64(conn, tree, tvb, off, 'SMM_2_ReadEventCourseResult_Unknown')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -17136,26 +17144,26 @@ off, Data_Store_ReadEventCourseResult_Unknown = do_Uint64(conn, tree, tvb, off, 
 				["name"] = "GetEventCourseHistogram",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_GetEventCourseHistogramParam(conn, tree, tvb, off, 'Data_Store_GetEventCourseHistogram_Param')
+off = do_GetEventCourseHistogramParam(conn, tree, tvb, off, 'SMM_2_GetEventCourseHistogram_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-off = do_EventCourseHistogram(conn, tree, tvb, off, 'Data_Store_GetEventCourseHistogram_Histogram_info')
+off = do_EventCourseHistogram(conn, tree, tvb, off, 'SMM_2_GetEventCourseHistogram_Histogram_info')
  end
 			},
 			[157] = {
 				["name"] = "GetEventCourseGhost",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_GetEventCourseGhostParam(conn, tree, tvb, off, 'Data_Store_GetEventCourseGhost_Param')
+off = do_GetEventCourseGhostParam(conn, tree, tvb, off, 'SMM_2_GetEventCourseGhost_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-local Data_Store_GetEventCourseGhost_Ghosts_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_GetEventCourseGhost_Ghosts_len, tvb(off,4))
+local SMM_2_GetEventCourseGhost_Ghosts_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMM_2_GetEventCourseGhost_Ghosts_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_GetEventCourseGhost_Ghosts_len do
-	off = do_EventCourseGhostInfo(conn, subtree, tvb, off, 'Data_Store_GetEventCourseGhost_Ghosts_item')
+	for i=1,SMM_2_GetEventCourseGhost_Ghosts_len do
+	off = do_EventCourseGhostInfo(conn, subtree, tvb, off, 'SMM_2_GetEventCourseGhost_Ghosts_item')
 
 	end
 	
@@ -17165,7 +17173,7 @@ local Data_Store_GetEventCourseGhost_Ghosts_len = tvb(off, 4):le_uint()
 				["name"] = "DebugUploadEventCourseGhost",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_DebugUploadEventCourseGhostParam(conn, tree, tvb, off, 'Data_Store_DebugUploadEventCourseGhost_Param')
+off = do_DebugUploadEventCourseGhostParam(conn, tree, tvb, off, 'SMM_2_DebugUploadEventCourseGhost_Param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -19150,14 +19158,14 @@ off, Splatoon_2_AcquireTagId_pTagId = do_Uint64(conn, tree, tvb, off, 'Splatoon_
 add_proto(0x73,
 	{
 		["nested"] = true,
-		["name"] = "Data Store",
+		["name"] = "SMO",
 		["methods"] = {
 [47] = {
 				["name"] = "AddToBufferQueue",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_BufferQueueParam(conn, tree, tvb, off, 'Data_Store_AddToBufferQueue_param')
-off, Data_Store_AddToBufferQueue_buffer = do_qBuffer(conn, tree, tvb, off, 'Data_Store_AddToBufferQueue_buffer')
+off = do_BufferQueueParam(conn, tree, tvb, off, 'SMO_AddToBufferQueue_param')
+off, SMO_AddToBufferQueue_buffer = do_qBuffer(conn, tree, tvb, off, 'SMO_AddToBufferQueue_buffer')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
@@ -19167,30 +19175,30 @@ off, Data_Store_AddToBufferQueue_buffer = do_qBuffer(conn, tree, tvb, off, 'Data
 				["name"] = "AddToBufferQueues",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-local Data_Store_AddToBufferQueues_params_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_AddToBufferQueues_params_len, tvb(off,4))
+local SMO_AddToBufferQueues_params_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMO_AddToBufferQueues_params_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_AddToBufferQueues_params_len do
-	off = do_BufferQueueParam(conn, subtree, tvb, off, 'Data_Store_AddToBufferQueues_params_item')
+	for i=1,SMO_AddToBufferQueues_params_len do
+	off = do_BufferQueueParam(conn, subtree, tvb, off, 'SMO_AddToBufferQueues_params_item')
 
 	end
 	
-local Data_Store_AddToBufferQueues_buffers_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_AddToBufferQueues_buffers_len, tvb(off,4))
+local SMO_AddToBufferQueues_buffers_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMO_AddToBufferQueues_buffers_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_AddToBufferQueues_buffers_len do
-	off, Data_Store_AddToBufferQueues_buffers_item = do_qBuffer(conn, subtree, tvb, off, 'Data_Store_AddToBufferQueues_buffers_item')
+	for i=1,SMO_AddToBufferQueues_buffers_len do
+	off, SMO_AddToBufferQueues_buffers_item = do_qBuffer(conn, subtree, tvb, off, 'SMO_AddToBufferQueues_buffers_item')
 
 	end
 	
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-local Data_Store_AddToBufferQueues_pResults_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_AddToBufferQueues_pResults_len, tvb(off,4))
+local SMO_AddToBufferQueues_pResults_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMO_AddToBufferQueues_pResults_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_AddToBufferQueues_pResults_len do
-	off, Data_Store_AddToBufferQueues_pResults_item = do_Result(conn, subtree, tvb, off, 'Data_Store_AddToBufferQueues_pResults_item')
+	for i=1,SMO_AddToBufferQueues_pResults_len do
+	off, SMO_AddToBufferQueues_pResults_item = do_Result(conn, subtree, tvb, off, 'SMO_AddToBufferQueues_pResults_item')
 
 	end
 	
@@ -19200,15 +19208,15 @@ local Data_Store_AddToBufferQueues_pResults_len = tvb(off, 4):le_uint()
 				["name"] = "GetBufferQueue",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_BufferQueueParam(conn, tree, tvb, off, 'Data_Store_GetBufferQueue_param')
+off = do_BufferQueueParam(conn, tree, tvb, off, 'SMO_GetBufferQueue_param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-local Data_Store_GetBufferQueue_pBufferQueue_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_GetBufferQueue_pBufferQueue_len, tvb(off,4))
+local SMO_GetBufferQueue_pBufferQueue_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMO_GetBufferQueue_pBufferQueue_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_GetBufferQueue_pBufferQueue_len do
-	off, Data_Store_GetBufferQueue_pBufferQueue_item = do_qBuffer(conn, subtree, tvb, off, 'Data_Store_GetBufferQueue_pBufferQueue_item')
+	for i=1,SMO_GetBufferQueue_pBufferQueue_len do
+	off, SMO_GetBufferQueue_pBufferQueue_item = do_qBuffer(conn, subtree, tvb, off, 'SMO_GetBufferQueue_pBufferQueue_item')
 
 	end
 	
@@ -19218,37 +19226,37 @@ local Data_Store_GetBufferQueue_pBufferQueue_len = tvb(off, 4):le_uint()
 				["name"] = "GetBufferQueues",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-local Data_Store_GetBufferQueues_params_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_GetBufferQueues_params_len, tvb(off,4))
+local SMO_GetBufferQueues_params_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMO_GetBufferQueues_params_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_GetBufferQueues_params_len do
-	off = do_BufferQueueParam(conn, subtree, tvb, off, 'Data_Store_GetBufferQueues_params_item')
+	for i=1,SMO_GetBufferQueues_params_len do
+	off = do_BufferQueueParam(conn, subtree, tvb, off, 'SMO_GetBufferQueues_params_item')
 
 	end
 	
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-local Data_Store_GetBufferQueues_pBufferQueueLst_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_GetBufferQueues_pBufferQueueLst_len, tvb(off,4))
+local SMO_GetBufferQueues_pBufferQueueLst_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMO_GetBufferQueues_pBufferQueueLst_len, tvb(off,4))
 	off = off + 4
-	for j=1,Data_Store_GetBufferQueues_pBufferQueueLst_len do
-	local Data_Store_GetBufferQueues_pBufferQueueLst_item_len = tvb(off, 4):le_uint()
-	subsubtree = subtree:add_le(F.Data_Store_GetBufferQueues_pBufferQueueLst_item_len, tvb(off,4))
+	for j=1,SMO_GetBufferQueues_pBufferQueueLst_len do
+	local SMO_GetBufferQueues_pBufferQueueLst_item_len = tvb(off, 4):le_uint()
+	subsubtree = subtree:add_le(F.SMO_GetBufferQueues_pBufferQueueLst_item_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_GetBufferQueues_pBufferQueueLst_item_len do
-	off, Data_Store_GetBufferQueues_pBufferQueueLst_item_item = do_qBuffer(conn, subsubtree, tvb, off, 'Data_Store_GetBufferQueues_pBufferQueueLst_item_item')
+	for i=1,SMO_GetBufferQueues_pBufferQueueLst_item_len do
+	off, SMO_GetBufferQueues_pBufferQueueLst_item_item = do_qBuffer(conn, subsubtree, tvb, off, 'SMO_GetBufferQueues_pBufferQueueLst_item_item')
 
 	end
 	
 
 	end
 	
-local Data_Store_GetBufferQueues_pResults_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_GetBufferQueues_pResults_len, tvb(off,4))
+local SMO_GetBufferQueues_pResults_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMO_GetBufferQueues_pResults_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_GetBufferQueues_pResults_len do
-	off, Data_Store_GetBufferQueues_pResults_item = do_Result(conn, subtree, tvb, off, 'Data_Store_GetBufferQueues_pResults_item')
+	for i=1,SMO_GetBufferQueues_pResults_len do
+	off, SMO_GetBufferQueues_pResults_item = do_Result(conn, subtree, tvb, off, 'SMO_GetBufferQueues_pResults_item')
 
 	end
 	
@@ -19258,22 +19266,22 @@ local Data_Store_GetBufferQueues_pResults_len = tvb(off, 4):le_uint()
 				["name"] = "ClearBufferQueues",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-local Data_Store_ClearBufferQueues_params_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_ClearBufferQueues_params_len, tvb(off,4))
+local SMO_ClearBufferQueues_params_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMO_ClearBufferQueues_params_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_ClearBufferQueues_params_len do
-	off = do_BufferQueueParam(conn, subtree, tvb, off, 'Data_Store_ClearBufferQueues_params_item')
+	for i=1,SMO_ClearBufferQueues_params_len do
+	off = do_BufferQueueParam(conn, subtree, tvb, off, 'SMO_ClearBufferQueues_params_item')
 
 	end
 	
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-local Data_Store_ClearBufferQueues_pResults_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_ClearBufferQueues_pResults_len, tvb(off,4))
+local SMO_ClearBufferQueues_pResults_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMO_ClearBufferQueues_pResults_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_ClearBufferQueues_pResults_len do
-	off, Data_Store_ClearBufferQueues_pResults_item = do_Result(conn, subtree, tvb, off, 'Data_Store_ClearBufferQueues_pResults_item')
+	for i=1,SMO_ClearBufferQueues_pResults_len do
+	off, SMO_ClearBufferQueues_pResults_item = do_Result(conn, subtree, tvb, off, 'SMO_ClearBufferQueues_pResults_item')
 
 	end
 	
@@ -19283,15 +19291,15 @@ local Data_Store_ClearBufferQueues_pResults_len = tvb(off, 4):le_uint()
 				["name"] = "SearchBalloon",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_DataStoreSearchBalloonParam(conn, tree, tvb, off, 'Data_Store_SearchBalloon_param')
+off = do_DataStoreSearchBalloonParam(conn, tree, tvb, off, 'SMO_SearchBalloon_param')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-local Data_Store_SearchBalloon_pResults_len = tvb(off, 4):le_uint()
-	subtree = tree:add_le(F.Data_Store_SearchBalloon_pResults_len, tvb(off,4))
+local SMO_SearchBalloon_pResults_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.SMO_SearchBalloon_pResults_len, tvb(off,4))
 	off = off + 4
-	for i=1,Data_Store_SearchBalloon_pResults_len do
-	off = do_DataStoreSearchBalloonResultSet(conn, subtree, tvb, off, 'Data_Store_SearchBalloon_pResults_item')
+	for i=1,SMO_SearchBalloon_pResults_len do
+	off = do_DataStoreSearchBalloonResultSet(conn, subtree, tvb, off, 'SMO_SearchBalloon_pResults_item')
 
 	end
 	
@@ -19301,11 +19309,11 @@ local Data_Store_SearchBalloon_pResults_len = tvb(off, 4):le_uint()
 				["name"] = "FetchMyInfos",
 				["request"] = function (conn, tree, tvb)
 	local off = 0
-off = do_DataStoreFetchMyInfosParam(conn, tree, tvb, off, 'Data_Store_FetchMyInfos_patam')
+off = do_DataStoreFetchMyInfosParam(conn, tree, tvb, off, 'SMO_FetchMyInfos_patam')
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
-off = do_DataStoreFetchMyInfosResult(conn, tree, tvb, off, 'Data_Store_FetchMyInfos_pResult')
+off = do_DataStoreFetchMyInfosResult(conn, tree, tvb, off, 'SMO_FetchMyInfos_pResult')
  end
 			},
 			
@@ -20406,4 +20414,4 @@ local MK8_Deluxe_CustomGetSimplePlayingSession_Playing_sessions_len = tvb(off, 4
 		}
 	})
 
-return info
+return info, nested_info
