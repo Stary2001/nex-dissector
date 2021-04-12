@@ -168,6 +168,17 @@ def do_list(field_name, arg_name, list_type, in_list=False):
 	end
 	"""
 
+def do_map(field_name, arg_name, map_types):
+	loop_var_name = 'i'
+	proto_fields.append((field_name+"_len", arg_name + " length", "uint32", "uint32"))
+	return f"""local {field_name}_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.{field_name}_len, tvb(off,4))
+	off = off + 4
+	for {loop_var_name}=1,{field_name}_len do
+	""" + dispatch_type(field_name+"_key", arg_name, map_types[0]).replace("tree", "subtree") + "\n" + dispatch_type(field_name+"_value", arg_name, map_types[1]).replace("tree", "subtree") + """
+	end
+	"""
+
 def do_data(field_name, arg_name, full_type):
 	func = ""
 	func += f"""
@@ -190,28 +201,50 @@ def do_data(field_name, arg_name, full_type):
 	"""
 	return func
 
+def valid_type(type_name):
+	if type_name in types:
+		return True, type_name, False
+	else:
+		if type_name.startswith("Data<"):
+			data_type = type_name[5:-1]
+			if data_type in types:
+				return True, data_type, False
+			else:
+				return False, data_type, False
+		elif type_name.startswith("List<"):
+			contained_type = type_name[5:-1]
+			if contained_type in types:
+				return True, type_name, True
+			else:
+				return False, type_name, True
+		else:
+			return False, type_name, False
+
 def dispatch_type(field_unique_name, arg_name, arg_type):
 	if arg_type.startswith("List"):
 		in_list = False
 
 		list_type = arg_type[5:-1]
-		if not list_type in types:
-			if list_type.startswith("Data<"):
-				data_type = list_type[5:-1]
-				if not data_type in types:
-					print("Stubbed type {} in list... in data".format(data_type))
-					return "--[[ Stubbed! Missing type (in list/in Data) {}]]\n".format(data_type)
-			elif list_type.startswith("List<"):
-				in_list = True
-				contained_type = list_type[5:-1]
-				if not contained_type in types:
-					print("Stubbed type {} in list... in list".format(data_type))
-					return "--[[ Stubbed! Missing type (in list in list {}]]\n".format(data_type)
-			else:
-				# bail.
-				print("Stubbed type {} in list".format(list_type))
-				return "--[[ Stubbed! Missing type (in list) {}]]\n".format(list_type)
+		valid, type_name, in_list = valid_type(list_type)
+		if not valid:
+			# bail.
+			print("Stubbed type {} in list".format(type_name))
+			return "--[[ Stubbed! Missing type (in list) {}]]\n".format(type_name)
+
 		return do_list(field_unique_name, arg_name, list_type, in_list) + "\n"
+	elif arg_type.startswith("Map"):
+		maybe_map_types = arg_type[4:-1]
+		maybe_map_types = list(map(lambda a: a.strip(), maybe_map_types.split(",")))
+		map_types = []
+		for ty in maybe_map_types:
+			valid, type_name, in_list = valid_type(ty)
+			if valid:
+				map_types.append(type_name)
+			else:
+				print("Stubbed type {} in map".format(type_name))
+				return "--[[ Stubbed! Missing type (in map) {}]]\n".format(type_name)
+
+		return do_map(field_unique_name, arg_name, map_types) + "\n"
 	elif arg_type == 'Data' or arg_type.startswith("Data<"):
 		if len(arg_type) > 4:
 			data_type = arg_type[5:-1]
@@ -278,7 +311,6 @@ def lua_build_method(method_prefix, info):
 		arg_detail = None
 		if len(i) > 2:
 			arg_detail = i[2]
-		#print(method_prefix, arg_type, arg_name, '"' + str(arg_detail) + '"')
 		func += dispatch_type(field_unique_name, arg_name, arg_type)
 		
 	func += " end"
@@ -380,7 +412,6 @@ def types_pass(f):
 						
 					]
 					if fields not in allowed_tables:
-						#print("Got weird table ", l)
 						skip_table = True
 				continue # Skip the table header..
 		if table:
@@ -402,7 +433,11 @@ def types_pass(f):
 				if skip_table:
 					continue
 				if should_parse_type:
-					field_name_safe = bad_lua_chars(delink(row[1]))
+					if '<br>' in row[1]:
+						field_name = row[1].split("<br>")[0]
+					else:
+						field_name = row[1]
+					field_name_safe = bad_lua_chars(delink(field_name))
 					type_name_safe = fix_html(delink(row[0]))
 
 					rename_needed = False
@@ -430,7 +465,6 @@ def types_pass(f):
 					sticky_skip_table = False
 					skip_table = False
 
-				#print(l)
 				# Hack lmao
 				if l == '## Request' or l == '## Response':
 					skip_table = True
@@ -525,7 +559,6 @@ def methods_pass(f):
 						if delink(m[1]) == meth.name:
 							found = True
 					if not found:
-						#print("Skipping non-method ", l)
 						continue
 					current_method = meth
 					state = MethodRequest
@@ -537,8 +570,6 @@ def methods_pass(f):
 					state = MethodRequest
 			elif l.startswith("##"):
 				if (state == MethodRequest and l != '## Request') or (state == MethodResponse and l != '## Response'):
-					#print("Odd!", state, l)
-					#	print((state == MethodRequest and l != '## Request'), (state == MethodResponse and l != '## Response'))
 					skip_table = True
 				else:
 					skip_table = False
@@ -607,6 +638,15 @@ def pull_prereqs(l):
 			if f_type in l:
 				l.remove(f_type)
 				top.append(f_type)
+
+			if f_type.startswith("Map"):
+				f_types = list(map(lambda a: a.strip() ,f_type[4:-1].split(",")))
+				if f_types[0] in l:
+					l.remove(f_types[0])
+					top.append(f_types[0])
+				if f_types[1] in l:
+					l.remove(f_types[1])
+					top.append(f_types[1])
 	return top
 
 all_types = list(struct_infos)
@@ -622,14 +662,12 @@ for i in range(len(prereq_chunks) - 1, -1, -1):
 	prereq_types += prereq_chunks[i]
 
 for prereq_name in prereq_types:
-	#print(prereq_name)
 	reg_struct(prereq_name, struct_infos[prereq_name])
 print("=====================================================================")
 
 for type_name in struct_infos:
 	if not type_name in prereq_types:
 		reg_struct(type_name, struct_infos[type_name])
-
 
 print("=====================================================================")
 

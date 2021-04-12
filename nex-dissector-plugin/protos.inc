@@ -102,6 +102,9 @@ F.CalicoPlayerSimple_clothesSkillIds_item = ProtoField.int32("CalicoPlayerSimple
 F.CalicoPlayerSimple_shoesId = ProtoField.int32("CalicoPlayerSimple_shoesId", "shoesId (uint32)")
 F.CalicoPlayerSimple_shoesSkillIds_len = ProtoField.uint32("CalicoPlayerSimple_shoesSkillIds_len", "shoesSkillIds length (uint32)")
 F.CalicoPlayerSimple_shoesSkillIds_item = ProtoField.int32("CalicoPlayerSimple_shoesSkillIds_item", "shoesSkillIds (uint32)")
+F.StageTimeAttackWeapon = ProtoField.bytes("StageTimeAttackWeapon", "StageTimeAttackWeapon (StageTimeAttackWeapon)")
+F.StageTimeAttackWeapon_weaponLevel = ProtoField.int32("StageTimeAttackWeapon_weaponLevel", "weaponLevel (uint32)")
+F.StageTimeAttackWeapon_clearTime = ProtoField.int32("StageTimeAttackWeapon_clearTime", "clearTime (uint32)")
 F.MatchmakeParam = ProtoField.bytes("MatchmakeParam", "MatchmakeParam (MatchmakeParam)")
 F.PlayerStatSet = ProtoField.bytes("PlayerStatSet", "PlayerStatSet (PlayerStatSet)")
 F.PlayerStatSet_m_playerPID = ProtoField.uint32("PlayerStatSet_m_playerPID", "m_playerPID (uint32)")
@@ -125,6 +128,9 @@ F.UplaySectionContentLocalized_m_width_len = ProtoField.uint16("UplaySectionCont
 F.UplaySectionContentLocalized_m_width_data = ProtoField.string("UplaySectionContentLocalized_m_width_data", "m_width data (String)")
 F.UplaySectionContentLocalized_m_height_len = ProtoField.uint16("UplaySectionContentLocalized_m_height_len", "m_height length (String)")
 F.UplaySectionContentLocalized_m_height_data = ProtoField.string("UplaySectionContentLocalized_m_height_data", "m_height data (String)")
+F.LeaguePlayerDetail = ProtoField.bytes("LeaguePlayerDetail", "LeaguePlayerDetail (LeaguePlayerDetail)")
+F.LeaguePlayerDetail_principalId = ProtoField.uint64("LeaguePlayerDetail_principalId", "principalId (uint64)")
+F.LeaguePlayerDetail_weaponId = ProtoField.int32("LeaguePlayerDetail_weaponId", "weaponId (uint32)")
 F.Mii = ProtoField.bytes("Mii", "Mii (Mii)")
 F.Mii_Unknown_len = ProtoField.uint16("Mii_Unknown_len", "Unknown length (String)")
 F.Mii_Unknown_data = ProtoField.string("Mii_Unknown_data", "Unknown data (String)")
@@ -225,6 +231,9 @@ F.PlayLogEntry_User_id = ProtoField.uint32("PlayLogEntry_User_id", "User_id (uin
 F.PlayLogEntry_Player_name_len = ProtoField.uint16("PlayLogEntry_Player_name_len", "Player_name length (String)")
 F.PlayLogEntry_Player_name_data = ProtoField.string("PlayLogEntry_Player_name_data", "Player_name data (String)")
 F.PlayLogEntry_Unknown = ProtoField.uint64("PlayLogEntry_Unknown", "Unknown (uint64)")
+F.StageTimeAttackInfo = ProtoField.bytes("StageTimeAttackInfo", "StageTimeAttackInfo (StageTimeAttackInfo)")
+F.StageTimeAttackInfo_clearWeapons_len = ProtoField.uint32("StageTimeAttackInfo_clearWeapons_len", "clearWeapons length (uint32)")
+F.StageTimeAttackInfo_clearWeapons_key = ProtoField.int32("StageTimeAttackInfo_clearWeapons_key", "clearWeapons (uint32)")
 F.MatchmakeSession = ProtoField.bytes("MatchmakeSession", "MatchmakeSession (MatchmakeSession)")
 F.MatchmakeSession_m_GameMode = ProtoField.uint32("MatchmakeSession_m_GameMode", "m_GameMode (uint32)")
 F.MatchmakeSession_m_Attribs_len = ProtoField.uint32("MatchmakeSession_m_Attribs_len", "m_Attribs length (uint32)")
@@ -349,6 +358,8 @@ F.LeaguePointInfo_regionFlag = ProtoField.uint8("LeaguePointInfo_regionFlag", "r
 F.LeaguePointInfo_leagueId_len = ProtoField.uint16("LeaguePointInfo_leagueId_len", "leagueId length (String)")
 F.LeaguePointInfo_leagueId_data = ProtoField.string("LeaguePointInfo_leagueId_data", "leagueId data (String)")
 F.LeaguePointInfo_point = ProtoField.uint32("LeaguePointInfo_point", "point (uint32)")
+F.LeaguePointInfo_tagMembers_len = ProtoField.uint32("LeaguePointInfo_tagMembers_len", "tagMembers length (uint32)")
+F.LeaguePointInfo_tagMembers_key = ProtoField.uint64("LeaguePointInfo_tagMembers_key", "tagMembers (uint64)")
 F.LeaguePointInfo_applicationBuffer_len = ProtoField.uint16("LeaguePointInfo_applicationBuffer_len", "applicationBuffer length (Buffer)")
 F.LeaguePointInfo_applicationBuffer_data = ProtoField.bytes("LeaguePointInfo_applicationBuffer_data", "applicationBuffer data (Buffer)")
 F.FriendMii = ProtoField.bytes("FriendMii", "FriendMii (FriendMii)")
@@ -408,6 +419,17 @@ F.PreparePostCourseParam_Unknown18 = ProtoField.uint32("PreparePostCourseParam_U
 F.PreparePostCourseParam_Unknown19_len = ProtoField.uint32("PreparePostCourseParam_Unknown19_len", "Unknown19 length (uint32)")
 F.PreparePostCourseParam_Unknown19_item_len = ProtoField.uint16("PreparePostCourseParam_Unknown19_item_len", "Unknown19 length (String)")
 F.PreparePostCourseParam_Unknown19_item_data = ProtoField.string("PreparePostCourseParam_Unknown19_item_data", "Unknown19 data (String)")
+F.UnknownStruct4 = ProtoField.bytes("UnknownStruct4", "UnknownStruct4 (UnknownStruct4)")
+F.UnknownStruct4_Unknown = ProtoField.uint8("UnknownStruct4_Unknown", "Unknown (uint8)")
+F.UnknownStruct4_Unknown2 = ProtoField.uint8("UnknownStruct4_Unknown2", "Unknown2 (uint8)")
+F.UnknownStruct4_Unknown3 = ProtoField.uint32("UnknownStruct4_Unknown3", "Unknown3 (uint32)")
+F.UnknownStruct4_Unknown4 = ProtoField.uint64("UnknownStruct4_Unknown4", "Unknown4 (uint64)")
+F.UnknownStruct4_Unknown5 = ProtoField.uint64("UnknownStruct4_Unknown5", "Unknown5 (uint64)")
+F.UnknownStruct4_Unknown6 = ProtoField.uint8("UnknownStruct4_Unknown6", "Unknown6 (uint8)")
+F.UnknownStruct4_Unknown7 = ProtoField.uint8("UnknownStruct4_Unknown7", "Unknown7 (uint8)")
+F.UnknownStruct5 = ProtoField.bytes("UnknownStruct5", "UnknownStruct5 (UnknownStruct5)")
+F.UnknownStruct5_Unknown = ProtoField.uint8("UnknownStruct5_Unknown", "Unknown (uint8)")
+F.UnknownStruct5_Unknown2 = ProtoField.uint32("UnknownStruct5_Unknown2", "Unknown2 (uint32)")
 F.RelationObjectReqGetInfo = ProtoField.bytes("RelationObjectReqGetInfo", "RelationObjectReqGetInfo (RelationObjectReqGetInfo)")
 F.RelationObjectReqGetInfo_Url_len = ProtoField.uint16("RelationObjectReqGetInfo_Url_len", "Url length (String)")
 F.RelationObjectReqGetInfo_Url_data = ProtoField.string("RelationObjectReqGetInfo_Url_data", "Url data (String)")
@@ -504,6 +526,10 @@ F.DataStoreSearchBalloonResult_ownerDataId = ProtoField.uint64("DataStoreSearchB
 F.DataStoreSearchBalloonResult_ownerName_len = ProtoField.uint16("DataStoreSearchBalloonResult_ownerName_len", "ownerName length (String)")
 F.DataStoreSearchBalloonResult_ownerName_data = ProtoField.string("DataStoreSearchBalloonResult_ownerName_data", "ownerName data (String)")
 F.DataStoreSearchBalloonResult_isFriendBalloon = ProtoField.bool("DataStoreSearchBalloonResult_isFriendBalloon", "isFriendBalloon (bool)")
+F.DataStoreSearchBalloonResult_ratings_len = ProtoField.uint32("DataStoreSearchBalloonResult_ratings_len", "ratings length (uint32)")
+F.DataStoreSearchBalloonResult_ratings_key = ProtoField.int8("DataStoreSearchBalloonResult_ratings_key", "ratings (uint8)")
+F.DataStoreSearchBalloonResult_ownerRatings_len = ProtoField.uint32("DataStoreSearchBalloonResult_ownerRatings_len", "ownerRatings length (uint32)")
+F.DataStoreSearchBalloonResult_ownerRatings_key = ProtoField.int8("DataStoreSearchBalloonResult_ownerRatings_key", "ownerRatings (uint8)")
 F.DataStoreFetchMyInfosBalloonResult = ProtoField.bytes("DataStoreFetchMyInfosBalloonResult", "DataStoreFetchMyInfosBalloonResult (DataStoreFetchMyInfosBalloonResult)")
 F.DataStoreFetchMyInfosBalloonResult_dataId = ProtoField.uint64("DataStoreFetchMyInfosBalloonResult_dataId", "dataId (uint64)")
 F.DataStoreFetchMyInfosBalloonResult_dataType = ProtoField.uint16("DataStoreFetchMyInfosBalloonResult_dataType", "dataType (uint16)")
@@ -512,12 +538,26 @@ F.DataStoreFetchMyInfosBalloonResult_metaBinary_data = ProtoField.bytes("DataSto
 F.DataStoreFetchMyInfosBalloonResult_createdTime = ProtoField.uint64("DataStoreFetchMyInfosBalloonResult_createdTime", "createdTime (uint64)")
 F.DataStoreFetchMyInfosBalloonResult_updatedTime = ProtoField.uint64("DataStoreFetchMyInfosBalloonResult_updatedTime", "updatedTime (uint64)")
 F.DataStoreFetchMyInfosBalloonResult_isCleared = ProtoField.bool("DataStoreFetchMyInfosBalloonResult_isCleared", "isCleared (bool)")
+F.DataStoreFetchMyInfosBalloonResult_ratings_len = ProtoField.uint32("DataStoreFetchMyInfosBalloonResult_ratings_len", "ratings length (uint32)")
+F.DataStoreFetchMyInfosBalloonResult_ratings_key = ProtoField.int8("DataStoreFetchMyInfosBalloonResult_ratings_key", "ratings (uint8)")
+F.DataStoreFetchMyInfosBalloonResult_buffers_len = ProtoField.uint32("DataStoreFetchMyInfosBalloonResult_buffers_len", "buffers length (uint32)")
+F.DataStoreFetchMyInfosBalloonResult_buffers_key = ProtoField.int8("DataStoreFetchMyInfosBalloonResult_buffers_key", "buffers (uint8)")
+F.DataStoreFetchMyInfosBalloonResult_buffers_value_len = ProtoField.uint32("DataStoreFetchMyInfosBalloonResult_buffers_value_len", "buffers length (uint32)")
+F.DataStoreFetchMyInfosBalloonResult_buffers_value_item_len = ProtoField.uint16("DataStoreFetchMyInfosBalloonResult_buffers_value_item_len", "buffers length (Buffer)")
+F.DataStoreFetchMyInfosBalloonResult_buffers_value_item_data = ProtoField.bytes("DataStoreFetchMyInfosBalloonResult_buffers_value_item_data", "buffers data (Buffer)")
 F.DataStoreFetchMyInfosAchievementResult = ProtoField.bytes("DataStoreFetchMyInfosAchievementResult", "DataStoreFetchMyInfosAchievementResult (DataStoreFetchMyInfosAchievementResult)")
 F.DataStoreFetchMyInfosAchievementResult_dataId = ProtoField.uint64("DataStoreFetchMyInfosAchievementResult_dataId", "dataId (uint64)")
 F.DataStoreFetchMyInfosAchievementResult_dataType = ProtoField.uint16("DataStoreFetchMyInfosAchievementResult_dataType", "dataType (uint16)")
 F.DataStoreFetchMyInfosAchievementResult_metaBinary_len = ProtoField.uint16("DataStoreFetchMyInfosAchievementResult_metaBinary_len", "metaBinary length (Buffer)")
 F.DataStoreFetchMyInfosAchievementResult_metaBinary_data = ProtoField.bytes("DataStoreFetchMyInfosAchievementResult_metaBinary_data", "metaBinary data (Buffer)")
 F.DataStoreFetchMyInfosAchievementResult_createdTime = ProtoField.uint64("DataStoreFetchMyInfosAchievementResult_createdTime", "createdTime (uint64)")
+F.DataStoreFetchMyInfosAchievementResult_ratings_len = ProtoField.uint32("DataStoreFetchMyInfosAchievementResult_ratings_len", "ratings length (uint32)")
+F.DataStoreFetchMyInfosAchievementResult_ratings_key = ProtoField.int8("DataStoreFetchMyInfosAchievementResult_ratings_key", "ratings (uint8)")
+F.DataStoreFetchMyInfosAchievementResult_buffers_len = ProtoField.uint32("DataStoreFetchMyInfosAchievementResult_buffers_len", "buffers length (uint32)")
+F.DataStoreFetchMyInfosAchievementResult_buffers_key = ProtoField.int8("DataStoreFetchMyInfosAchievementResult_buffers_key", "buffers (uint8)")
+F.DataStoreFetchMyInfosAchievementResult_buffers_value_len = ProtoField.uint32("DataStoreFetchMyInfosAchievementResult_buffers_value_len", "buffers length (uint32)")
+F.DataStoreFetchMyInfosAchievementResult_buffers_value_item_len = ProtoField.uint16("DataStoreFetchMyInfosAchievementResult_buffers_value_item_len", "buffers length (Buffer)")
+F.DataStoreFetchMyInfosAchievementResult_buffers_value_item_data = ProtoField.bytes("DataStoreFetchMyInfosAchievementResult_buffers_value_item_data", "buffers data (Buffer)")
 F.Privilege = ProtoField.bytes("Privilege", "Privilege (Privilege)")
 F.Privilege_m_ID = ProtoField.uint32("Privilege_m_ID", "m_ID (uint32)")
 F.Privilege_m_description_len = ProtoField.uint16("Privilege_m_description_len", "m_description length (String)")
@@ -740,11 +780,9 @@ F.PlayLogPreparePostParam_Entries_len = ProtoField.uint32("PlayLogPreparePostPar
 F.PlayLogPreparePostParam_Play_time = ProtoField.uint64("PlayLogPreparePostParam_Play_time", "Play_time (uint64)")
 F.PlayLogPreparePostParam_Stage_id = ProtoField.uint32("PlayLogPreparePostParam_Stage_id", "Stage_id (uint32)")
 F.PlayLogPreparePostParam_Unknown = ProtoField.uint32("PlayLogPreparePostParam_Unknown", "Unknown (uint32)")
-F.StageTimeAttackInfo = ProtoField.bytes("StageTimeAttackInfo", "StageTimeAttackInfo (StageTimeAttackInfo)")
-F.StageTimeAttackWeapon = ProtoField.bytes("StageTimeAttackWeapon", "StageTimeAttackWeapon (StageTimeAttackWeapon)")
-F.StageTimeAttackWeapon_weaponLevel = ProtoField.int32("StageTimeAttackWeapon_weaponLevel", "weaponLevel (uint32)")
-F.StageTimeAttackWeapon_clearTime = ProtoField.int32("StageTimeAttackWeapon_clearTime", "clearTime (uint32)")
 F.TimeAttackInfo = ProtoField.bytes("TimeAttackInfo", "TimeAttackInfo (TimeAttackInfo)")
+F.TimeAttackInfo_stageInfos_len = ProtoField.uint32("TimeAttackInfo_stageInfos_len", "stageInfos length (uint32)")
+F.TimeAttackInfo_stageInfos_key = ProtoField.int32("TimeAttackInfo_stageInfos_key", "stageInfos (uint32)")
 F.Gathering = ProtoField.bytes("Gathering", "Gathering (Gathering)")
 F.Gathering_m_idMyself = ProtoField.uint32("Gathering_m_idMyself", "m_idMyself (uint32)")
 F.Gathering_m_pidOwner = ProtoField.uint32("Gathering_m_pidOwner", "m_pidOwner (uint32)")
@@ -1280,9 +1318,6 @@ F.FestivalUploadScoreParam_applicationBuffer_data = ProtoField.bytes("FestivalUp
 F.FestivalUploadVoteParam = ProtoField.bytes("FestivalUploadVoteParam", "FestivalUploadVoteParam (FestivalUploadVoteParam)")
 F.FestivalUploadVoteParam_festivalId = ProtoField.uint32("FestivalUploadVoteParam_festivalId", "festivalId (uint32)")
 F.FestivalUploadVoteParam_themeId = ProtoField.uint8("FestivalUploadVoteParam_themeId", "themeId (uint8)")
-F.LeaguePlayerDetail = ProtoField.bytes("LeaguePlayerDetail", "LeaguePlayerDetail (LeaguePlayerDetail)")
-F.LeaguePlayerDetail_principalId = ProtoField.uint64("LeaguePlayerDetail_principalId", "principalId (uint64)")
-F.LeaguePlayerDetail_weaponId = ProtoField.int32("LeaguePlayerDetail_weaponId", "weaponId (uint32)")
 F.LeagueResult = ProtoField.bytes("LeagueResult", "LeagueResult (LeagueResult)")
 F.LeagueResult_status = ProtoField.uint8("LeagueResult_status", "status (uint8)")
 F.LeagueResult_specificRank = ProtoField.uint32("LeagueResult_specificRank", "specificRank (uint32)")
@@ -1347,28 +1382,28 @@ F.AuthenticationInfo_m_ngsVersion = ProtoField.uint32("AuthenticationInfo_m_ngsV
 F.AuthenticationInfo_m_authTokenType = ProtoField.uint8("AuthenticationInfo_m_authTokenType", "m_authTokenType (uint8)")
 F.AuthenticationInfo_m_serverVersion = ProtoField.uint32("AuthenticationInfo_m_serverVersion", "m_serverVersion (uint32)")
 F.ValidateAndRequestTicketParam = ProtoField.bytes("ValidateAndRequestTicketParam", "ValidateAndRequestTicketParam (ValidateAndRequestTicketParam)")
-F.ValidateAndRequestTicketParam_Platform_type_always_3 = ProtoField.uint32("ValidateAndRequestTicketParam_Platform_type_always_3", "Platform_type_always_3 (uint32)")
-F.ValidateAndRequestTicketParam_Username_len = ProtoField.uint16("ValidateAndRequestTicketParam_Username_len", "Username length (String)")
-F.ValidateAndRequestTicketParam_Username_data = ProtoField.string("ValidateAndRequestTicketParam_Username_data", "Username data (String)")
-F.ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_data_bytes = ProtoField.bytes("ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_data_bytes", "NullData_or_AuthenticationInfo data bytes (bytes)")
-F.ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_type_name_len = ProtoField.uint16("ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_type_name_len", "NullData_or_AuthenticationInfo_type_name length (String)")
-F.ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_type_name_data = ProtoField.string("ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_type_name_data", "NullData_or_AuthenticationInfo_type_name data (String)")
-F.ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_len_plus_four = ProtoField.uint32("ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_len_plus_four", "NullData_or_AuthenticationInfo_len_plus_four (uint32)")
-F.ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_data_len = ProtoField.uint32("ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_data_len", "NullData_or_AuthenticationInfo_data_len (uint32)")
-F.ValidateAndRequestTicketParam_Unknown = ProtoField.bool("ValidateAndRequestTicketParam_Unknown", "Unknown (bool)")
-F.ValidateAndRequestTicketParam_NEX_version_e_g__40601 = ProtoField.uint32("ValidateAndRequestTicketParam_NEX_version_e_g__40601", "NEX_version_e_g__40601 (uint32)")
-F.ValidateAndRequestTicketParam_Client_version = ProtoField.uint32("ValidateAndRequestTicketParam_Client_version", "Client_version (uint32)")
+F.ValidateAndRequestTicketParam_platformType = ProtoField.uint32("ValidateAndRequestTicketParam_platformType", "platformType (uint32)")
+F.ValidateAndRequestTicketParam_userName_len = ProtoField.uint16("ValidateAndRequestTicketParam_userName_len", "userName length (String)")
+F.ValidateAndRequestTicketParam_userName_data = ProtoField.string("ValidateAndRequestTicketParam_userName_data", "userName data (String)")
+F.ValidateAndRequestTicketParam_extraData_data_bytes = ProtoField.bytes("ValidateAndRequestTicketParam_extraData_data_bytes", "extraData data bytes (bytes)")
+F.ValidateAndRequestTicketParam_extraData_type_name_len = ProtoField.uint16("ValidateAndRequestTicketParam_extraData_type_name_len", "extraData_type_name length (String)")
+F.ValidateAndRequestTicketParam_extraData_type_name_data = ProtoField.string("ValidateAndRequestTicketParam_extraData_type_name_data", "extraData_type_name data (String)")
+F.ValidateAndRequestTicketParam_extraData_len_plus_four = ProtoField.uint32("ValidateAndRequestTicketParam_extraData_len_plus_four", "extraData_len_plus_four (uint32)")
+F.ValidateAndRequestTicketParam_extraData_data_len = ProtoField.uint32("ValidateAndRequestTicketParam_extraData_data_len", "extraData_data_len (uint32)")
+F.ValidateAndRequestTicketParam_ignoreApiVersionCheck = ProtoField.bool("ValidateAndRequestTicketParam_ignoreApiVersionCheck", "ignoreApiVersionCheck (bool)")
+F.ValidateAndRequestTicketParam_apiVersionGeneral = ProtoField.uint32("ValidateAndRequestTicketParam_apiVersionGeneral", "apiVersionGeneral (uint32)")
+F.ValidateAndRequestTicketParam_apiVersionCustom = ProtoField.uint32("ValidateAndRequestTicketParam_apiVersionCustom", "apiVersionCustom (uint32)")
 F.ValidateAndRequestTicketResult = ProtoField.bytes("ValidateAndRequestTicketResult", "ValidateAndRequestTicketResult (ValidateAndRequestTicketResult)")
-F.ValidateAndRequestTicketResult_User_id = ProtoField.uint32("ValidateAndRequestTicketResult_User_id", "User_id (uint32)")
-F.ValidateAndRequestTicketResult_Kerberos_ticket_len = ProtoField.uint32("ValidateAndRequestTicketResult_Kerberos_ticket_len", "Kerberos_ticket length (Buffer)")
-F.ValidateAndRequestTicketResult_Kerberos_ticket_data = ProtoField.bytes("ValidateAndRequestTicketResult_Kerberos_ticket_data", "Kerberos_ticket data (Buffer)")
-F.ValidateAndRequestTicketResult_Secure_server_location_len = ProtoField.uint16("ValidateAndRequestTicketResult_Secure_server_location_len", "Secure_server_location length (String)")
-F.ValidateAndRequestTicketResult_Secure_server_location_data = ProtoField.string("ValidateAndRequestTicketResult_Secure_server_location_data", "Secure_server_location data (String)")
-F.ValidateAndRequestTicketResult_Server_time = ProtoField.uint64("ValidateAndRequestTicketResult_Server_time", "Server_time (uint64)")
-F.ValidateAndRequestTicketResult_Server_build_name_len = ProtoField.uint16("ValidateAndRequestTicketResult_Server_build_name_len", "Server_build_name length (String)")
-F.ValidateAndRequestTicketResult_Server_build_name_data = ProtoField.string("ValidateAndRequestTicketResult_Server_build_name_data", "Server_build_name data (String)")
-F.ValidateAndRequestTicketResult_Kerberos_key__If_present__key_derivation_is_skipped_and_this_key_is_used_to_decrypt_the_ticket_instead__len = ProtoField.uint16("ValidateAndRequestTicketResult_Kerberos_key__If_present__key_derivation_is_skipped_and_this_key_is_used_to_decrypt_the_ticket_instead__len", "Kerberos_key__If_present__key_derivation_is_skipped_and_this_key_is_used_to_decrypt_the_ticket_instead_ length (String)")
-F.ValidateAndRequestTicketResult_Kerberos_key__If_present__key_derivation_is_skipped_and_this_key_is_used_to_decrypt_the_ticket_instead__data = ProtoField.string("ValidateAndRequestTicketResult_Kerberos_key__If_present__key_derivation_is_skipped_and_this_key_is_used_to_decrypt_the_ticket_instead__data", "Kerberos_key__If_present__key_derivation_is_skipped_and_this_key_is_used_to_decrypt_the_ticket_instead_ data (String)")
+F.ValidateAndRequestTicketResult_sourcePid = ProtoField.uint32("ValidateAndRequestTicketResult_sourcePid", "sourcePid (uint32)")
+F.ValidateAndRequestTicketResult_bufResponse_len = ProtoField.uint32("ValidateAndRequestTicketResult_bufResponse_len", "bufResponse length (Buffer)")
+F.ValidateAndRequestTicketResult_bufResponse_data = ProtoField.bytes("ValidateAndRequestTicketResult_bufResponse_data", "bufResponse data (Buffer)")
+F.ValidateAndRequestTicketResult_serviceNodeUrl_len = ProtoField.uint16("ValidateAndRequestTicketResult_serviceNodeUrl_len", "serviceNodeUrl length (String)")
+F.ValidateAndRequestTicketResult_serviceNodeUrl_data = ProtoField.string("ValidateAndRequestTicketResult_serviceNodeUrl_data", "serviceNodeUrl data (String)")
+F.ValidateAndRequestTicketResult_currentUtcTime = ProtoField.uint64("ValidateAndRequestTicketResult_currentUtcTime", "currentUtcTime (uint64)")
+F.ValidateAndRequestTicketResult_returnMsg_len = ProtoField.uint16("ValidateAndRequestTicketResult_returnMsg_len", "returnMsg length (String)")
+F.ValidateAndRequestTicketResult_returnMsg_data = ProtoField.string("ValidateAndRequestTicketResult_returnMsg_data", "returnMsg data (String)")
+F.ValidateAndRequestTicketResult_sourceKey_len = ProtoField.uint16("ValidateAndRequestTicketResult_sourceKey_len", "sourceKey length (String)")
+F.ValidateAndRequestTicketResult_sourceKey_data = ProtoField.string("ValidateAndRequestTicketResult_sourceKey_data", "sourceKey data (String)")
 F.NintendoNotificationEvent = ProtoField.bytes("NintendoNotificationEvent", "NintendoNotificationEvent (NintendoNotificationEvent)")
 F.NintendoNotificationEvent_m_uiType = ProtoField.uint32("NintendoNotificationEvent_m_uiType", "m_uiType (uint32)")
 F.NintendoNotificationEvent_m_pidSender = ProtoField.uint32("NintendoNotificationEvent_m_pidSender", "m_pidSender (uint32)")
@@ -1405,8 +1440,14 @@ F.CanPostRatingAndCommentResult = ProtoField.bytes("CanPostRatingAndCommentResul
 F.CanPostRatingAndCommentResult_Unknown = ProtoField.uint64("CanPostRatingAndCommentResult_Unknown", "Unknown (uint64)")
 F.CanPostRatingAndCommentResult_Unknown2 = ProtoField.bool("CanPostRatingAndCommentResult_Unknown2", "Unknown2 (bool)")
 F.CanPostRatingAndCommentResult_Unknown3 = ProtoField.uint32("CanPostRatingAndCommentResult_Unknown3", "Unknown3 (uint32)")
+F.CanPostRatingAndCommentResult_Unknown4_len = ProtoField.uint32("CanPostRatingAndCommentResult_Unknown4_len", "Unknown4 length (uint32)")
+F.CanPostRatingAndCommentResult_Unknown4_key = ProtoField.uint8("CanPostRatingAndCommentResult_Unknown4_key", "Unknown4 (uint8)")
+F.CanPostRatingAndCommentResult_Unknown4_value = ProtoField.uint32("CanPostRatingAndCommentResult_Unknown4_value", "Unknown4 (uint32)")
 F.CanPostRatingAndCommentResult_Unknown5 = ProtoField.bool("CanPostRatingAndCommentResult_Unknown5", "Unknown5 (bool)")
 F.CanPostRatingAndCommentResult_Unknown6 = ProtoField.uint32("CanPostRatingAndCommentResult_Unknown6", "Unknown6 (uint32)")
+F.CanPostRatingAndCommentResult_Unknown7_len = ProtoField.uint32("CanPostRatingAndCommentResult_Unknown7_len", "Unknown7 length (uint32)")
+F.CanPostRatingAndCommentResult_Unknown7_key = ProtoField.uint8("CanPostRatingAndCommentResult_Unknown7_key", "Unknown7 (uint8)")
+F.CanPostRatingAndCommentResult_Unknown7_value = ProtoField.uint32("CanPostRatingAndCommentResult_Unknown7_value", "Unknown7 (uint32)")
 F.CommentInfo = ProtoField.bytes("CommentInfo", "CommentInfo (CommentInfo)")
 F.CommentInfo_Unknown = ProtoField.uint64("CommentInfo_Unknown", "Unknown (uint64)")
 F.CommentInfo_Unknown2_len = ProtoField.uint16("CommentInfo_Unknown2_len", "Unknown2 length (String)")
@@ -1451,6 +1492,10 @@ F.DebugUploadEventCourseGhostParam_Unknown2 = ProtoField.uint32("DebugUploadEven
 F.DebugUploadEventCourseGhostParam_Unknown3_len = ProtoField.uint16("DebugUploadEventCourseGhostParam_Unknown3_len", "Unknown3 length (String)")
 F.DebugUploadEventCourseGhostParam_Unknown3_data = ProtoField.string("DebugUploadEventCourseGhostParam_Unknown3_data", "Unknown3 data (String)")
 F.EndlessModeStatus = ProtoField.bytes("EndlessModeStatus", "EndlessModeStatus (EndlessModeStatus)")
+F.EndlessModeStatus_Unknown_len = ProtoField.uint32("EndlessModeStatus_Unknown_len", "Unknown length (uint32)")
+F.EndlessModeStatus_Unknown_key = ProtoField.uint8("EndlessModeStatus_Unknown_key", "Unknown (uint8)")
+F.EndlessModeStatus_Unknown2_len = ProtoField.uint32("EndlessModeStatus_Unknown2_len", "Unknown2 length (uint32)")
+F.EndlessModeStatus_Unknown2_key = ProtoField.uint8("EndlessModeStatus_Unknown2_key", "Unknown2 (uint8)")
 F.EventCourseGhostInfo = ProtoField.bytes("EventCourseGhostInfo", "EventCourseGhostInfo (EventCourseGhostInfo)")
 F.EventCourseGhostInfo_Time_in_milliseconds = ProtoField.uint32("EventCourseGhostInfo_Time_in_milliseconds", "Time_in_milliseconds (uint32)")
 F.EventCourseGhostInfo_User_id = ProtoField.uint32("EventCourseGhostInfo_User_id", "User_id (uint32)")
@@ -1461,6 +1506,9 @@ F.EventCourseHistogram_Unknown2 = ProtoField.uint32("EventCourseHistogram_Unknow
 F.EventCourseHistogram_Unknown3 = ProtoField.uint32("EventCourseHistogram_Unknown3", "Unknown3 (uint32)")
 F.EventCourseHistogram_Histogram_values_len = ProtoField.uint32("EventCourseHistogram_Histogram_values_len", "Histogram_values length (uint32)")
 F.EventCourseHistogram_Histogram_values_item = ProtoField.uint32("EventCourseHistogram_Histogram_values_item", "Histogram_values (uint32)")
+F.EventCourseHistogram_Medal_time_len = ProtoField.uint32("EventCourseHistogram_Medal_time_len", "Medal_time length (uint32)")
+F.EventCourseHistogram_Medal_time_key = ProtoField.uint8("EventCourseHistogram_Medal_time_key", "Medal_time (uint8)")
+F.EventCourseHistogram_Medal_time_value = ProtoField.uint32("EventCourseHistogram_Medal_time_value", "Medal_time (uint32)")
 F.EventCourseHistogram_Unknown4 = ProtoField.uint32("EventCourseHistogram_Unknown4", "Unknown4 (uint32)")
 F.EventCourseStatusInfo = ProtoField.bytes("EventCourseStatusInfo", "EventCourseStatusInfo (EventCourseStatusInfo)")
 F.EventCourseStatusInfo_Unknown = ProtoField.uint64("EventCourseStatusInfo_Unknown", "Unknown (uint64)")
@@ -1613,17 +1661,6 @@ F.SyncUserProfileResult_Unknown6 = ProtoField.bool("SyncUserProfileResult_Unknow
 F.UnknownStruct3 = ProtoField.bytes("UnknownStruct3", "UnknownStruct3 (UnknownStruct3)")
 F.UnknownStruct3_Unknown = ProtoField.uint8("UnknownStruct3_Unknown", "Unknown (uint8)")
 F.UnknownStruct3_Unknown2 = ProtoField.uint64("UnknownStruct3_Unknown2", "Unknown2 (uint64)")
-F.UnknownStruct4 = ProtoField.bytes("UnknownStruct4", "UnknownStruct4 (UnknownStruct4)")
-F.UnknownStruct4_Unknown = ProtoField.uint8("UnknownStruct4_Unknown", "Unknown (uint8)")
-F.UnknownStruct4_Unknown2 = ProtoField.uint8("UnknownStruct4_Unknown2", "Unknown2 (uint8)")
-F.UnknownStruct4_Unknown3 = ProtoField.uint32("UnknownStruct4_Unknown3", "Unknown3 (uint32)")
-F.UnknownStruct4_Unknown4 = ProtoField.uint64("UnknownStruct4_Unknown4", "Unknown4 (uint64)")
-F.UnknownStruct4_Unknown5 = ProtoField.uint64("UnknownStruct4_Unknown5", "Unknown5 (uint64)")
-F.UnknownStruct4_Unknown6 = ProtoField.uint8("UnknownStruct4_Unknown6", "Unknown6 (uint8)")
-F.UnknownStruct4_Unknown7 = ProtoField.uint8("UnknownStruct4_Unknown7", "Unknown7 (uint8)")
-F.UnknownStruct5 = ProtoField.bytes("UnknownStruct5", "UnknownStruct5 (UnknownStruct5)")
-F.UnknownStruct5_Unknown = ProtoField.uint8("UnknownStruct5_Unknown", "Unknown (uint8)")
-F.UnknownStruct5_Unknown2 = ProtoField.uint32("UnknownStruct5_Unknown2", "Unknown2 (uint32)")
 F.UnknownStruct6 = ProtoField.bytes("UnknownStruct6", "UnknownStruct6 (UnknownStruct6)")
 F.UnknownStruct6_Unknown = ProtoField.uint64("UnknownStruct6_Unknown", "Unknown (uint64)")
 F.UnknownStruct6_Unknown2 = ProtoField.uint32("UnknownStruct6_Unknown2", "Unknown2 (uint32)")
@@ -2751,7 +2788,14 @@ F.Utility_AcquireNexUniqueId_pNexUniqueId = ProtoField.uint64("Utility_AcquireNe
 F.Utility_AssociateNexUniqueIdsWithMyPrincipalId_uniqueIdInfo_len = ProtoField.uint32("Utility_AssociateNexUniqueIdsWithMyPrincipalId_uniqueIdInfo_len", "uniqueIdInfo length (uint32)")
 F.Utility_GetAssociatedNexUniqueIdsWithMyPrincipalId_pUniqueIdInfo_len = ProtoField.uint32("Utility_GetAssociatedNexUniqueIdsWithMyPrincipalId_pUniqueIdInfo_len", "pUniqueIdInfo length (uint32)")
 F.Utility_GetIntegerSettings_integerSettingIndex = ProtoField.uint32("Utility_GetIntegerSettings_integerSettingIndex", "integerSettingIndex (uint32)")
+F.Utility_GetIntegerSettings_integerSettings_len = ProtoField.uint32("Utility_GetIntegerSettings_integerSettings_len", "integerSettings length (uint32)")
+F.Utility_GetIntegerSettings_integerSettings_key = ProtoField.uint16("Utility_GetIntegerSettings_integerSettings_key", "integerSettings (uint16)")
+F.Utility_GetIntegerSettings_integerSettings_value = ProtoField.int32("Utility_GetIntegerSettings_integerSettings_value", "integerSettings (uint32)")
 F.Utility_GetStringSettings_stringSettingIndex = ProtoField.uint32("Utility_GetStringSettings_stringSettingIndex", "stringSettingIndex (uint32)")
+F.Utility_GetStringSettings_stringSettings_len = ProtoField.uint32("Utility_GetStringSettings_stringSettings_len", "stringSettings length (uint32)")
+F.Utility_GetStringSettings_stringSettings_key = ProtoField.uint16("Utility_GetStringSettings_stringSettings_key", "stringSettings (uint16)")
+F.Utility_GetStringSettings_stringSettings_value_len = ProtoField.uint16("Utility_GetStringSettings_stringSettings_value_len", "stringSettings length (String)")
+F.Utility_GetStringSettings_stringSettings_value_data = ProtoField.string("Utility_GetStringSettings_stringSettings_value_data", "stringSettings data (String)")
 F.User_Storage_SearchContents_searchResults_len = ProtoField.uint32("User_Storage_SearchContents_searchResults_len", "searchResults length (uint32)")
 F.User_Storage_SearchContentsWithTotal_searchResults_len = ProtoField.uint32("User_Storage_SearchContentsWithTotal_searchResults_len", "searchResults length (uint32)")
 F.User_Storage_SearchContentsWithTotal_totalResults = ProtoField.uint32("User_Storage_SearchContentsWithTotal_totalResults", "totalResults (uint32)")
@@ -3446,31 +3490,77 @@ F.Ubi_Account_Management_ForgetPassword_usernameOrEmail_data = ProtoField.string
 F.Ubi_Account_Management_LookupPrincipalIds_ubiAccountIds_len = ProtoField.uint32("Ubi_Account_Management_LookupPrincipalIds_ubiAccountIds_len", "ubiAccountIds length (uint32)")
 F.Ubi_Account_Management_LookupPrincipalIds_ubiAccountIds_item_len = ProtoField.uint16("Ubi_Account_Management_LookupPrincipalIds_ubiAccountIds_item_len", "ubiAccountIds length (String)")
 F.Ubi_Account_Management_LookupPrincipalIds_ubiAccountIds_item_data = ProtoField.string("Ubi_Account_Management_LookupPrincipalIds_ubiAccountIds_item_data", "ubiAccountIds data (String)")
+F.Ubi_Account_Management_LookupPrincipalIds_pids_len = ProtoField.uint32("Ubi_Account_Management_LookupPrincipalIds_pids_len", "pids length (uint32)")
+F.Ubi_Account_Management_LookupPrincipalIds_pids_key_len = ProtoField.uint16("Ubi_Account_Management_LookupPrincipalIds_pids_key_len", "pids length (String)")
+F.Ubi_Account_Management_LookupPrincipalIds_pids_key_data = ProtoField.string("Ubi_Account_Management_LookupPrincipalIds_pids_key_data", "pids data (String)")
+F.Ubi_Account_Management_LookupPrincipalIds_pids_value = ProtoField.uint32("Ubi_Account_Management_LookupPrincipalIds_pids_value", "pids (uint32)")
 F.Ubi_Account_Management_LookupUbiAccountIDsByPids_pids_len = ProtoField.uint32("Ubi_Account_Management_LookupUbiAccountIDsByPids_pids_len", "pids length (uint32)")
 F.Ubi_Account_Management_LookupUbiAccountIDsByPids_pids_item = ProtoField.uint32("Ubi_Account_Management_LookupUbiAccountIDsByPids_pids_item", "pids (uint32)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByPids_ubiaccountIDs_len = ProtoField.uint32("Ubi_Account_Management_LookupUbiAccountIDsByPids_ubiaccountIDs_len", "ubiaccountIDs length (uint32)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByPids_ubiaccountIDs_key = ProtoField.uint32("Ubi_Account_Management_LookupUbiAccountIDsByPids_ubiaccountIDs_key", "ubiaccountIDs (uint32)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByPids_ubiaccountIDs_value_len = ProtoField.uint16("Ubi_Account_Management_LookupUbiAccountIDsByPids_ubiaccountIDs_value_len", "ubiaccountIDs length (String)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByPids_ubiaccountIDs_value_data = ProtoField.string("Ubi_Account_Management_LookupUbiAccountIDsByPids_ubiaccountIDs_value_data", "ubiaccountIDs data (String)")
 F.Ubi_Account_Management_LookupUbiAccountIDsByUsernames_Usernames_len = ProtoField.uint32("Ubi_Account_Management_LookupUbiAccountIDsByUsernames_Usernames_len", "Usernames length (uint32)")
 F.Ubi_Account_Management_LookupUbiAccountIDsByUsernames_Usernames_item_len = ProtoField.uint16("Ubi_Account_Management_LookupUbiAccountIDsByUsernames_Usernames_item_len", "Usernames length (String)")
 F.Ubi_Account_Management_LookupUbiAccountIDsByUsernames_Usernames_item_data = ProtoField.string("Ubi_Account_Management_LookupUbiAccountIDsByUsernames_Usernames_item_data", "Usernames data (String)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByUsernames_UbiAccountIDs_len = ProtoField.uint32("Ubi_Account_Management_LookupUbiAccountIDsByUsernames_UbiAccountIDs_len", "UbiAccountIDs length (uint32)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByUsernames_UbiAccountIDs_key_len = ProtoField.uint16("Ubi_Account_Management_LookupUbiAccountIDsByUsernames_UbiAccountIDs_key_len", "UbiAccountIDs length (String)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByUsernames_UbiAccountIDs_key_data = ProtoField.string("Ubi_Account_Management_LookupUbiAccountIDsByUsernames_UbiAccountIDs_key_data", "UbiAccountIDs data (String)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByUsernames_UbiAccountIDs_value_len = ProtoField.uint16("Ubi_Account_Management_LookupUbiAccountIDsByUsernames_UbiAccountIDs_value_len", "UbiAccountIDs length (String)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByUsernames_UbiAccountIDs_value_data = ProtoField.string("Ubi_Account_Management_LookupUbiAccountIDsByUsernames_UbiAccountIDs_value_data", "UbiAccountIDs data (String)")
 F.Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_UbiAccountIds_len = ProtoField.uint32("Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_UbiAccountIds_len", "UbiAccountIds length (uint32)")
 F.Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_UbiAccountIds_item_len = ProtoField.uint16("Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_UbiAccountIds_item_len", "UbiAccountIds length (String)")
 F.Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_UbiAccountIds_item_data = ProtoField.string("Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_UbiAccountIds_item_data", "UbiAccountIds data (String)")
+F.Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_Usernames_len = ProtoField.uint32("Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_Usernames_len", "Usernames length (uint32)")
+F.Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_Usernames_key_len = ProtoField.uint16("Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_Usernames_key_len", "Usernames length (String)")
+F.Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_Usernames_key_data = ProtoField.string("Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_Usernames_key_data", "Usernames data (String)")
+F.Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_Usernames_value_len = ProtoField.uint16("Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_Usernames_value_len", "Usernames length (String)")
+F.Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_Usernames_value_data = ProtoField.string("Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_Usernames_value_data", "Usernames data (String)")
 F.Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UsernameSubString_len = ProtoField.uint16("Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UsernameSubString_len", "UsernameSubString length (String)")
 F.Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UsernameSubString_data = ProtoField.string("Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UsernameSubString_data", "UsernameSubString data (String)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UbiAccountIDs_len = ProtoField.uint32("Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UbiAccountIDs_len", "UbiAccountIDs length (uint32)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UbiAccountIDs_key_len = ProtoField.uint16("Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UbiAccountIDs_key_len", "UbiAccountIDs length (String)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UbiAccountIDs_key_data = ProtoField.string("Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UbiAccountIDs_key_data", "UbiAccountIDs data (String)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UbiAccountIDs_value_len = ProtoField.uint16("Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UbiAccountIDs_value_len", "UbiAccountIDs length (String)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UbiAccountIDs_value_data = ProtoField.string("Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UbiAccountIDs_value_data", "UbiAccountIDs data (String)")
 F.Ubi_Account_Management_UserHasPlayed_UbiAccountIDs_len = ProtoField.uint32("Ubi_Account_Management_UserHasPlayed_UbiAccountIDs_len", "UbiAccountIDs length (uint32)")
 F.Ubi_Account_Management_UserHasPlayed_UbiAccountIDs_item_len = ProtoField.uint16("Ubi_Account_Management_UserHasPlayed_UbiAccountIDs_item_len", "UbiAccountIDs length (String)")
 F.Ubi_Account_Management_UserHasPlayed_UbiAccountIDs_item_data = ProtoField.string("Ubi_Account_Management_UserHasPlayed_UbiAccountIDs_item_data", "UbiAccountIDs data (String)")
+F.Ubi_Account_Management_UserHasPlayed_UserPresence_len = ProtoField.uint32("Ubi_Account_Management_UserHasPlayed_UserPresence_len", "UserPresence length (uint32)")
+F.Ubi_Account_Management_UserHasPlayed_UserPresence_key_len = ProtoField.uint16("Ubi_Account_Management_UserHasPlayed_UserPresence_key_len", "UserPresence length (String)")
+F.Ubi_Account_Management_UserHasPlayed_UserPresence_key_data = ProtoField.string("Ubi_Account_Management_UserHasPlayed_UserPresence_key_data", "UserPresence data (String)")
+F.Ubi_Account_Management_UserHasPlayed_UserPresence_value = ProtoField.bool("Ubi_Account_Management_UserHasPlayed_UserPresence_value", "UserPresence (bool)")
 F.Ubi_Account_Management_IsUserPlaying_UbiAccountIDs_len = ProtoField.uint32("Ubi_Account_Management_IsUserPlaying_UbiAccountIDs_len", "UbiAccountIDs length (uint32)")
 F.Ubi_Account_Management_IsUserPlaying_UbiAccountIDs_item_len = ProtoField.uint16("Ubi_Account_Management_IsUserPlaying_UbiAccountIDs_item_len", "UbiAccountIDs length (String)")
 F.Ubi_Account_Management_IsUserPlaying_UbiAccountIDs_item_data = ProtoField.string("Ubi_Account_Management_IsUserPlaying_UbiAccountIDs_item_data", "UbiAccountIDs data (String)")
+F.Ubi_Account_Management_IsUserPlaying_UserPresence_len = ProtoField.uint32("Ubi_Account_Management_IsUserPlaying_UserPresence_len", "UserPresence length (uint32)")
+F.Ubi_Account_Management_IsUserPlaying_UserPresence_key_len = ProtoField.uint16("Ubi_Account_Management_IsUserPlaying_UserPresence_key_len", "UserPresence length (String)")
+F.Ubi_Account_Management_IsUserPlaying_UserPresence_key_data = ProtoField.string("Ubi_Account_Management_IsUserPlaying_UserPresence_key_data", "UserPresence data (String)")
+F.Ubi_Account_Management_IsUserPlaying_UserPresence_value = ProtoField.bool("Ubi_Account_Management_IsUserPlaying_UserPresence_value", "UserPresence (bool)")
 F.Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_Usernames_len = ProtoField.uint32("Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_Usernames_len", "Usernames length (uint32)")
 F.Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_Usernames_item_len = ProtoField.uint16("Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_Usernames_item_len", "Usernames length (String)")
 F.Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_Usernames_item_data = ProtoField.string("Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_Usernames_item_data", "Usernames data (String)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_UbiAccountIDs_len = ProtoField.uint32("Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_UbiAccountIDs_len", "UbiAccountIDs length (uint32)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_UbiAccountIDs_key_len = ProtoField.uint16("Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_UbiAccountIDs_key_len", "UbiAccountIDs length (String)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_UbiAccountIDs_key_data = ProtoField.string("Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_UbiAccountIDs_key_data", "UbiAccountIDs data (String)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_UbiAccountIDs_value_len = ProtoField.uint16("Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_UbiAccountIDs_value_len", "UbiAccountIDs length (String)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_UbiAccountIDs_value_data = ProtoField.string("Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_UbiAccountIDs_value_data", "UbiAccountIDs data (String)")
 F.Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_Emails_len = ProtoField.uint32("Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_Emails_len", "Emails length (uint32)")
 F.Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_Emails_item_len = ProtoField.uint16("Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_Emails_item_len", "Emails length (String)")
 F.Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_Emails_item_data = ProtoField.string("Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_Emails_item_data", "Emails data (String)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_UbiAccountIDs_len = ProtoField.uint32("Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_UbiAccountIDs_len", "UbiAccountIDs length (uint32)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_UbiAccountIDs_key_len = ProtoField.uint16("Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_UbiAccountIDs_key_len", "UbiAccountIDs length (String)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_UbiAccountIDs_key_data = ProtoField.string("Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_UbiAccountIDs_key_data", "UbiAccountIDs data (String)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_UbiAccountIDs_value_len = ProtoField.uint16("Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_UbiAccountIDs_value_len", "UbiAccountIDs length (String)")
+F.Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_UbiAccountIDs_value_data = ProtoField.string("Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_UbiAccountIDs_value_data", "UbiAccountIDs data (String)")
 F.Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_UbiAccountIds_len = ProtoField.uint32("Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_UbiAccountIds_len", "UbiAccountIds length (uint32)")
 F.Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_UbiAccountIds_item_len = ProtoField.uint16("Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_UbiAccountIds_item_len", "UbiAccountIds length (String)")
 F.Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_UbiAccountIds_item_data = ProtoField.string("Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_UbiAccountIds_item_data", "UbiAccountIds data (String)")
+F.Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_Usernames_len = ProtoField.uint32("Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_Usernames_len", "Usernames length (uint32)")
+F.Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_Usernames_key_len = ProtoField.uint16("Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_Usernames_key_len", "Usernames length (String)")
+F.Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_Usernames_key_data = ProtoField.string("Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_Usernames_key_data", "Usernames data (String)")
+F.Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_Usernames_value_len = ProtoField.uint16("Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_Usernames_value_len", "Usernames length (String)")
+F.Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_Usernames_value_data = ProtoField.string("Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_Usernames_value_data", "Usernames data (String)")
 F.Ubi_Account_Management_GetTOSEx_countryCode_len = ProtoField.uint16("Ubi_Account_Management_GetTOSEx_countryCode_len", "countryCode length (String)")
 F.Ubi_Account_Management_GetTOSEx_countryCode_data = ProtoField.string("Ubi_Account_Management_GetTOSEx_countryCode_data", "countryCode data (String)")
 F.Ubi_Account_Management_GetTOSEx_languageCode_len = ProtoField.uint16("Ubi_Account_Management_GetTOSEx_languageCode_len", "languageCode length (String)")
@@ -3540,6 +3630,8 @@ F.Remote_Log_Device_Log_Message_len = ProtoField.uint16("Remote_Log_Device_Log_M
 F.Remote_Log_Device_Log_Message_data = ProtoField.string("Remote_Log_Device_Log_Message_data", "Message data (String)")
 F.Privileges_GetPrivileges_localeCode_len = ProtoField.uint16("Privileges_GetPrivileges_localeCode_len", "localeCode length (String)")
 F.Privileges_GetPrivileges_localeCode_data = ProtoField.string("Privileges_GetPrivileges_localeCode_data", "localeCode data (String)")
+F.Privileges_GetPrivileges_privileges_len = ProtoField.uint32("Privileges_GetPrivileges_privileges_len", "privileges length (uint32)")
+F.Privileges_GetPrivileges_privileges_key = ProtoField.uint32("Privileges_GetPrivileges_privileges_key", "privileges (uint32)")
 F.Privileges_ActivateKey_uniqueKey_len = ProtoField.uint16("Privileges_ActivateKey_uniqueKey_len", "uniqueKey length (String)")
 F.Privileges_ActivateKey_uniqueKey_data = ProtoField.string("Privileges_ActivateKey_uniqueKey_data", "uniqueKey data (String)")
 F.Privileges_ActivateKey_languageCode_len = ProtoField.uint16("Privileges_ActivateKey_languageCode_len", "languageCode length (String)")
@@ -3602,27 +3694,51 @@ F.Friends_GetRelationships_uiTotalCount = ProtoField.uint32("Friends_GetRelation
 F.Friends_GetRelationships_lstRelationshipsList_len = ProtoField.uint32("Friends_GetRelationships_lstRelationshipsList_len", "lstRelationshipsList length (uint32)")
 F.User_Account_Management_LookupSceNpIds_pids_len = ProtoField.uint32("User_Account_Management_LookupSceNpIds_pids_len", "pids length (uint32)")
 F.User_Account_Management_LookupSceNpIds_pids_item = ProtoField.uint32("User_Account_Management_LookupSceNpIds_pids_item", "pids (uint32)")
+F.User_Account_Management_LookupSceNpIds_npids_len = ProtoField.uint32("User_Account_Management_LookupSceNpIds_npids_len", "npids length (uint32)")
+F.User_Account_Management_LookupSceNpIds_npids_key = ProtoField.uint32("User_Account_Management_LookupSceNpIds_npids_key", "npids (uint32)")
+F.User_Account_Management_LookupSceNpIds_npids_value_len = ProtoField.uint16("User_Account_Management_LookupSceNpIds_npids_value_len", "npids length (Buffer)")
+F.User_Account_Management_LookupSceNpIds_npids_value_data = ProtoField.bytes("User_Account_Management_LookupSceNpIds_npids_value_data", "npids data (Buffer)")
 F.User_Account_Management_LookupPrincipalIDs_firstPartyIds_len = ProtoField.uint32("User_Account_Management_LookupPrincipalIDs_firstPartyIds_len", "firstPartyIds length (uint32)")
 F.User_Account_Management_LookupPrincipalIDs_firstPartyIds_item_len = ProtoField.uint16("User_Account_Management_LookupPrincipalIDs_firstPartyIds_item_len", "firstPartyIds length (String)")
 F.User_Account_Management_LookupPrincipalIDs_firstPartyIds_item_data = ProtoField.string("User_Account_Management_LookupPrincipalIDs_firstPartyIds_item_data", "firstPartyIds data (String)")
 F.User_Account_Management_LookupPrincipalIDs_platformId = ProtoField.uint32("User_Account_Management_LookupPrincipalIDs_platformId", "platformId (uint32)")
+F.User_Account_Management_LookupPrincipalIDs_pids_len = ProtoField.uint32("User_Account_Management_LookupPrincipalIDs_pids_len", "pids length (uint32)")
+F.User_Account_Management_LookupPrincipalIDs_pids_key_len = ProtoField.uint16("User_Account_Management_LookupPrincipalIDs_pids_key_len", "pids length (String)")
+F.User_Account_Management_LookupPrincipalIDs_pids_key_data = ProtoField.string("User_Account_Management_LookupPrincipalIDs_pids_key_data", "pids data (String)")
+F.User_Account_Management_LookupPrincipalIDs_pids_value = ProtoField.uint32("User_Account_Management_LookupPrincipalIDs_pids_value", "pids (uint32)")
 F.User_Account_Management_LookupFirstPartyIds_pids_len = ProtoField.uint32("User_Account_Management_LookupFirstPartyIds_pids_len", "pids length (uint32)")
 F.User_Account_Management_LookupFirstPartyIds_pids_item = ProtoField.uint32("User_Account_Management_LookupFirstPartyIds_pids_item", "pids (uint32)")
 F.User_Account_Management_LookupFirstPartyIds_platformId = ProtoField.uint32("User_Account_Management_LookupFirstPartyIds_platformId", "platformId (uint32)")
+F.User_Account_Management_LookupFirstPartyIds_firstPartyIds_len = ProtoField.uint32("User_Account_Management_LookupFirstPartyIds_firstPartyIds_len", "firstPartyIds length (uint32)")
+F.User_Account_Management_LookupFirstPartyIds_firstPartyIds_key = ProtoField.uint32("User_Account_Management_LookupFirstPartyIds_firstPartyIds_key", "firstPartyIds (uint32)")
+F.User_Account_Management_LookupFirstPartyIds_firstPartyIds_value_len = ProtoField.uint16("User_Account_Management_LookupFirstPartyIds_firstPartyIds_value_len", "firstPartyIds length (String)")
+F.User_Account_Management_LookupFirstPartyIds_firstPartyIds_value_data = ProtoField.string("User_Account_Management_LookupFirstPartyIds_firstPartyIds_value_data", "firstPartyIds data (String)")
 F.User_Account_Management_UserHasPlayed_FirstPartyIds_len = ProtoField.uint32("User_Account_Management_UserHasPlayed_FirstPartyIds_len", "FirstPartyIds length (uint32)")
 F.User_Account_Management_UserHasPlayed_FirstPartyIds_item_len = ProtoField.uint16("User_Account_Management_UserHasPlayed_FirstPartyIds_item_len", "FirstPartyIds length (String)")
 F.User_Account_Management_UserHasPlayed_FirstPartyIds_item_data = ProtoField.string("User_Account_Management_UserHasPlayed_FirstPartyIds_item_data", "FirstPartyIds data (String)")
 F.User_Account_Management_UserHasPlayed_platformId = ProtoField.uint32("User_Account_Management_UserHasPlayed_platformId", "platformId (uint32)")
+F.User_Account_Management_UserHasPlayed_UserPresence_len = ProtoField.uint32("User_Account_Management_UserHasPlayed_UserPresence_len", "UserPresence length (uint32)")
+F.User_Account_Management_UserHasPlayed_UserPresence_key_len = ProtoField.uint16("User_Account_Management_UserHasPlayed_UserPresence_key_len", "UserPresence length (String)")
+F.User_Account_Management_UserHasPlayed_UserPresence_key_data = ProtoField.string("User_Account_Management_UserHasPlayed_UserPresence_key_data", "UserPresence data (String)")
+F.User_Account_Management_UserHasPlayed_UserPresence_value = ProtoField.bool("User_Account_Management_UserHasPlayed_UserPresence_value", "UserPresence (bool)")
 F.User_Account_Management_IsUserPlaying_firstPartyIds_len = ProtoField.uint32("User_Account_Management_IsUserPlaying_firstPartyIds_len", "firstPartyIds length (uint32)")
 F.User_Account_Management_IsUserPlaying_firstPartyIds_item_len = ProtoField.uint16("User_Account_Management_IsUserPlaying_firstPartyIds_item_len", "firstPartyIds length (String)")
 F.User_Account_Management_IsUserPlaying_firstPartyIds_item_data = ProtoField.string("User_Account_Management_IsUserPlaying_firstPartyIds_item_data", "firstPartyIds data (String)")
 F.User_Account_Management_IsUserPlaying_platformId = ProtoField.uint32("User_Account_Management_IsUserPlaying_platformId", "platformId (uint32)")
+F.User_Account_Management_IsUserPlaying_UserPresence_len = ProtoField.uint32("User_Account_Management_IsUserPlaying_UserPresence_len", "UserPresence length (uint32)")
+F.User_Account_Management_IsUserPlaying_UserPresence_key_len = ProtoField.uint16("User_Account_Management_IsUserPlaying_UserPresence_key_len", "UserPresence length (String)")
+F.User_Account_Management_IsUserPlaying_UserPresence_key_data = ProtoField.string("User_Account_Management_IsUserPlaying_UserPresence_key_data", "UserPresence data (String)")
+F.User_Account_Management_IsUserPlaying_UserPresence_value = ProtoField.bool("User_Account_Management_IsUserPlaying_UserPresence_value", "UserPresence (bool)")
 F.User_Account_Management_updateSonyAccountInfo_ticketData_len = ProtoField.uint16("User_Account_Management_updateSonyAccountInfo_ticketData_len", "ticketData length (Buffer)")
 F.User_Account_Management_updateSonyAccountInfo_ticketData_data = ProtoField.bytes("User_Account_Management_updateSonyAccountInfo_ticketData_data", "ticketData data (Buffer)")
 F.User_Account_Management_updateSonyAccountInfo_ticketSize = ProtoField.uint32("User_Account_Management_updateSonyAccountInfo_ticketSize", "ticketSize (uint32)")
 F.User_Account_Management_LookupUsernames_pids_len = ProtoField.uint32("User_Account_Management_LookupUsernames_pids_len", "pids length (uint32)")
 F.User_Account_Management_LookupUsernames_pids_item = ProtoField.uint32("User_Account_Management_LookupUsernames_pids_item", "pids (uint32)")
 F.User_Account_Management_LookupUsernames_platformId = ProtoField.uint32("User_Account_Management_LookupUsernames_platformId", "platformId (uint32)")
+F.User_Account_Management_LookupUsernames_UserNames_len = ProtoField.uint32("User_Account_Management_LookupUsernames_UserNames_len", "UserNames length (uint32)")
+F.User_Account_Management_LookupUsernames_UserNames_key = ProtoField.uint32("User_Account_Management_LookupUsernames_UserNames_key", "UserNames (uint32)")
+F.User_Account_Management_LookupUsernames_UserNames_value_len = ProtoField.uint16("User_Account_Management_LookupUsernames_UserNames_value_len", "UserNames length (String)")
+F.User_Account_Management_LookupUsernames_UserNames_value_data = ProtoField.string("User_Account_Management_LookupUsernames_UserNames_value_data", "UserNames data (String)")
 F.Matchmake_Referee_StartRound_Round_id = ProtoField.uint64("Matchmake_Referee_StartRound_Round_id", "Round id (uint64)")
 F.Matchmake_Referee_GetStartRoundParam_Round_id = ProtoField.uint64("Matchmake_Referee_GetStartRoundParam_Round_id", "Round id (uint64)")
 F.Matchmake_Referee_EndRoundWithoutReport_Round_id = ProtoField.uint64("Matchmake_Referee_EndRoundWithoutReport_Round_id", "Round id (uint64)")
@@ -3947,11 +4063,20 @@ local CalicoPlayerSimple_shoesSkillIds_len = tvb(off, 4):le_uint()
 
 return off
 end
+function do_StageTimeAttackWeapon(conn, tree, tvb, off, field_name)
+local StageTimeAttackWeapon_container = tree:add(F.StageTimeAttackWeapon, tvb(off, 0))
+	StageTimeAttackWeapon_container:set_text("StageTimeAttackWeapon")
+	off = do_Structure(conn, StageTimeAttackWeapon_container, tvb, off, 'StageTimeAttackWeapon_Base')
+off, StageTimeAttackWeapon_weaponLevel = do_Sint32(conn, StageTimeAttackWeapon_container, tvb, off, 'StageTimeAttackWeapon_weaponLevel')
+off, StageTimeAttackWeapon_clearTime = do_Sint32(conn, StageTimeAttackWeapon_container, tvb, off, 'StageTimeAttackWeapon_clearTime')
+
+return off
+end
 function do_MatchmakeParam(conn, tree, tvb, off, field_name)
 local MatchmakeParam_container = tree:add(F.MatchmakeParam, tvb(off, 0))
 	MatchmakeParam_container:set_text("MatchmakeParam")
 	off = do_Structure(conn, MatchmakeParam_container, tvb, off, 'MatchmakeParam_Base')
---[[ Stubbed! Missing type Map<String, Variant>]]
+--[[ Stubbed! Missing type (in map) Variant]]
 
 return off
 end
@@ -3985,6 +4110,15 @@ off, UplaySectionContentLocalized_m_duration = do_Sint32(conn, UplaySectionConte
 off, UplaySectionContentLocalized_m_size = do_String(conn, UplaySectionContentLocalized_container, tvb, off, 'UplaySectionContentLocalized_m_size')
 off, UplaySectionContentLocalized_m_width = do_String(conn, UplaySectionContentLocalized_container, tvb, off, 'UplaySectionContentLocalized_m_width')
 off, UplaySectionContentLocalized_m_height = do_String(conn, UplaySectionContentLocalized_container, tvb, off, 'UplaySectionContentLocalized_m_height')
+
+return off
+end
+function do_LeaguePlayerDetail(conn, tree, tvb, off, field_name)
+local LeaguePlayerDetail_container = tree:add(F.LeaguePlayerDetail, tvb(off, 0))
+	LeaguePlayerDetail_container:set_text("LeaguePlayerDetail")
+	off = do_Structure(conn, LeaguePlayerDetail_container, tvb, off, 'LeaguePlayerDetail_Base')
+off, LeaguePlayerDetail_principalId = do_Uint64(conn, LeaguePlayerDetail_container, tvb, off, 'LeaguePlayerDetail_principalId')
+off, LeaguePlayerDetail_weaponId = do_Sint32(conn, LeaguePlayerDetail_container, tvb, off, 'LeaguePlayerDetail_weaponId')
 
 return off
 end
@@ -4183,7 +4317,24 @@ local PlayLogEntry_container = tree:add(F.PlayLogEntry, tvb(off, 0))
 off, PlayLogEntry_User_id = do_PID(conn, PlayLogEntry_container, tvb, off, 'PlayLogEntry_User_id')
 off, PlayLogEntry_Player_name = do_String(conn, PlayLogEntry_container, tvb, off, 'PlayLogEntry_Player_name')
 off, PlayLogEntry_Unknown = do_Uint64(conn, PlayLogEntry_container, tvb, off, 'PlayLogEntry_Unknown')
---[[ Stubbed! Missing type Map<String, Variant>]]
+--[[ Stubbed! Missing type (in map) Variant]]
+
+return off
+end
+function do_StageTimeAttackInfo(conn, tree, tvb, off, field_name)
+local StageTimeAttackInfo_container = tree:add(F.StageTimeAttackInfo, tvb(off, 0))
+	StageTimeAttackInfo_container:set_text("StageTimeAttackInfo")
+	off = do_Structure(conn, StageTimeAttackInfo_container, tvb, off, 'StageTimeAttackInfo_Base')
+local StageTimeAttackInfo_clearWeapons_len = tvb(off, 4):le_uint()
+	subStageTimeAttackInfo_container = StageTimeAttackInfo_container:add_le(F.StageTimeAttackInfo_clearWeapons_len, tvb(off,4))
+	off = off + 4
+	for i=1,StageTimeAttackInfo_clearWeapons_len do
+	off, StageTimeAttackInfo_clearWeapons_key = do_Sint32(conn, subStageTimeAttackInfo_container, tvb, off, 'StageTimeAttackInfo_clearWeapons_key')
+
+off = do_StageTimeAttackWeapon(conn, subStageTimeAttackInfo_container, tvb, off, 'StageTimeAttackInfo_clearWeapons_value')
+
+	end
+	
 
 return off
 end
@@ -4403,7 +4554,7 @@ off, NotificationEvent_m_uiParam12 = do_Uint64(conn, NotificationEvent_container
 off, NotificationEvent_m_uiParam22 = do_Uint64(conn, NotificationEvent_container, tvb, off, 'NotificationEvent_m_uiParam22')
 off, NotificationEvent_m_strParam2 = do_String(conn, NotificationEvent_container, tvb, off, 'NotificationEvent_m_strParam2')
 off, NotificationEvent_m_uiParam3 = do_Uint64(conn, NotificationEvent_container, tvb, off, 'NotificationEvent_m_uiParam3')
---[[ Stubbed! Missing type Map<String, Variant>]]
+--[[ Stubbed! Missing type (in map) Variant]]
 
 return off
 end
@@ -4415,7 +4566,16 @@ off, LeaguePointInfo_tagId = do_Uint64(conn, LeaguePointInfo_container, tvb, off
 off, LeaguePointInfo_regionFlag = do_Uint8(conn, LeaguePointInfo_container, tvb, off, 'LeaguePointInfo_regionFlag')
 off, LeaguePointInfo_leagueId = do_String(conn, LeaguePointInfo_container, tvb, off, 'LeaguePointInfo_leagueId')
 off, LeaguePointInfo_point = do_Uint32(conn, LeaguePointInfo_container, tvb, off, 'LeaguePointInfo_point')
---[[ Stubbed! Missing type Map<Uint64, LeaguePlayerDetail>]]
+local LeaguePointInfo_tagMembers_len = tvb(off, 4):le_uint()
+	subLeaguePointInfo_container = LeaguePointInfo_container:add_le(F.LeaguePointInfo_tagMembers_len, tvb(off,4))
+	off = off + 4
+	for i=1,LeaguePointInfo_tagMembers_len do
+	off, LeaguePointInfo_tagMembers_key = do_Uint64(conn, subLeaguePointInfo_container, tvb, off, 'LeaguePointInfo_tagMembers_key')
+
+off = do_LeaguePlayerDetail(conn, subLeaguePointInfo_container, tvb, off, 'LeaguePointInfo_tagMembers_value')
+
+	end
+	
 off, LeaguePointInfo_applicationBuffer = do_qBuffer(conn, LeaguePointInfo_container, tvb, off, 'LeaguePointInfo_applicationBuffer')
 
 return off
@@ -4504,6 +4664,29 @@ local PreparePostCourseParam_Unknown19_len = tvb(off, 4):le_uint()
 
 	end
 	
+
+return off
+end
+function do_UnknownStruct4(conn, tree, tvb, off, field_name)
+local UnknownStruct4_container = tree:add(F.UnknownStruct4, tvb(off, 0))
+	UnknownStruct4_container:set_text("UnknownStruct4")
+	off = do_Structure(conn, UnknownStruct4_container, tvb, off, 'UnknownStruct4_Base')
+off, UnknownStruct4_Unknown = do_Uint8(conn, UnknownStruct4_container, tvb, off, 'UnknownStruct4_Unknown')
+off, UnknownStruct4_Unknown2 = do_Uint8(conn, UnknownStruct4_container, tvb, off, 'UnknownStruct4_Unknown2')
+off, UnknownStruct4_Unknown3 = do_Uint32(conn, UnknownStruct4_container, tvb, off, 'UnknownStruct4_Unknown3')
+off, UnknownStruct4_Unknown4 = do_DateTime(conn, UnknownStruct4_container, tvb, off, 'UnknownStruct4_Unknown4')
+off, UnknownStruct4_Unknown5 = do_DateTime(conn, UnknownStruct4_container, tvb, off, 'UnknownStruct4_Unknown5')
+off, UnknownStruct4_Unknown6 = do_Uint8(conn, UnknownStruct4_container, tvb, off, 'UnknownStruct4_Unknown6')
+off, UnknownStruct4_Unknown7 = do_Uint8(conn, UnknownStruct4_container, tvb, off, 'UnknownStruct4_Unknown7')
+
+return off
+end
+function do_UnknownStruct5(conn, tree, tvb, off, field_name)
+local UnknownStruct5_container = tree:add(F.UnknownStruct5, tvb(off, 0))
+	UnknownStruct5_container:set_text("UnknownStruct5")
+	off = do_Structure(conn, UnknownStruct5_container, tvb, off, 'UnknownStruct5_Base')
+off, UnknownStruct5_Unknown = do_Uint8(conn, UnknownStruct5_container, tvb, off, 'UnknownStruct5_Unknown')
+off, UnknownStruct5_Unknown2 = do_Uint32(conn, UnknownStruct5_container, tvb, off, 'UnknownStruct5_Unknown2')
 
 return off
 end
@@ -4662,8 +4845,26 @@ off, DataStoreSearchBalloonResult_updatedTime = do_DateTime(conn, DataStoreSearc
 off, DataStoreSearchBalloonResult_ownerDataId = do_Uint64(conn, DataStoreSearchBalloonResult_container, tvb, off, 'DataStoreSearchBalloonResult_ownerDataId')
 off, DataStoreSearchBalloonResult_ownerName = do_String(conn, DataStoreSearchBalloonResult_container, tvb, off, 'DataStoreSearchBalloonResult_ownerName')
 off, DataStoreSearchBalloonResult_isFriendBalloon = do_Bool(conn, DataStoreSearchBalloonResult_container, tvb, off, 'DataStoreSearchBalloonResult_isFriendBalloon')
---[[ Stubbed! Missing type Map<Sint8, DataStoreRatingInfo>]]
---[[ Stubbed! Missing type Map<Sint8, DataStoreRatingInfo>]]
+local DataStoreSearchBalloonResult_ratings_len = tvb(off, 4):le_uint()
+	subDataStoreSearchBalloonResult_container = DataStoreSearchBalloonResult_container:add_le(F.DataStoreSearchBalloonResult_ratings_len, tvb(off,4))
+	off = off + 4
+	for i=1,DataStoreSearchBalloonResult_ratings_len do
+	off, DataStoreSearchBalloonResult_ratings_key = do_Sint8(conn, subDataStoreSearchBalloonResult_container, tvb, off, 'DataStoreSearchBalloonResult_ratings_key')
+
+off = do_DataStoreRatingInfo(conn, subDataStoreSearchBalloonResult_container, tvb, off, 'DataStoreSearchBalloonResult_ratings_value')
+
+	end
+	
+local DataStoreSearchBalloonResult_ownerRatings_len = tvb(off, 4):le_uint()
+	subDataStoreSearchBalloonResult_container = DataStoreSearchBalloonResult_container:add_le(F.DataStoreSearchBalloonResult_ownerRatings_len, tvb(off,4))
+	off = off + 4
+	for i=1,DataStoreSearchBalloonResult_ownerRatings_len do
+	off, DataStoreSearchBalloonResult_ownerRatings_key = do_Sint8(conn, subDataStoreSearchBalloonResult_container, tvb, off, 'DataStoreSearchBalloonResult_ownerRatings_key')
+
+off = do_DataStoreRatingInfo(conn, subDataStoreSearchBalloonResult_container, tvb, off, 'DataStoreSearchBalloonResult_ownerRatings_value')
+
+	end
+	
 
 return off
 end
@@ -4677,8 +4878,33 @@ off, DataStoreFetchMyInfosBalloonResult_metaBinary = do_qBuffer(conn, DataStoreF
 off, DataStoreFetchMyInfosBalloonResult_createdTime = do_DateTime(conn, DataStoreFetchMyInfosBalloonResult_container, tvb, off, 'DataStoreFetchMyInfosBalloonResult_createdTime')
 off, DataStoreFetchMyInfosBalloonResult_updatedTime = do_DateTime(conn, DataStoreFetchMyInfosBalloonResult_container, tvb, off, 'DataStoreFetchMyInfosBalloonResult_updatedTime')
 off, DataStoreFetchMyInfosBalloonResult_isCleared = do_Bool(conn, DataStoreFetchMyInfosBalloonResult_container, tvb, off, 'DataStoreFetchMyInfosBalloonResult_isCleared')
---[[ Stubbed! Missing type Map<Sint8, DataStoreRatingInfo>]]
---[[ Stubbed! Missing type Map<Sint8, List<qBuffer>>]]
+local DataStoreFetchMyInfosBalloonResult_ratings_len = tvb(off, 4):le_uint()
+	subDataStoreFetchMyInfosBalloonResult_container = DataStoreFetchMyInfosBalloonResult_container:add_le(F.DataStoreFetchMyInfosBalloonResult_ratings_len, tvb(off,4))
+	off = off + 4
+	for i=1,DataStoreFetchMyInfosBalloonResult_ratings_len do
+	off, DataStoreFetchMyInfosBalloonResult_ratings_key = do_Sint8(conn, subDataStoreFetchMyInfosBalloonResult_container, tvb, off, 'DataStoreFetchMyInfosBalloonResult_ratings_key')
+
+off = do_DataStoreRatingInfo(conn, subDataStoreFetchMyInfosBalloonResult_container, tvb, off, 'DataStoreFetchMyInfosBalloonResult_ratings_value')
+
+	end
+	
+local DataStoreFetchMyInfosBalloonResult_buffers_len = tvb(off, 4):le_uint()
+	subDataStoreFetchMyInfosBalloonResult_container = DataStoreFetchMyInfosBalloonResult_container:add_le(F.DataStoreFetchMyInfosBalloonResult_buffers_len, tvb(off,4))
+	off = off + 4
+	for i=1,DataStoreFetchMyInfosBalloonResult_buffers_len do
+	off, DataStoreFetchMyInfosBalloonResult_buffers_key = do_Sint8(conn, subDataStoreFetchMyInfosBalloonResult_container, tvb, off, 'DataStoreFetchMyInfosBalloonResult_buffers_key')
+
+local DataStoreFetchMyInfosBalloonResult_buffers_value_len = tvb(off, 4):le_uint()
+	subsubDataStoreFetchMyInfosBalloonResult_container = subDataStoreFetchMyInfosBalloonResult_container:add_le(F.DataStoreFetchMyInfosBalloonResult_buffers_value_len, tvb(off,4))
+	off = off + 4
+	for i=1,DataStoreFetchMyInfosBalloonResult_buffers_value_len do
+	off, DataStoreFetchMyInfosBalloonResult_buffers_value_item = do_qBuffer(conn, subsubDataStoreFetchMyInfosBalloonResult_container, tvb, off, 'DataStoreFetchMyInfosBalloonResult_buffers_value_item')
+
+	end
+	
+
+	end
+	
 
 return off
 end
@@ -4690,8 +4916,33 @@ off, DataStoreFetchMyInfosAchievementResult_dataId = do_Uint64(conn, DataStoreFe
 off, DataStoreFetchMyInfosAchievementResult_dataType = do_Uint16(conn, DataStoreFetchMyInfosAchievementResult_container, tvb, off, 'DataStoreFetchMyInfosAchievementResult_dataType')
 off, DataStoreFetchMyInfosAchievementResult_metaBinary = do_qBuffer(conn, DataStoreFetchMyInfosAchievementResult_container, tvb, off, 'DataStoreFetchMyInfosAchievementResult_metaBinary')
 off, DataStoreFetchMyInfosAchievementResult_createdTime = do_DateTime(conn, DataStoreFetchMyInfosAchievementResult_container, tvb, off, 'DataStoreFetchMyInfosAchievementResult_createdTime')
---[[ Stubbed! Missing type Map<Sint8, DataStoreRatingInfo>]]
---[[ Stubbed! Missing type Map<Sint8, List<qBuffer>>]]
+local DataStoreFetchMyInfosAchievementResult_ratings_len = tvb(off, 4):le_uint()
+	subDataStoreFetchMyInfosAchievementResult_container = DataStoreFetchMyInfosAchievementResult_container:add_le(F.DataStoreFetchMyInfosAchievementResult_ratings_len, tvb(off,4))
+	off = off + 4
+	for i=1,DataStoreFetchMyInfosAchievementResult_ratings_len do
+	off, DataStoreFetchMyInfosAchievementResult_ratings_key = do_Sint8(conn, subDataStoreFetchMyInfosAchievementResult_container, tvb, off, 'DataStoreFetchMyInfosAchievementResult_ratings_key')
+
+off = do_DataStoreRatingInfo(conn, subDataStoreFetchMyInfosAchievementResult_container, tvb, off, 'DataStoreFetchMyInfosAchievementResult_ratings_value')
+
+	end
+	
+local DataStoreFetchMyInfosAchievementResult_buffers_len = tvb(off, 4):le_uint()
+	subDataStoreFetchMyInfosAchievementResult_container = DataStoreFetchMyInfosAchievementResult_container:add_le(F.DataStoreFetchMyInfosAchievementResult_buffers_len, tvb(off,4))
+	off = off + 4
+	for i=1,DataStoreFetchMyInfosAchievementResult_buffers_len do
+	off, DataStoreFetchMyInfosAchievementResult_buffers_key = do_Sint8(conn, subDataStoreFetchMyInfosAchievementResult_container, tvb, off, 'DataStoreFetchMyInfosAchievementResult_buffers_key')
+
+local DataStoreFetchMyInfosAchievementResult_buffers_value_len = tvb(off, 4):le_uint()
+	subsubDataStoreFetchMyInfosAchievementResult_container = subDataStoreFetchMyInfosAchievementResult_container:add_le(F.DataStoreFetchMyInfosAchievementResult_buffers_value_len, tvb(off,4))
+	off = off + 4
+	for i=1,DataStoreFetchMyInfosAchievementResult_buffers_value_len do
+	off, DataStoreFetchMyInfosAchievementResult_buffers_value_item = do_qBuffer(conn, subsubDataStoreFetchMyInfosAchievementResult_container, tvb, off, 'DataStoreFetchMyInfosAchievementResult_buffers_value_item')
+
+	end
+	
+
+	end
+	
 
 return off
 end
@@ -5191,24 +5442,7 @@ local PlayLogPreparePostParam_Entries_len = tvb(off, 4):le_uint()
 off, PlayLogPreparePostParam_Play_time = do_DateTime(conn, PlayLogPreparePostParam_container, tvb, off, 'PlayLogPreparePostParam_Play_time')
 off, PlayLogPreparePostParam_Stage_id = do_Uint32(conn, PlayLogPreparePostParam_container, tvb, off, 'PlayLogPreparePostParam_Stage_id')
 off, PlayLogPreparePostParam_Unknown = do_Uint32(conn, PlayLogPreparePostParam_container, tvb, off, 'PlayLogPreparePostParam_Unknown')
---[[ Stubbed! Missing type Map<String, Variant>]]
-
-return off
-end
-function do_StageTimeAttackInfo(conn, tree, tvb, off, field_name)
-local StageTimeAttackInfo_container = tree:add(F.StageTimeAttackInfo, tvb(off, 0))
-	StageTimeAttackInfo_container:set_text("StageTimeAttackInfo")
-	off = do_Structure(conn, StageTimeAttackInfo_container, tvb, off, 'StageTimeAttackInfo_Base')
---[[ Stubbed! Missing type Map<Sint32, StageTimeAttackWeapon>]]
-
-return off
-end
-function do_StageTimeAttackWeapon(conn, tree, tvb, off, field_name)
-local StageTimeAttackWeapon_container = tree:add(F.StageTimeAttackWeapon, tvb(off, 0))
-	StageTimeAttackWeapon_container:set_text("StageTimeAttackWeapon")
-	off = do_Structure(conn, StageTimeAttackWeapon_container, tvb, off, 'StageTimeAttackWeapon_Base')
-off, StageTimeAttackWeapon_weaponLevel = do_Sint32(conn, StageTimeAttackWeapon_container, tvb, off, 'StageTimeAttackWeapon_weaponLevel')
-off, StageTimeAttackWeapon_clearTime = do_Sint32(conn, StageTimeAttackWeapon_container, tvb, off, 'StageTimeAttackWeapon_clearTime')
+--[[ Stubbed! Missing type (in map) Variant]]
 
 return off
 end
@@ -5216,7 +5450,16 @@ function do_TimeAttackInfo(conn, tree, tvb, off, field_name)
 local TimeAttackInfo_container = tree:add(F.TimeAttackInfo, tvb(off, 0))
 	TimeAttackInfo_container:set_text("TimeAttackInfo")
 	off = do_Structure(conn, TimeAttackInfo_container, tvb, off, 'TimeAttackInfo_Base')
---[[ Stubbed! Missing type Map<Sint32, StageTimeAttackInfo>]]
+local TimeAttackInfo_stageInfos_len = tvb(off, 4):le_uint()
+	subTimeAttackInfo_container = TimeAttackInfo_container:add_le(F.TimeAttackInfo_stageInfos_len, tvb(off,4))
+	off = off + 4
+	for i=1,TimeAttackInfo_stageInfos_len do
+	off, TimeAttackInfo_stageInfos_key = do_Sint32(conn, subTimeAttackInfo_container, tvb, off, 'TimeAttackInfo_stageInfos_key')
+
+off = do_StageTimeAttackInfo(conn, subTimeAttackInfo_container, tvb, off, 'TimeAttackInfo_stageInfos_value')
+
+	end
+	
 
 return off
 end
@@ -6643,15 +6886,6 @@ off, FestivalUploadVoteParam_themeId = do_Uint8(conn, FestivalUploadVoteParam_co
 
 return off
 end
-function do_LeaguePlayerDetail(conn, tree, tvb, off, field_name)
-local LeaguePlayerDetail_container = tree:add(F.LeaguePlayerDetail, tvb(off, 0))
-	LeaguePlayerDetail_container:set_text("LeaguePlayerDetail")
-	off = do_Structure(conn, LeaguePlayerDetail_container, tvb, off, 'LeaguePlayerDetail_Base')
-off, LeaguePlayerDetail_principalId = do_Uint64(conn, LeaguePlayerDetail_container, tvb, off, 'LeaguePlayerDetail_principalId')
-off, LeaguePlayerDetail_weaponId = do_Sint32(conn, LeaguePlayerDetail_container, tvb, off, 'LeaguePlayerDetail_weaponId')
-
-return off
-end
 function do_LeagueResult(conn, tree, tvb, off, field_name)
 local LeagueResult_container = tree:add(F.LeagueResult, tvb(off, 0))
 	LeagueResult_container:set_text("LeagueResult")
@@ -6793,28 +7027,28 @@ function do_ValidateAndRequestTicketParam(conn, tree, tvb, off, field_name)
 local ValidateAndRequestTicketParam_container = tree:add(F.ValidateAndRequestTicketParam, tvb(off, 0))
 	ValidateAndRequestTicketParam_container:set_text("ValidateAndRequestTicketParam")
 	off = do_Structure(conn, ValidateAndRequestTicketParam_container, tvb, off, 'ValidateAndRequestTicketParam_Base')
-off, ValidateAndRequestTicketParam_Platform_type_always_3 = do_Uint32(conn, ValidateAndRequestTicketParam_container, tvb, off, 'ValidateAndRequestTicketParam_Platform_type_always_3')
-off, ValidateAndRequestTicketParam_Username = do_String(conn, ValidateAndRequestTicketParam_container, tvb, off, 'ValidateAndRequestTicketParam_Username')
+off, ValidateAndRequestTicketParam_platformType = do_Uint32(conn, ValidateAndRequestTicketParam_container, tvb, off, 'ValidateAndRequestTicketParam_platformType')
+off, ValidateAndRequestTicketParam_userName = do_String(conn, ValidateAndRequestTicketParam_container, tvb, off, 'ValidateAndRequestTicketParam_userName')
 
-		local ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_container = ValidateAndRequestTicketParam_container:add(F.Data, tvb(off, 0))
-		ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_container:set_text("Any")
-	off, ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_type_name = do_String(conn, ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_container, tvb, off, 'ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_type_name')
+		local ValidateAndRequestTicketParam_extraData_container = ValidateAndRequestTicketParam_container:add(F.Data, tvb(off, 0))
+		ValidateAndRequestTicketParam_extraData_container:set_text("Any")
+	off, ValidateAndRequestTicketParam_extraData_type_name = do_String(conn, ValidateAndRequestTicketParam_extraData_container, tvb, off, 'ValidateAndRequestTicketParam_extraData_type_name')
 
-off, ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_len_plus_four = do_Uint32(conn, ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_container, tvb, off, 'ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_len_plus_four')
+off, ValidateAndRequestTicketParam_extraData_len_plus_four = do_Uint32(conn, ValidateAndRequestTicketParam_extraData_container, tvb, off, 'ValidateAndRequestTicketParam_extraData_len_plus_four')
 
-off, ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_data_len = do_Uint32(conn, ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_container, tvb, off, 'ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_data_len')
+off, ValidateAndRequestTicketParam_extraData_data_len = do_Uint32(conn, ValidateAndRequestTicketParam_extraData_container, tvb, off, 'ValidateAndRequestTicketParam_extraData_data_len')
 
-local type_func = 'do_'..ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_type_name
+local type_func = 'do_'..ValidateAndRequestTicketParam_extraData_type_name
 		if _G[type_func] ~= nil then
-			off = _G[type_func](conn, ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_container, tvb, off, "ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_data")
+			off = _G[type_func](conn, ValidateAndRequestTicketParam_extraData_container, tvb, off, "ValidateAndRequestTicketParam_extraData_data")
 		else
-			ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_container:add(F.ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_data_bytes, tvb(off, ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_len))
-			off = off + ValidateAndRequestTicketParam_NullData_or_AuthenticationInfo_data_len
+			ValidateAndRequestTicketParam_extraData_container:add(F.ValidateAndRequestTicketParam_extraData_data_bytes, tvb(off, ValidateAndRequestTicketParam_extraData_len))
+			off = off + ValidateAndRequestTicketParam_extraData_data_len
 		end
 	
-off, ValidateAndRequestTicketParam_Unknown = do_Bool(conn, ValidateAndRequestTicketParam_container, tvb, off, 'ValidateAndRequestTicketParam_Unknown')
-off, ValidateAndRequestTicketParam_NEX_version_e_g__40601 = do_Uint32(conn, ValidateAndRequestTicketParam_container, tvb, off, 'ValidateAndRequestTicketParam_NEX_version_e_g__40601')
-off, ValidateAndRequestTicketParam_Client_version = do_Uint32(conn, ValidateAndRequestTicketParam_container, tvb, off, 'ValidateAndRequestTicketParam_Client_version')
+off, ValidateAndRequestTicketParam_ignoreApiVersionCheck = do_Bool(conn, ValidateAndRequestTicketParam_container, tvb, off, 'ValidateAndRequestTicketParam_ignoreApiVersionCheck')
+off, ValidateAndRequestTicketParam_apiVersionGeneral = do_Uint32(conn, ValidateAndRequestTicketParam_container, tvb, off, 'ValidateAndRequestTicketParam_apiVersionGeneral')
+off, ValidateAndRequestTicketParam_apiVersionCustom = do_Uint32(conn, ValidateAndRequestTicketParam_container, tvb, off, 'ValidateAndRequestTicketParam_apiVersionCustom')
 
 return off
 end
@@ -6822,12 +7056,12 @@ function do_ValidateAndRequestTicketResult(conn, tree, tvb, off, field_name)
 local ValidateAndRequestTicketResult_container = tree:add(F.ValidateAndRequestTicketResult, tvb(off, 0))
 	ValidateAndRequestTicketResult_container:set_text("ValidateAndRequestTicketResult")
 	off = do_Structure(conn, ValidateAndRequestTicketResult_container, tvb, off, 'ValidateAndRequestTicketResult_Base')
-off, ValidateAndRequestTicketResult_User_id = do_PID(conn, ValidateAndRequestTicketResult_container, tvb, off, 'ValidateAndRequestTicketResult_User_id')
-off, ValidateAndRequestTicketResult_Kerberos_ticket = do_Buffer(conn, ValidateAndRequestTicketResult_container, tvb, off, 'ValidateAndRequestTicketResult_Kerberos_ticket')
-off, ValidateAndRequestTicketResult_Secure_server_location = do_StationURL(conn, ValidateAndRequestTicketResult_container, tvb, off, 'ValidateAndRequestTicketResult_Secure_server_location')
-off, ValidateAndRequestTicketResult_Server_time = do_DateTime(conn, ValidateAndRequestTicketResult_container, tvb, off, 'ValidateAndRequestTicketResult_Server_time')
-off, ValidateAndRequestTicketResult_Server_build_name = do_String(conn, ValidateAndRequestTicketResult_container, tvb, off, 'ValidateAndRequestTicketResult_Server_build_name')
-off, ValidateAndRequestTicketResult_Kerberos_key__If_present__key_derivation_is_skipped_and_this_key_is_used_to_decrypt_the_ticket_instead_ = do_String(conn, ValidateAndRequestTicketResult_container, tvb, off, 'ValidateAndRequestTicketResult_Kerberos_key__If_present__key_derivation_is_skipped_and_this_key_is_used_to_decrypt_the_ticket_instead_')
+off, ValidateAndRequestTicketResult_sourcePid = do_PID(conn, ValidateAndRequestTicketResult_container, tvb, off, 'ValidateAndRequestTicketResult_sourcePid')
+off, ValidateAndRequestTicketResult_bufResponse = do_Buffer(conn, ValidateAndRequestTicketResult_container, tvb, off, 'ValidateAndRequestTicketResult_bufResponse')
+off, ValidateAndRequestTicketResult_serviceNodeUrl = do_StationURL(conn, ValidateAndRequestTicketResult_container, tvb, off, 'ValidateAndRequestTicketResult_serviceNodeUrl')
+off, ValidateAndRequestTicketResult_currentUtcTime = do_DateTime(conn, ValidateAndRequestTicketResult_container, tvb, off, 'ValidateAndRequestTicketResult_currentUtcTime')
+off, ValidateAndRequestTicketResult_returnMsg = do_String(conn, ValidateAndRequestTicketResult_container, tvb, off, 'ValidateAndRequestTicketResult_returnMsg')
+off, ValidateAndRequestTicketResult_sourceKey = do_String(conn, ValidateAndRequestTicketResult_container, tvb, off, 'ValidateAndRequestTicketResult_sourceKey')
 
 return off
 end
@@ -6923,10 +7157,28 @@ local CanPostRatingAndCommentResult_container = tree:add(F.CanPostRatingAndComme
 off, CanPostRatingAndCommentResult_Unknown = do_Uint64(conn, CanPostRatingAndCommentResult_container, tvb, off, 'CanPostRatingAndCommentResult_Unknown')
 off, CanPostRatingAndCommentResult_Unknown2 = do_Bool(conn, CanPostRatingAndCommentResult_container, tvb, off, 'CanPostRatingAndCommentResult_Unknown2')
 off, CanPostRatingAndCommentResult_Unknown3 = do_Uint32(conn, CanPostRatingAndCommentResult_container, tvb, off, 'CanPostRatingAndCommentResult_Unknown3')
---[[ Stubbed! Missing type Map<Uint8, Uint32>]]
+local CanPostRatingAndCommentResult_Unknown4_len = tvb(off, 4):le_uint()
+	subCanPostRatingAndCommentResult_container = CanPostRatingAndCommentResult_container:add_le(F.CanPostRatingAndCommentResult_Unknown4_len, tvb(off,4))
+	off = off + 4
+	for i=1,CanPostRatingAndCommentResult_Unknown4_len do
+	off, CanPostRatingAndCommentResult_Unknown4_key = do_Uint8(conn, subCanPostRatingAndCommentResult_container, tvb, off, 'CanPostRatingAndCommentResult_Unknown4_key')
+
+off, CanPostRatingAndCommentResult_Unknown4_value = do_Uint32(conn, subCanPostRatingAndCommentResult_container, tvb, off, 'CanPostRatingAndCommentResult_Unknown4_value')
+
+	end
+	
 off, CanPostRatingAndCommentResult_Unknown5 = do_Bool(conn, CanPostRatingAndCommentResult_container, tvb, off, 'CanPostRatingAndCommentResult_Unknown5')
 off, CanPostRatingAndCommentResult_Unknown6 = do_Uint32(conn, CanPostRatingAndCommentResult_container, tvb, off, 'CanPostRatingAndCommentResult_Unknown6')
---[[ Stubbed! Missing type Map<Uint8, Uint32>]]
+local CanPostRatingAndCommentResult_Unknown7_len = tvb(off, 4):le_uint()
+	subCanPostRatingAndCommentResult_container = CanPostRatingAndCommentResult_container:add_le(F.CanPostRatingAndCommentResult_Unknown7_len, tvb(off,4))
+	off = off + 4
+	for i=1,CanPostRatingAndCommentResult_Unknown7_len do
+	off, CanPostRatingAndCommentResult_Unknown7_key = do_Uint8(conn, subCanPostRatingAndCommentResult_container, tvb, off, 'CanPostRatingAndCommentResult_Unknown7_key')
+
+off, CanPostRatingAndCommentResult_Unknown7_value = do_Uint32(conn, subCanPostRatingAndCommentResult_container, tvb, off, 'CanPostRatingAndCommentResult_Unknown7_value')
+
+	end
+	
 
 return off
 end
@@ -6994,8 +7246,26 @@ function do_EndlessModeStatus(conn, tree, tvb, off, field_name)
 local EndlessModeStatus_container = tree:add(F.EndlessModeStatus, tvb(off, 0))
 	EndlessModeStatus_container:set_text("EndlessModeStatus")
 	off = do_Structure(conn, EndlessModeStatus_container, tvb, off, 'EndlessModeStatus_Base')
---[[ Stubbed! Missing type Map<Uint8, UnknownStruct4>]]
---[[ Stubbed! Missing type Map<Uint8, UnknownStruct5>]]
+local EndlessModeStatus_Unknown_len = tvb(off, 4):le_uint()
+	subEndlessModeStatus_container = EndlessModeStatus_container:add_le(F.EndlessModeStatus_Unknown_len, tvb(off,4))
+	off = off + 4
+	for i=1,EndlessModeStatus_Unknown_len do
+	off, EndlessModeStatus_Unknown_key = do_Uint8(conn, subEndlessModeStatus_container, tvb, off, 'EndlessModeStatus_Unknown_key')
+
+off = do_UnknownStruct4(conn, subEndlessModeStatus_container, tvb, off, 'EndlessModeStatus_Unknown_value')
+
+	end
+	
+local EndlessModeStatus_Unknown2_len = tvb(off, 4):le_uint()
+	subEndlessModeStatus_container = EndlessModeStatus_container:add_le(F.EndlessModeStatus_Unknown2_len, tvb(off,4))
+	off = off + 4
+	for i=1,EndlessModeStatus_Unknown2_len do
+	off, EndlessModeStatus_Unknown2_key = do_Uint8(conn, subEndlessModeStatus_container, tvb, off, 'EndlessModeStatus_Unknown2_key')
+
+off = do_UnknownStruct5(conn, subEndlessModeStatus_container, tvb, off, 'EndlessModeStatus_Unknown2_value')
+
+	end
+	
 
 return off
 end
@@ -7025,7 +7295,16 @@ local EventCourseHistogram_Histogram_values_len = tvb(off, 4):le_uint()
 
 	end
 	
---[[ Stubbed! Missing type Map<Uint8, Uint32>]]
+local EventCourseHistogram_Medal_time_len = tvb(off, 4):le_uint()
+	subEventCourseHistogram_container = EventCourseHistogram_container:add_le(F.EventCourseHistogram_Medal_time_len, tvb(off,4))
+	off = off + 4
+	for i=1,EventCourseHistogram_Medal_time_len do
+	off, EventCourseHistogram_Medal_time_key = do_Uint8(conn, subEventCourseHistogram_container, tvb, off, 'EventCourseHistogram_Medal_time_key')
+
+off, EventCourseHistogram_Medal_time_value = do_Uint32(conn, subEventCourseHistogram_container, tvb, off, 'EventCourseHistogram_Medal_time_value')
+
+	end
+	
 off, EventCourseHistogram_Unknown4 = do_Uint32(conn, EventCourseHistogram_container, tvb, off, 'EventCourseHistogram_Unknown4')
 
 return off
@@ -7403,29 +7682,6 @@ local UnknownStruct3_container = tree:add(F.UnknownStruct3, tvb(off, 0))
 	off = do_Structure(conn, UnknownStruct3_container, tvb, off, 'UnknownStruct3_Base')
 off, UnknownStruct3_Unknown = do_Uint8(conn, UnknownStruct3_container, tvb, off, 'UnknownStruct3_Unknown')
 off, UnknownStruct3_Unknown2 = do_DateTime(conn, UnknownStruct3_container, tvb, off, 'UnknownStruct3_Unknown2')
-
-return off
-end
-function do_UnknownStruct4(conn, tree, tvb, off, field_name)
-local UnknownStruct4_container = tree:add(F.UnknownStruct4, tvb(off, 0))
-	UnknownStruct4_container:set_text("UnknownStruct4")
-	off = do_Structure(conn, UnknownStruct4_container, tvb, off, 'UnknownStruct4_Base')
-off, UnknownStruct4_Unknown = do_Uint8(conn, UnknownStruct4_container, tvb, off, 'UnknownStruct4_Unknown')
-off, UnknownStruct4_Unknown2 = do_Uint8(conn, UnknownStruct4_container, tvb, off, 'UnknownStruct4_Unknown2')
-off, UnknownStruct4_Unknown3 = do_Uint32(conn, UnknownStruct4_container, tvb, off, 'UnknownStruct4_Unknown3')
-off, UnknownStruct4_Unknown4 = do_DateTime(conn, UnknownStruct4_container, tvb, off, 'UnknownStruct4_Unknown4')
-off, UnknownStruct4_Unknown5 = do_DateTime(conn, UnknownStruct4_container, tvb, off, 'UnknownStruct4_Unknown5')
-off, UnknownStruct4_Unknown6 = do_Uint8(conn, UnknownStruct4_container, tvb, off, 'UnknownStruct4_Unknown6')
-off, UnknownStruct4_Unknown7 = do_Uint8(conn, UnknownStruct4_container, tvb, off, 'UnknownStruct4_Unknown7')
-
-return off
-end
-function do_UnknownStruct5(conn, tree, tvb, off, field_name)
-local UnknownStruct5_container = tree:add(F.UnknownStruct5, tvb(off, 0))
-	UnknownStruct5_container:set_text("UnknownStruct5")
-	off = do_Structure(conn, UnknownStruct5_container, tvb, off, 'UnknownStruct5_Base')
-off, UnknownStruct5_Unknown = do_Uint8(conn, UnknownStruct5_container, tvb, off, 'UnknownStruct5_Unknown')
-off, UnknownStruct5_Unknown2 = do_Uint32(conn, UnknownStruct5_container, tvb, off, 'UnknownStruct5_Unknown2')
 
 return off
 end
@@ -13309,7 +13565,16 @@ off, Utility_GetIntegerSettings_integerSettingIndex = do_Uint32(conn, tree, tvb,
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type Map<Uint16, Sint32>]]
+local Utility_GetIntegerSettings_integerSettings_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.Utility_GetIntegerSettings_integerSettings_len, tvb(off,4))
+	off = off + 4
+	for i=1,Utility_GetIntegerSettings_integerSettings_len do
+	off, Utility_GetIntegerSettings_integerSettings_key = do_Uint16(conn, subtree, tvb, off, 'Utility_GetIntegerSettings_integerSettings_key')
+
+off, Utility_GetIntegerSettings_integerSettings_value = do_Sint32(conn, subtree, tvb, off, 'Utility_GetIntegerSettings_integerSettings_value')
+
+	end
+	
  end
 			},
 			[8] = {
@@ -13320,7 +13585,16 @@ off, Utility_GetStringSettings_stringSettingIndex = do_Uint32(conn, tree, tvb, o
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type Map<Uint16, String>]]
+local Utility_GetStringSettings_stringSettings_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.Utility_GetStringSettings_stringSettings_len, tvb(off,4))
+	off = off + 4
+	for i=1,Utility_GetStringSettings_stringSettings_len do
+	off, Utility_GetStringSettings_stringSettings_key = do_Uint16(conn, subtree, tvb, off, 'Utility_GetStringSettings_stringSettings_key')
+
+off, Utility_GetStringSettings_stringSettings_value = do_String(conn, subtree, tvb, off, 'Utility_GetStringSettings_stringSettings_value')
+
+	end
+	
  end
 			},
 			
@@ -18684,7 +18958,16 @@ local Ubi_Account_Management_LookupPrincipalIds_ubiAccountIds_len = tvb(off, 4):
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type Map<String, Uint32>]]
+local Ubi_Account_Management_LookupPrincipalIds_pids_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.Ubi_Account_Management_LookupPrincipalIds_pids_len, tvb(off,4))
+	off = off + 4
+	for i=1,Ubi_Account_Management_LookupPrincipalIds_pids_len do
+	off, Ubi_Account_Management_LookupPrincipalIds_pids_key = do_String(conn, subtree, tvb, off, 'Ubi_Account_Management_LookupPrincipalIds_pids_key')
+
+off, Ubi_Account_Management_LookupPrincipalIds_pids_value = do_Uint32(conn, subtree, tvb, off, 'Ubi_Account_Management_LookupPrincipalIds_pids_value')
+
+	end
+	
  end
 			},
 			[12] = {
@@ -18702,7 +18985,16 @@ local Ubi_Account_Management_LookupUbiAccountIDsByPids_pids_len = tvb(off, 4):le
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type Map<Uint32, String>]]
+local Ubi_Account_Management_LookupUbiAccountIDsByPids_ubiaccountIDs_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.Ubi_Account_Management_LookupUbiAccountIDsByPids_ubiaccountIDs_len, tvb(off,4))
+	off = off + 4
+	for i=1,Ubi_Account_Management_LookupUbiAccountIDsByPids_ubiaccountIDs_len do
+	off, Ubi_Account_Management_LookupUbiAccountIDsByPids_ubiaccountIDs_key = do_Uint32(conn, subtree, tvb, off, 'Ubi_Account_Management_LookupUbiAccountIDsByPids_ubiaccountIDs_key')
+
+off, Ubi_Account_Management_LookupUbiAccountIDsByPids_ubiaccountIDs_value = do_String(conn, subtree, tvb, off, 'Ubi_Account_Management_LookupUbiAccountIDsByPids_ubiaccountIDs_value')
+
+	end
+	
  end
 			},
 			[13] = {
@@ -18720,7 +19012,16 @@ local Ubi_Account_Management_LookupUbiAccountIDsByUsernames_Usernames_len = tvb(
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type Map<String, String>]]
+local Ubi_Account_Management_LookupUbiAccountIDsByUsernames_UbiAccountIDs_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.Ubi_Account_Management_LookupUbiAccountIDsByUsernames_UbiAccountIDs_len, tvb(off,4))
+	off = off + 4
+	for i=1,Ubi_Account_Management_LookupUbiAccountIDsByUsernames_UbiAccountIDs_len do
+	off, Ubi_Account_Management_LookupUbiAccountIDsByUsernames_UbiAccountIDs_key = do_String(conn, subtree, tvb, off, 'Ubi_Account_Management_LookupUbiAccountIDsByUsernames_UbiAccountIDs_key')
+
+off, Ubi_Account_Management_LookupUbiAccountIDsByUsernames_UbiAccountIDs_value = do_String(conn, subtree, tvb, off, 'Ubi_Account_Management_LookupUbiAccountIDsByUsernames_UbiAccountIDs_value')
+
+	end
+	
  end
 			},
 			[14] = {
@@ -18738,7 +19039,16 @@ local Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_UbiAccountIds_len = 
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type Map<String, String>]]
+local Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_Usernames_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_Usernames_len, tvb(off,4))
+	off = off + 4
+	for i=1,Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_Usernames_len do
+	off, Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_Usernames_key = do_String(conn, subtree, tvb, off, 'Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_Usernames_key')
+
+off, Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_Usernames_value = do_String(conn, subtree, tvb, off, 'Ubi_Account_Management_LookupUsernamesByUbiAccountIDs_Usernames_value')
+
+	end
+	
  end
 			},
 			[15] = {
@@ -18749,7 +19059,16 @@ off, Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UsernameSubSt
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type Map<String, String>]]
+local Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UbiAccountIDs_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UbiAccountIDs_len, tvb(off,4))
+	off = off + 4
+	for i=1,Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UbiAccountIDs_len do
+	off, Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UbiAccountIDs_key = do_String(conn, subtree, tvb, off, 'Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UbiAccountIDs_key')
+
+off, Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UbiAccountIDs_value = do_String(conn, subtree, tvb, off, 'Ubi_Account_Management_LookupUbiAccountIDsByUsernameSubString_UbiAccountIDs_value')
+
+	end
+	
  end
 			},
 			[16] = {
@@ -18767,7 +19086,16 @@ local Ubi_Account_Management_UserHasPlayed_UbiAccountIDs_len = tvb(off, 4):le_ui
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type Map<String, Bool>]]
+local Ubi_Account_Management_UserHasPlayed_UserPresence_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.Ubi_Account_Management_UserHasPlayed_UserPresence_len, tvb(off,4))
+	off = off + 4
+	for i=1,Ubi_Account_Management_UserHasPlayed_UserPresence_len do
+	off, Ubi_Account_Management_UserHasPlayed_UserPresence_key = do_String(conn, subtree, tvb, off, 'Ubi_Account_Management_UserHasPlayed_UserPresence_key')
+
+off, Ubi_Account_Management_UserHasPlayed_UserPresence_value = do_Bool(conn, subtree, tvb, off, 'Ubi_Account_Management_UserHasPlayed_UserPresence_value')
+
+	end
+	
  end
 			},
 			[17] = {
@@ -18785,7 +19113,16 @@ local Ubi_Account_Management_IsUserPlaying_UbiAccountIDs_len = tvb(off, 4):le_ui
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type Map<String, Bool>]]
+local Ubi_Account_Management_IsUserPlaying_UserPresence_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.Ubi_Account_Management_IsUserPlaying_UserPresence_len, tvb(off,4))
+	off = off + 4
+	for i=1,Ubi_Account_Management_IsUserPlaying_UserPresence_len do
+	off, Ubi_Account_Management_IsUserPlaying_UserPresence_key = do_String(conn, subtree, tvb, off, 'Ubi_Account_Management_IsUserPlaying_UserPresence_key')
+
+off, Ubi_Account_Management_IsUserPlaying_UserPresence_value = do_Bool(conn, subtree, tvb, off, 'Ubi_Account_Management_IsUserPlaying_UserPresence_value')
+
+	end
+	
  end
 			},
 			[18] = {
@@ -18803,7 +19140,16 @@ local Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_Usernames_len 
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type Map<String, String>]]
+local Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_UbiAccountIDs_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_UbiAccountIDs_len, tvb(off,4))
+	off = off + 4
+	for i=1,Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_UbiAccountIDs_len do
+	off, Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_UbiAccountIDs_key = do_String(conn, subtree, tvb, off, 'Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_UbiAccountIDs_key')
+
+off, Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_UbiAccountIDs_value = do_String(conn, subtree, tvb, off, 'Ubi_Account_Management_LookupUbiAccountIDsByUsernamesGlobal_UbiAccountIDs_value')
+
+	end
+	
  end
 			},
 			[19] = {
@@ -18821,7 +19167,16 @@ local Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_Emails_len = tvb(
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type Map<String, String>]]
+local Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_UbiAccountIDs_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_UbiAccountIDs_len, tvb(off,4))
+	off = off + 4
+	for i=1,Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_UbiAccountIDs_len do
+	off, Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_UbiAccountIDs_key = do_String(conn, subtree, tvb, off, 'Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_UbiAccountIDs_key')
+
+off, Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_UbiAccountIDs_value = do_String(conn, subtree, tvb, off, 'Ubi_Account_Management_LookupUbiAccountIDsByEmailsGlobal_UbiAccountIDs_value')
+
+	end
+	
  end
 			},
 			[20] = {
@@ -18839,7 +19194,16 @@ local Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_UbiAccountIds_
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type Map<String, String>]]
+local Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_Usernames_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_Usernames_len, tvb(off,4))
+	off = off + 4
+	for i=1,Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_Usernames_len do
+	off, Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_Usernames_key = do_String(conn, subtree, tvb, off, 'Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_Usernames_key')
+
+off, Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_Usernames_value = do_String(conn, subtree, tvb, off, 'Ubi_Account_Management_LookupUsernamesByUbiAccountIDsGlobal_Usernames_value')
+
+	end
+	
  end
 			},
 			[21] = {
@@ -19350,7 +19714,16 @@ off, Privileges_GetPrivileges_localeCode = do_String(conn, tree, tvb, off, 'Priv
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type Map<Uint32, Privilege>]]
+local Privileges_GetPrivileges_privileges_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.Privileges_GetPrivileges_privileges_len, tvb(off,4))
+	off = off + 4
+	for i=1,Privileges_GetPrivileges_privileges_len do
+	off, Privileges_GetPrivileges_privileges_key = do_Uint32(conn, subtree, tvb, off, 'Privileges_GetPrivileges_privileges_key')
+
+off = do_Privilege(conn, subtree, tvb, off, 'Privileges_GetPrivileges_privileges_value')
+
+	end
+	
  end
 			},
 			[2] = {
@@ -19658,7 +20031,16 @@ local User_Account_Management_LookupSceNpIds_pids_len = tvb(off, 4):le_uint()
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type Map<Uint32, qBuffer>]]
+local User_Account_Management_LookupSceNpIds_npids_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.User_Account_Management_LookupSceNpIds_npids_len, tvb(off,4))
+	off = off + 4
+	for i=1,User_Account_Management_LookupSceNpIds_npids_len do
+	off, User_Account_Management_LookupSceNpIds_npids_key = do_Uint32(conn, subtree, tvb, off, 'User_Account_Management_LookupSceNpIds_npids_key')
+
+off, User_Account_Management_LookupSceNpIds_npids_value = do_qBuffer(conn, subtree, tvb, off, 'User_Account_Management_LookupSceNpIds_npids_value')
+
+	end
+	
  end
 			},
 			[2] = {
@@ -19677,7 +20059,16 @@ off, User_Account_Management_LookupPrincipalIDs_platformId = do_Uint32(conn, tre
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type Map<String, Uint32>]]
+local User_Account_Management_LookupPrincipalIDs_pids_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.User_Account_Management_LookupPrincipalIDs_pids_len, tvb(off,4))
+	off = off + 4
+	for i=1,User_Account_Management_LookupPrincipalIDs_pids_len do
+	off, User_Account_Management_LookupPrincipalIDs_pids_key = do_String(conn, subtree, tvb, off, 'User_Account_Management_LookupPrincipalIDs_pids_key')
+
+off, User_Account_Management_LookupPrincipalIDs_pids_value = do_Uint32(conn, subtree, tvb, off, 'User_Account_Management_LookupPrincipalIDs_pids_value')
+
+	end
+	
  end
 			},
 			[3] = {
@@ -19696,7 +20087,16 @@ off, User_Account_Management_LookupFirstPartyIds_platformId = do_Uint32(conn, tr
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type Map<Uint32, String>]]
+local User_Account_Management_LookupFirstPartyIds_firstPartyIds_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.User_Account_Management_LookupFirstPartyIds_firstPartyIds_len, tvb(off,4))
+	off = off + 4
+	for i=1,User_Account_Management_LookupFirstPartyIds_firstPartyIds_len do
+	off, User_Account_Management_LookupFirstPartyIds_firstPartyIds_key = do_Uint32(conn, subtree, tvb, off, 'User_Account_Management_LookupFirstPartyIds_firstPartyIds_key')
+
+off, User_Account_Management_LookupFirstPartyIds_firstPartyIds_value = do_String(conn, subtree, tvb, off, 'User_Account_Management_LookupFirstPartyIds_firstPartyIds_value')
+
+	end
+	
  end
 			},
 			[4] = {
@@ -19715,7 +20115,16 @@ off, User_Account_Management_UserHasPlayed_platformId = do_Uint32(conn, tree, tv
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type Map<String, Bool>]]
+local User_Account_Management_UserHasPlayed_UserPresence_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.User_Account_Management_UserHasPlayed_UserPresence_len, tvb(off,4))
+	off = off + 4
+	for i=1,User_Account_Management_UserHasPlayed_UserPresence_len do
+	off, User_Account_Management_UserHasPlayed_UserPresence_key = do_String(conn, subtree, tvb, off, 'User_Account_Management_UserHasPlayed_UserPresence_key')
+
+off, User_Account_Management_UserHasPlayed_UserPresence_value = do_Bool(conn, subtree, tvb, off, 'User_Account_Management_UserHasPlayed_UserPresence_value')
+
+	end
+	
  end
 			},
 			[5] = {
@@ -19734,7 +20143,16 @@ off, User_Account_Management_IsUserPlaying_platformId = do_Uint32(conn, tree, tv
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type Map<String, Bool>]]
+local User_Account_Management_IsUserPlaying_UserPresence_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.User_Account_Management_IsUserPlaying_UserPresence_len, tvb(off,4))
+	off = off + 4
+	for i=1,User_Account_Management_IsUserPlaying_UserPresence_len do
+	off, User_Account_Management_IsUserPlaying_UserPresence_key = do_String(conn, subtree, tvb, off, 'User_Account_Management_IsUserPlaying_UserPresence_key')
+
+off, User_Account_Management_IsUserPlaying_UserPresence_value = do_Bool(conn, subtree, tvb, off, 'User_Account_Management_IsUserPlaying_UserPresence_value')
+
+	end
+	
  end
 			},
 			[6] = {
@@ -19764,7 +20182,16 @@ off, User_Account_Management_LookupUsernames_platformId = do_Uint32(conn, tree, 
  end,
 				["response"] = function (conn, tree, tvb)
 	local off = 0
---[[ Stubbed! Missing type Map<Uint32, String>]]
+local User_Account_Management_LookupUsernames_UserNames_len = tvb(off, 4):le_uint()
+	subtree = tree:add_le(F.User_Account_Management_LookupUsernames_UserNames_len, tvb(off,4))
+	off = off + 4
+	for i=1,User_Account_Management_LookupUsernames_UserNames_len do
+	off, User_Account_Management_LookupUsernames_UserNames_key = do_Uint32(conn, subtree, tvb, off, 'User_Account_Management_LookupUsernames_UserNames_key')
+
+off, User_Account_Management_LookupUsernames_UserNames_value = do_String(conn, subtree, tvb, off, 'User_Account_Management_LookupUsernames_UserNames_value')
+
+	end
+	
  end
 			},
 			
