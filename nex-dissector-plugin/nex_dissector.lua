@@ -10,8 +10,18 @@ local md5 = require("md5")
 
 local access_key_table = {
 	["9f2b4678"] = "SMM",
+	["6f599f81"] = "Splatoon",
 	-- todo: for other game specific protocols...
 }
+
+function sig_v0(access_key, secure_key, pkt_seq, fragment, raw_payload)
+	seq = string.char(bit.band(pkt_seq, 0xff)) .. string.char(bit.rshift(bit.band(pkt_seq, 0xff00), 8))
+	fragment = string.char(fragment)
+	local data = secure_key .. seq ..  fragment .. raw_payload:raw()
+
+	local key = md5.sum(access_key)
+	return hmac.compute(key, data, md5.sum, 64):sub(1,4)
+end
 
 function sig_v1(access_key, packet_header, secure_key, conn_sig, optional_data, raw_payload)
 	access_key_sum = 0
@@ -23,6 +33,24 @@ function sig_v1(access_key, packet_header, secure_key, conn_sig, optional_data, 
 
 	local key = md5.sum(access_key)
 	return hmac.compute(key, data, md5.sum, 64)
+end
+
+function version_gt_eq(a, b)
+	if a[1] > b[1] then
+		return true
+	elseif a[1] < b[1] then
+		return false
+	elseif a[2] > b[2] then -- first one equal
+		return true
+	elseif a[2] < b[2] then
+		return true
+	elseif a[3] > b[3] then -- first 2 equal
+		return true
+	elseif a[3] < b[3] then
+		return false
+	else
+		return true
+	end
 end
 
 local nex_proto = Proto("nex", "NEX")
@@ -85,6 +113,7 @@ end
 
 F = nex_proto.fields
 _G["F"] = F -- apparently this isn't global enough >:(
+_G["version_gt_eq"] = version_gt_eq
 protos, nested_protos = dofile(script_path() .. "protos.inc")
 
 F.raw_payload = ProtoField.bytes("nex.rawpayload", "Decrypted PRUDP payload")
@@ -276,7 +305,8 @@ function nex_proto.dissector(buf, pinfo, tree)
 					[PORT_CLIENT] = rc4.new_ks(secure_key),
 					['nonsecure_pid'] = partial_conn['nonsecure_pid'],
 					['has_struct_headers'] = partial_conn['has_struct_headers'],
-					['version'] = partial_conn['version'],
+					['prudp_version'] = partial_conn['prudp_version'],
+					['nex_version'] = partial_conn['nex_version'],
 					['server_conn_sig'] = partial_conn['server_conn_sig'],
 					['client_conn_sig'] = pkt_conn_sig,
 				}
@@ -290,7 +320,8 @@ function nex_proto.dissector(buf, pinfo, tree)
 					[PORT_CLIENT] = rc4.new_ks("CD&ML"),
 					['nonsecure_pid'] = partial_conn['nonsecure_pid'],
 					['has_struct_headers'] = partial_conn['has_struct_headers'],
-					['version'] = partial_conn['version'],
+					['prudp_version'] = partial_conn['prudp_version'],
+					['nex_version'] = partial_conn['nex_version'],
 					['server_conn_sig'] = partial_conn['server_conn_sig'],
 					['client_conn_sig'] = pkt_conn_sig,
 				}
@@ -372,22 +403,43 @@ function nex_proto.dissector(buf, pinfo, tree)
 					if pkt_method_id == 1 or pkt_method_id == 2 then -- 1: Login, 2: LoginEx
 						struct_header_len = 0
 						has_struct_headers = false
-						secure_url_len = nex_data(12 + struct_header_len + buffer_len, 2):le_uint()
+
+						secure_url_len_off = 12 + struct_header_len + buffer_len
+						secure_url_len = nex_data(secure_url_len_off, 2):le_uint()
 
 						-- Time for a shitty heuristic!
 						if 14 + secure_url_len > nex_data:len() then
 							struct_header_len = 5
 							has_struct_headers = true
-							secure_url_len = nex_data(12 + struct_header_len + buffer_len, 2):le_uint()
+
+							secure_url_len_off = 12 + struct_header_len + buffer_len
+
+							secure_url_len = nex_data(secure_url_len_off, 2):le_uint()
 						end
 						conn['has_struct_headers'] = has_struct_headers
-						conn['version'] = version
+						conn['prudp_version'] = version
 
-						secure_url = nex_data(14 + struct_header_len + buffer_len, secure_url_len):string()
+						secure_url_off = secure_url_len_off + 2
+						secure_url = nex_data(secure_url_off, secure_url_len):string()
 
 						addr = string.match(secure_url, "address=([^;]+)")
 						port = string.match(secure_url, "port=([^;]+)")
 						conn['secure_id'] = addr .. "-" .. port
+
+						return_msg_len_off = secure_url_off + secure_url_len + 4 + 2 + 1
+						if version == 1 then
+							return_msg_len_off = return_msg_len_off + 8 -- skip date
+						end
+
+						return_msg_len = nex_data(return_msg_len_off, 2):le_uint()
+						return_msg = nex_data(return_msg_len_off + 2, return_msg_len):string()
+						print("aaaaaaaaaaa got return msg", return_msg)
+
+						major, minor, patch = return_msg:match("build:(%d+)_(%d+)_(%d+)")
+						print(got, major, minor, patch)
+						if major ~= nil then
+							conn['nex_version'] = {tonumber(major), tonumber(minor), tonumber(patch)}
+						end
 
 						-- this packet is server->client, so we use the server ip (from the secure url) first, then the dst ip (client ip)
 						new_conn_id = addr .. "-" .. port .. "-" .. tostring(pinfo.dst)
@@ -397,7 +449,8 @@ function nex_proto.dissector(buf, pinfo, tree)
 							[PORT_CLIENT] = rc4.new_ks(secure_key),
 							['nonsecure_pid'] = pid,
 							['has_struct_headers'] = conn['has_struct_headers'],
-							['version'] = conn['version']
+							['prudp_version'] = conn['prudp_version'],
+							['nex_version'] = conn['nex_version']
 						}
 
 						udp_table:add(tonumber(port), Dissector.get("nex"))
@@ -409,7 +462,8 @@ function nex_proto.dissector(buf, pinfo, tree)
 							[PORT_CLIENT] = rc4.new_ks(secure_key),
 							['nonsecure_pid'] = pid,
 							['has_struct_headers'] = conn['has_struct_headers'],
-							['version'] = conn['version']
+							['prudp_version'] = conn['prudp_version'],
+							['nex_version'] = conn['nex_version']
 						}
 					end
 				end
@@ -419,7 +473,7 @@ function nex_proto.dissector(buf, pinfo, tree)
 			if pkt_src == PORT_CLIENT and conn['game'] == nil and conn['nonsecure_pid'] ~= nil then
 				for access_key, game_name in pairs(access_key_table) do
 					if version == 0 then
-						if pkt_signature:raw() == sig_v0(access_key, SECURE_KEYS[conn_id], pkt_seq, f_fragment_v0()()) then
+						if pkt_signature:raw() == sig_v0(access_key, SECURE_KEYS[conn_id], pkt_seq, f_fragment_v0()(), raw_payload) then
 							conn['game'] = game_name
 							break
 						end

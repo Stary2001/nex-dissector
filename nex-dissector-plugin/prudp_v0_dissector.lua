@@ -18,7 +18,7 @@ F.flag_has_size = ProtoField.bool("prudpv0.has_size", "Has size", base.HEX, nil,
 F.flag_multi_ack = ProtoField.bool("prudpv0.multi_ack", "Multi ack", base.HEX, nil, 0x2000)
 
 F.session = ProtoField.uint8("prudpv0.session", "Session", base.HEX)
-F.packet_sig = ProtoField.uint32("prudpv0.packet_sig", "Packet signature", base.HEX)
+F.packet_sig = ProtoField.bytes("prudpv0.packet_sig", "Packet signature")
 F.seq = ProtoField.uint16("prudpv0.seq", "Sequence number", base.HEX)
 
 F.conn_sig = ProtoField.uint32("prudpv0.conn_sig", "Connection signature", base.HEX)
@@ -63,7 +63,7 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 
 	pkt.session = buf(4,1):le_uint()
 	subtree:add(F.session, buf(4,1))
-	subtree:add_le(F.packet_sig, buf(5,4))
+	subtree:add(F.packet_sig, buf(5,4))
 
 	pkt.seq = buf(9,2):le_uint()
 	subtree:add_le(F.seq, buf(9, 2))

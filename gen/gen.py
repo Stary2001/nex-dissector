@@ -33,7 +33,7 @@ class Type:
 		self.name = bad_lua_chars(result[1].strip())
 		if result[2] != None:
 			self.base = delink(result[2])
-			self.fields.append(('Base', self.base, None))
+			self.fields.append(('Base', self.base, None, None))
 		else:
 			self.base = None
 
@@ -50,17 +50,24 @@ struct_funcs = {}
 def reg_struct(struct_name, struct_info):
 	proto_fields.append((struct_name, struct_name, 'bytes', struct_name)) 
 	#types[struct_name] = lambda field_name, arg_name, struct_name=struct_name, struct_info=struct_info: do_struct(field_name, arg_name, struct_name, struct_info)
-	types[struct_name] = lambda field_name, arg_name, struct_name=struct_name: f"off = do_{struct_name}(conn, tree, tvb, off, '{field_name}')"
+	types[struct_name] = lambda field_name, arg_name, struct_name=struct_name: f"off = do_{struct_name}(conn, tree, tvb, off, '{field_name}', '{arg_name}')"
 
 	struct_length = 0
-	func = f"function do_{struct_name}(conn, tree, tvb, off, field_name)\n"
+	func = f"function do_{struct_name}(conn, tree, tvb, off, field_unique_name, field_name)\n"
 
 	func += f"""local {struct_name}_container = tree:add(F.{struct_name}, tvb(off, {struct_length}))
-	{struct_name}_container:set_text("{struct_name}")
+	{struct_name}_container:set_text(field_name .. " ({struct_name}):")
 	"""
 
 	for f in struct_info:
+		# f[2] holds nex version
+		# TODO: please just make this a struct
+		if f[2] != None:
+			func += f"if version_gt_eq(conn['nex_version'], {{{f[2].replace('.',',')}}}) then\n"
 		func += dispatch_type(struct_name + "_" + f[0], f[0], f[1]).replace("tree", f"{struct_name}_container")
+		if f[2] != None:
+			func += "\nend\n"
+			pass
 
 	func += "\nreturn off\nend"
 
@@ -69,10 +76,10 @@ def reg_struct(struct_name, struct_info):
 types = {}
 type_funcs = {}
 def reg_type(type_name, func):
-	type_funcs[type_name] = f"function do_{type_name}(conn, tree, tvb, off, field_name)\n" + func(type_name, type_name) + "\nend"
+	type_funcs[type_name] = f"function do_{type_name}(conn, tree, tvb, off, field_unique_name, field_name)\n" + func(type_name, type_name) + "\nend"
 	def type_thunk(field_name, arg_name, type_name=type_name, func=func, extract=False):
 		func(field_name, arg_name) # TODO: why?????
-		return f"off, {field_name} = do_{type_name}(conn, tree, tvb, off, '{field_name}')"
+		return f"off, {field_name} = do_{type_name}(conn, tree, tvb, off, '{field_name}', '{arg_name}')"
 	types[type_name] = type_thunk
 
 def int_field(l, field_name, arg_name, signed=False):
@@ -81,7 +88,7 @@ def int_field(l, field_name, arg_name, signed=False):
 	else:
 		prefix = "u"
 	proto_fields.append((field_name, arg_name, f"{prefix}int{l}", f"uint{l}"))
-	func = f"tree:add_le(F[field_name], tvb(off,{l//8}))"
+	func = f"tree:add_le(F[field_unique_name], tvb(off,{l//8}))"
 	if l != 64:
 		func += f"return off + {l//8}, tvb(off,{l//8}):le_{prefix}int()"
 	else:
@@ -90,7 +97,7 @@ def int_field(l, field_name, arg_name, signed=False):
 
 def i32(field_name, arg_name):
 	proto_fields.append((field_name, arg_name, 'int32', 'int32'))
-	return f"""tree:add_le(F[field_name], tvb(off,4))
+	return f"""tree:add_le(F[field_unique_name], tvb(off,4))
 
 	return off + 4, tvb(off,4):le_int()"""
 
@@ -115,9 +122,9 @@ def buffer(l, field_name, arg_name):
 	proto_fields.append((field_name+"_data", arg_name + " data", "bytes", "Buffer"))
 
 	return f"""local {field_name}_len = tvb(off,{l//8}):le_uint()
-	tree:add_le(F[field_name.."_len"], tvb(off, {l//8}))
+	tree:add_le(F[field_unique_name.."_len"], tvb(off, {l//8}))
 	if {field_name}_len ~= 0 then
-		tree:add(F[field_name.."_data"], tvb(off+{l//8}, {field_name}_len))
+		tree:add(F[field_unique_name.."_data"], tvb(off+{l//8}, {field_name}_len))
 		return off + {l//8} + {field_name}_len, tvb(off+{l//8}, {field_name}_len)
 	else
 		return off + {l//8}
@@ -132,8 +139,8 @@ def do_string(field_name, arg_name):
 	proto_fields.append((field_name+"_data", arg_name + " data", "string", "String"))
 
 	return f"""local {field_name}_len = tvb(off,2):le_uint()
-	tree:add_le(F[field_name.. "_len"], tvb(off, 2))
-	tree:add(F[field_name.. "_data"], tvb(off+2, {field_name}_len))
+	tree:add_le(F[field_unique_name.. "_len"], tvb(off, 2))
+	tree:add(F[field_unique_name.. "_data"], tvb(off+2, {field_name}_len))
 	return off + 2 + {field_name}_len, tvb(off+2, {field_name}_len-1):string()"""
 
 reg_type('String', do_string)
@@ -141,7 +148,7 @@ reg_type('StationURL', do_string)
 
 def do_bool(field_name, arg_name):
 	proto_fields.append((field_name, arg_name, "bool", "bool"))
-	return f"""tree:add(F[field_name], tvb(off,1))
+	return f"""tree:add(F[field_unique_name], tvb(off,1))
 	return off + 1, (tvb(off,1)~= 0)"""
 reg_type('Bool', do_bool)
 
@@ -151,7 +158,7 @@ def do_float(l, field_name, arg_name):
 	elif l == 8:
 		n = "double"
 	proto_fields.append((field_name, arg_name, n, n))
-	return f"""tree:add_le(F[field_name], tvb(off,{l}))
+	return f"""tree:add_le(F[field_unique_name], tvb(off,{l}))
 	return off + {l}, tvb(off,{l}):le_float()"""
 reg_type('Float', lambda a,b: do_float(4, a, b))
 reg_type('Double', lambda a,b: do_float(8, a, b))
@@ -193,7 +200,7 @@ def do_data(field_name, arg_name, full_type):
 	func += dispatch_type(field_name + "_data_len", arg_name + "_data_len", "Uint32").replace("tree", f"{field_name}_container") + "\n"
 	func += f"""local type_func = 'do_'..{field_name}_type_name
 		if _G[type_func] ~= nil then
-			off = _G[type_func](conn, {field_name}_container, tvb, off, "{field_name}_data")
+			off = _G[type_func](conn, {field_name}_container, tvb, off, "{field_name}_data", "{arg_name}")
 		else
 			{field_name}_container:add(F.{field_name}_data_bytes, tvb(off, {field_name}_len))
 			off = off + {field_name}_data_len
@@ -272,26 +279,26 @@ Data_info = (
 reg_struct('Data', Data_info)
 
 Structure_info = (
-	("Version", "Uint8"),
-	("Length", "Uint32")
+	("Version", "Uint8", None),
+	("Length", "Uint32", None)
 )
 reg_struct('Structure', Structure_info)
 
 DataHeader_info = (
-	("Base", "Structure"),
+	("Base", "Structure", None),
 )
 reg_struct('DataHeader', DataHeader_info)
 
 RVConnectionData_info = (
-	('m_urlRegularProtocols', 'StationURL'),
-	('m_lstSpecialProtocols', 'List<byte>'),
-	('m_urlSpecialProtocols', 'StationURL')
+	('m_urlRegularProtocols', 'StationURL', None),
+	('m_lstSpecialProtocols', 'List<byte>', None),
+	('m_urlSpecialProtocols', 'StationURL', None)
 )
 reg_struct('RVConnectionData', RVConnectionData_info)
 
 ResultRange_info = (
-	('m_uiOffset', 'Uint32'),
-	('m_uiSize', 'Uint32')
+	('m_uiOffset', 'Uint32', None),
+	('m_uiSize', 'Uint32', None)
 )
 reg_struct('ResultRange', ResultRange_info)
 
@@ -386,14 +393,13 @@ def types_pass(f):
 		l = l.strip()
 		if not table and l.startswith('|'):
 			if 'This structure inherits from' in l:
-				print(current_type, should_parse_type)
 				base = delink(re.search("This structure inherits from ([^|]+) \|", l)[1])
 
 				if base == 'Data':
 					base = 'DataHeader'
 
-					current_type.base = base # lol
-					current_type.fields.append(('Base2', base, None))
+				current_type.base = base # lol
+				current_type.fields.insert(0, ('Base2', base, None, None))
 
 				table = True
 				skip_table = True
@@ -403,7 +409,7 @@ def types_pass(f):
 			else:
 				table = True
 				if should_parse_type:
-					fields = list(map(lambda a: a.strip(), filter(None, l.split("|"))))
+					table_header = list(map(lambda a: a.strip(), filter(None, l.split("|"))))
 					allowed_tables = [
 						['Type','Name','Description'],
 						['Type','Description'],
@@ -411,18 +417,18 @@ def types_pass(f):
 						['Type', 'Name', 'Only present on'],
 						
 					]
-					if fields not in allowed_tables:
+					if table_header not in allowed_tables:
 						skip_table = True
 				continue # Skip the table header..
 		if table:
 			if l == '': # End of table
 				if not skip_table and should_parse_type:
 					fixed = []
-					for f_name, t_name, rename_count in current_type.fields:
+					for f_name, t_name, nex_version, rename_count in current_type.fields:
 						if rename_count == None:
-							fixed.append((f_name, t_name))
+							fixed.append((f_name, t_name, nex_version))
 						else:
-							fixed.append((f_name + str(rename_count), t_name))
+							fixed.append((f_name + str(rename_count), t_name, nex_version))
 					struct_infos[current_type.name] = fixed
 				skip_table = sticky_skip_table
 				table = False
@@ -440,6 +446,14 @@ def types_pass(f):
 					field_name_safe = bad_lua_chars(delink(field_name))
 					type_name_safe = fix_html(delink(row[0]))
 
+					nex_version = None
+
+					if 'Only present on' in table_header:
+						loc = table_header.index('Only present on')
+						result = re.match("NEX v(.*) and later", row[loc])
+						if result:
+							nex_version = result[1]
+
 					rename_needed = False
 					max_n = 0
 					for i,f in enumerate(current_type.fields):
@@ -449,14 +463,14 @@ def types_pass(f):
 							if len(f) < 3:
 								max_n = 1
 							else:
-								if f[2] == None:
+								if f[3] == None:
 									max_n = 1
 								else:
-									max_n = f[2]
+									max_n = f[3]
 					if rename_needed:
-						current_type.fields.append((field_name_safe, type_name_safe, max_n + 1))
+						current_type.fields.append((field_name_safe, type_name_safe, nex_version, max_n + 1))
 					else:
-						current_type.fields.append((field_name_safe, type_name_safe, None))
+						current_type.fields.append((field_name_safe, type_name_safe, nex_version, None))
 		else:
 			if l == '# Types':
 				should_parse_type = True
@@ -632,7 +646,7 @@ prereq_types = []
 def pull_prereqs(l):
 	top = []
 	for item in l[:]: # Copy the list!
-		for f_name, f_type in struct_infos[item]:
+		for f_name, f_type, nex_version in struct_infos[item]:
 			if f_type.startswith("List"):
 				f_type = f_type[5:-1]
 			if f_type in l:
@@ -722,7 +736,7 @@ off, RVConnectionData_m_urlRegularProtocols = do_StationURL(conn, RVConnectionDa
 	
 	off, RVConnectionData_m_urlSpecialProtocols = do_StationURL(conn, RVConnectionData_container, tvb, off, 'RVConnectionData_m_urlSpecialProtocols')
 	
-	if conn['version'] == 1 then
+	if conn['prudp_version'] == 1 then
 		off = off + 8 -- skip date
 	end
 
