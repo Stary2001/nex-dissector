@@ -32,11 +32,11 @@ int main(int argc, char **argv)
 	FriendKey key;
 
 	if (R_FAILED(ret = FRD_GetMyFriendKey(&key)))
-		printf("FRD_GetMyFriendKey Failed: %" PRId32 "\n", ret);
+		printf("FRD_GetMyFriendKey failed: %" PRId32 "\n", ret);
 	else printf("PrincipalId: %" PRId32 "\n", key.principalId);
 
 	if (R_FAILED(ret = FRD_GetMyPassword(nexpassword, 20))) 
-		printf("FRD_GetMyPassword Failed: %" PRId32 "\n", ret);
+		printf("FRD_GetMyPassword failed: %" PRId32 "\n", ret);
 	else printf("NEX Password: %s\n", nexpassword);
 
 	frdExit();
