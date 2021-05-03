@@ -55,7 +55,7 @@ function raw_bytes_from_int(i)
 	        ):fromhex()
 end
 
-PORT_SERVER, PORT_CLIENT = 0xa1, 0xaf
+PORT_SERVER, PORT_CLIENT = 0x31, 0x3f
 TYPE_SYN, TYPE_CONNECT, TYPE_DATA, TYPE_DISCONNECT, TYPE_PING = 0, 1, 2, 3, 4
 
 ports = {
