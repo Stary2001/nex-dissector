@@ -1,5 +1,7 @@
 # Installation
 
+[ uhh, requires [luaffi](https://github.com/jmckaskill/luaffi) and zlib. TODO. ]
+
 ## Windows
 
 - Copy the `nex-dissector-plugin` folder to `%appdata%\Wireshark\plugins`.

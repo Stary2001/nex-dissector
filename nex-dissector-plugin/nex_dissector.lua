@@ -5,6 +5,8 @@ local common = require("common")
 require("prudp_v0_dissector_quazal")
 require("prudp_v1_dissector")
 
+local zlib = require("zlib")
+
 local hmac = require("hmac")
 local md5 = require("md5")
 
@@ -120,7 +122,8 @@ protos, nested_protos = dofile(script_path() .. "protos.inc")
 
 F.raw_payload = ProtoField.bytes("nex.rawpayload", "Decrypted PRUDP payload")
 
-F.size = ProtoField.uint32("nex.size", "Big ass size", base.HEX)
+F.compression_ratio = ProtoField.uint32("nex.compression_ratio", "Compression ratio", base.DEC)
+F.size = ProtoField.uint32("nex.size", "Size", base.HEX)
 F.proto = ProtoField.uint8("nex.proto", "Protocol", base.HEX, nil, 0x7f)
 F.call_id = ProtoField.uint32("nex.call_id", "Call ID", base.HEX)
 F.method_id = ProtoField.uint32("nex.method_id", "Method ID", base.HEX, nil, 0x7fff)
@@ -356,7 +359,12 @@ function nex_proto.dissector(buf, pinfo, tree)
 
 			-- I hate this. Please come up with a better method.
 			pkt_id = tostring(pinfo.src) .. "-" .. tostring(pinfo.src_port) .. "-" .. tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port) .."-".. tostring(pkt_seq) .. "-" .. tostring(pkt_session_id)
+
 			if dec_packets[pkt_id] == nil then
+
+				-- wtf?
+				conn[pkt_src] = rc4.new_ks("CD&ML")
+
 				dec_packets[pkt_id] = rc4.crypt(conn[pkt_src], raw_payload:bytes())
 				dec_payload = dec_packets[pkt_id]
 			else
@@ -507,6 +515,18 @@ function nex_proto.dissector(buf, pinfo, tree)
 	local subtreeitem = tree:add(nex_proto, buf)
 	subtreeitem:add(F.raw_payload, payload)
 
+	local compression_ratio = payload(0,1):le_uint()
+	subtreeitem:add_le(F.compression_ratio, payload(0,1))
+
+	if compression_ratio == 0 then
+		payload = payload(1)
+	else
+		decompressed = ByteArray.new(zlib.uncompress(payload(1):bytes():raw(), nil, payload:len() * compression_ratio), true)
+
+		local tvb = decompressed:tvb("Decompressed payload"):range()
+		payload = tvb
+	end
+
 	local pkt_size = payload(0,4):le_uint()
 	subtreeitem:add_le(F.size, payload(0,4))
 
@@ -574,3 +594,6 @@ udp_table = DissectorTable.get("udp.port")
 udp_table:add(60000, nex_proto)
 -- prudpv1
 udp_table:add(59900, nex_proto)
+
+-- ubi
+udp_table:add(23900, nex_proto)
