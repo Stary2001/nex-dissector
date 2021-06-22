@@ -2,13 +2,13 @@
 
 ## Windows
 
-- Copy the `nex-dissector-plugin` folder to `%appdata%\Wireshark\plugins`.
-- Create `%appdata%\Wireshark\nex-keys.txt` and (optionally) add your pid/password.
+- Copy the `nex-dissector-plugin` folder to `%appdata%\Wireshark\plugins` (you may need to create the `plugins` folder). Don't copy it into the `plugins` folder in Program Files!
+- Create `%appdata%\Wireshark\nex-keys.txt` and (optionally) add your PID/password.
 
 ## macOS/Linux
 
 - Copy the `nex-dissector-plugin` folder to `~/.local/lib/wireshark/plugins/` (you may need to create this folder).
-- Create `~/.config/wireshark/nex-keys.txt` and (optionally) add your pid/password.
+- Create `~/.config/wireshark/nex-keys.txt` and (optionally) add your PID/password.
 
 # Getting your NEX PID/password
 
