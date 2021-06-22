@@ -278,6 +278,16 @@ Data_info = (
 )
 reg_struct('Data', Data_info)
 
+Variant_info = (
+	("Sint64", "Sint64", None),
+	("Double", "Double", None),
+	("Bool", "Bool", None),
+	("String", "String", None),
+	("DateTime", "DateTime", None),
+	("Uint64", "Uint64", None)
+)
+reg_struct('Variant', Variant_info)
+
 Structure_info = (
 	("Version", "Uint8", None),
 	("Length", "Uint32", None)
@@ -743,6 +753,52 @@ off, RVConnectionData_m_urlRegularProtocols = do_StationURL(conn, RVConnectionDa
 return off
 end
 """)
+	elif struct_name == "Variant":
+		out_file.write(f""" function do_Variant(conn, tree, tvb, off, field_unique_name, field_name)
+			local variant = tvb(off, 1):le_uint()
+			off = off + 1
+
+			-- TODO implement length properly, maybe harder for String but doable
+			local len = 0
+
+			if variant == 0 then
+				len = 0
+			elseif variant == 1 or variant == 2 or variant == 5 or variant == 6 then
+				len = 8
+			elseif variant == 3 then
+				len = 1
+			elseif variant == 4 then
+				len = tvb(off, 2):le_uint() + 2
+			end
+
+			local Variant_container = tree:add(F.Variant, tvb(off, len))
+
+			if variant == 0 then
+				Variant_container:set_text(field_name .. " (none)")
+			elseif variant == 1 then
+				Variant_container:set_text(field_name .. " (Sint64)")
+				off, value = do_Sint64(conn, Variant_container, tvb, off, "Variant_Sint64", field_name)
+			elseif variant == 2 then
+				Variant_container:set_text(field_name .. " (Double)")
+				off, value = do_Double(conn, Variant_container, tvb, off, "Variant_Double", field_name)	
+			elseif variant == 3 then
+				Variant_container:set_text(field_name .. " (Bool)")
+				off, value = do_Bool(conn, Variant_container, tvb, off, "Variant_Bool", field_name)
+			elseif variant == 4 then
+				Variant_container:set_text(field_name .. " (String)")
+				off, value = do_String(conn, Variant_container, tvb, off, "Variant_String", field_name)
+			elseif variant == 5 then
+				Variant_container:set_text(field_name .. " (DateTime)")
+				off, value = do_DateTime(conn, Variant_container, tvb, off, "Variant_DateTime", field_name)
+			elseif variant == 6 then
+				Variant_container:set_text(field_name .. " (Uint64)")
+				off, value = do_Uint64(conn, Variant_container, tvb, off, "Variant_Uint64", field_name)
+			end
+
+			return off, value
+		end
+	""")
+
 	else:
 		out_file.write(struct_funcs[struct_name] + "\n")
 

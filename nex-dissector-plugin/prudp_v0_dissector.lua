@@ -26,7 +26,13 @@ F.fragment = ProtoField.uint8("prudpv0.fragment", "Fragment", base.HEX)
 F.size = ProtoField.uint16("prudpv0.size", "Packet size", base.HEX)
 
 F.payload = ProtoField.bytes("prudpv0.payload", "Payload")
+F.defragmented_payload = ProtoField.bytes("prudpv0.defragmented_payload", "Defragmented payload")
 F.checksum = ProtoField.uint8("prudpv0.checksum", "Checksum", base.HEX)
+
+local fragments_v0 = {}
+local sequence_stream = {}
+local first_sequence = {}
+local deferred_fragments = {}
 
 function prudp_v0_proto.dissector(buf,pinfo,tree)
 	pinfo.cols.protocol = "PRUDP v0"
@@ -92,8 +98,140 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 	end
 
 	if payload_size and payload_size ~= 0 then
-		subtree:add(F.payload, buf:range(off, payload_size))
-		off = off + payload_size
+		local payload_range = buf:range(off, payload_size)
+		subtree:add(F.payload, payload_range)
+
+		if pkt.type == TYPE_DATA then
+			local base_id = tostring(pinfo.src) .. "-" .. tostring(pinfo.src_port) .. "-" .. tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port)
+			if first_sequence[base_id] == nil then
+				first_sequence[base_id] = pkt.seq
+			end
+			local function make_sequence_id(seq)
+				return base_id .. "+" .. tostring(pkt.src) .. "-" .. tostring(pkt.dst) .. "-" .. tostring(pkt.session) .. "-" .. tostring(seq)
+			end
+			local payload = payload_range:bytes()
+			local sequence_id = make_sequence_id(pkt.seq)
+			sequence_stream[sequence_id] = {
+				['payload'] = payload
+			}
+			if pkt.fragment ~= nil then
+				if fragments_v0[sequence_id] == nil then
+					fragments_v0[sequence_id] = {
+						['fragment'] = pkt.fragment,
+						['payload'] = payload
+					}
+				end
+
+				local defragmented = fragments_v0[sequence_id]['defragmented']
+
+				if defragmented == nil then
+					defragmented = {}
+					if pkt.fragment == 0 then
+						-- look back in the sequence stream for which packets we are missing (max 50)
+						-- TODO: try to do some heuristic here, to see if we likely have to restore or not
+						-- this can be based on if a higher fragment id was seen in the past for this stream
+						missing = {}
+						for i = pkt.seq - 1, math.max(pkt.seq - 50, first_sequence[base_id]), -1 do
+							local id = make_sequence_id(i)
+							if sequence_stream[id] == nil then
+								missing[id] = i
+								print("While reassembling", base_id)
+								print("Missing packet " .. id .. " in stream, deferrring fragment restoration")
+							end
+						end
+
+						for id, _ in pairs(missing) do
+							deferred_fragments[id] = {
+								['missing'] = missing,
+								['sequence_id'] = pkt.seq
+							}
+						end
+
+						if next(missing) == nil then -- nothing missing, restore the fragments
+							local defragmented_payload = nil
+							local prev_fragment = fragments_v0[make_sequence_id(pkt.seq - 1)]
+							if prev_fragment ~= nil and prev_fragment['fragment'] > pkt.fragment then
+								print("Restoring " .. prev_fragment['fragment'] .. " fragments")
+								for i = pkt.seq, first_sequence[base_id] - 1, -1 do
+									local fragment = fragments_v0[make_sequence_id(i)]
+									if fragment == nil then
+										error("Cannot find fragment " .. i .. " in the past for packet " .. sequence_id)
+										break
+									end
+									local fragment_payload = fragment['payload']
+									if defragmented_payload == nil then
+										defragmented_payload = fragment_payload
+									else
+										defragmented_payload = fragment_payload .. defragmented_payload
+									end
+
+									if fragment['fragment'] == 1 then
+										break
+									end
+								end
+								defragmented['payload'] = defragmented_payload
+								defragmented['size'] = defragmented_payload:len()
+								defragmented['fragment'] = pkt.fragment
+							else
+								-- no additional fragments detected
+								defragmented['payload'] = payload
+								defragmented['size'] = nil
+								-- no need to highlight the packet as fragmented
+								defragmented['fragment'] = nil
+							end
+						end
+					else -- missing fragments, attempt to defer defragmentation until a later stage
+						local deferred = deferred_fragments[sequence_id]
+						if deferred ~= nil then
+							print("Found missing packet " .. sequence_id .. " (fragment: " .. pkt.fragment .. ")")
+							local missing = deferred['missing']
+							for id, _ in pairs(missing) do
+								if id == sequence_id then
+									missing[id] = nil
+								end
+							end
+							if next(missing) == nil then
+								local deferred_sequence_id = deferred['sequence_id']
+								print("Found all missing packets, defragmenting from " .. make_sequence_id(deferred_sequence_id))
+
+								local defragmented_payload = nil
+								for i = deferred_sequence_id, first_sequence[base_id] - 1, -1 do
+									local fragment = fragments_v0[make_sequence_id(i)]
+									if fragment == nil then
+										error("Cannot find fragment " .. i .. " in the past for packet " .. deferred_sequence_id)
+										break
+									end
+									local fragment_payload = fragment['payload']
+									if defragmented_payload == nil then
+										defragmented_payload = fragment_payload
+									else
+										defragmented_payload = fragment_payload .. defragmented_payload
+									end
+
+									if fragment['fragment'] == 1 then
+										break
+									end
+								end
+
+								defragmented['payload'] = defragmented_payload
+								defragmented['size'] = defragmented_payload:len()
+								defragmented['fragment'] = pkt.fragment
+							end
+						end
+					end
+					-- save the result of defragmentation (whether successful or not) to the global state in case packets are dissected multiple times (in the GUI)
+					fragments_v0[sequence_id]['defragmented'] = defragmented
+				end
+
+				-- dump defragmentation results
+				if defragmented['payload'] ~= nil then
+					subtree:add(F.defragmented_payload, defragmented['payload']:tvb("Defragmented payload"):range())
+				end
+				pkt.defragmented_size = defragmented['size']
+				pkt.fragment = defragmented['fragment']
+
+			end
+		end
 	end
 
 	local info = pkt_types[pkt.type]

@@ -25,6 +25,14 @@ F.Bool = ProtoField.bool("Bool", "Bool (bool)")
 F.Float = ProtoField.float("Float", "Float (float)")
 F.Double = ProtoField.double("Double", "Double (double)")
 F.Data = ProtoField.bytes("Data", "Data (Data)")
+F.Variant = ProtoField.bytes("Variant", "Variant (Variant)")
+F.Variant_Sint64 = ProtoField.int64("Variant_Sint64", "Sint64 (uint64)")
+F.Variant_Double = ProtoField.double("Variant_Double", "Double (double)")
+F.Variant_Bool = ProtoField.bool("Variant_Bool", "Bool (bool)")
+F.Variant_String_len = ProtoField.uint16("Variant_String_len", "String length (String)")
+F.Variant_String_data = ProtoField.string("Variant_String_data", "String data (String)")
+F.Variant_DateTime = ProtoField.uint64("Variant_DateTime", "DateTime (uint64)")
+F.Variant_Uint64 = ProtoField.uint64("Variant_Uint64", "Uint64 (uint64)")
 F.Structure = ProtoField.bytes("Structure", "Structure (Structure)")
 F.Structure_Version = ProtoField.uint8("Structure_Version", "Version (uint8)")
 F.Structure_Length = ProtoField.uint32("Structure_Length", "Length (uint32)")
@@ -145,6 +153,9 @@ F.Gathering_m_uiState = ProtoField.uint32("Gathering_m_uiState", "m_uiState (uin
 F.Gathering_m_strDescription_len = ProtoField.uint16("Gathering_m_strDescription_len", "m_strDescription length (String)")
 F.Gathering_m_strDescription_data = ProtoField.string("Gathering_m_strDescription_data", "m_strDescription data (String)")
 F.MatchmakeParam = ProtoField.bytes("MatchmakeParam", "MatchmakeParam (MatchmakeParam)")
+F.MatchmakeParam_m_Params_len = ProtoField.uint32("MatchmakeParam_m_Params_len", "m_Params length (uint32)")
+F.MatchmakeParam_m_Params_key_len = ProtoField.uint16("MatchmakeParam_m_Params_key_len", "m_Params length (String)")
+F.MatchmakeParam_m_Params_key_data = ProtoField.string("MatchmakeParam_m_Params_key_data", "m_Params data (String)")
 F.PlayerStatSet = ProtoField.bytes("PlayerStatSet", "PlayerStatSet (PlayerStatSet)")
 F.PlayerStatSet_m_playerPID = ProtoField.uint32("PlayerStatSet_m_playerPID", "m_playerPID (uint32)")
 F.PlayerStatSet_m_playerName_len = ProtoField.uint16("PlayerStatSet_m_playerName_len", "m_playerName length (String)")
@@ -285,6 +296,9 @@ F.PlayLogEntry_User_id = ProtoField.uint32("PlayLogEntry_User_id", "User_id (uin
 F.PlayLogEntry_Player_name_len = ProtoField.uint16("PlayLogEntry_Player_name_len", "Player_name length (String)")
 F.PlayLogEntry_Player_name_data = ProtoField.string("PlayLogEntry_Player_name_data", "Player_name data (String)")
 F.PlayLogEntry_Unknown = ProtoField.uint64("PlayLogEntry_Unknown", "Unknown (uint64)")
+F.PlayLogEntry_Properties_len = ProtoField.uint32("PlayLogEntry_Properties_len", "Properties length (uint32)")
+F.PlayLogEntry_Properties_key_len = ProtoField.uint16("PlayLogEntry_Properties_key_len", "Properties length (String)")
+F.PlayLogEntry_Properties_key_data = ProtoField.string("PlayLogEntry_Properties_key_data", "Properties data (String)")
 F.StageTimeAttackInfo = ProtoField.bytes("StageTimeAttackInfo", "StageTimeAttackInfo (StageTimeAttackInfo)")
 F.StageTimeAttackInfo_clearWeapons_len = ProtoField.uint32("StageTimeAttackInfo_clearWeapons_len", "clearWeapons length (uint32)")
 F.StageTimeAttackInfo_clearWeapons_key = ProtoField.int32("StageTimeAttackInfo_clearWeapons_key", "clearWeapons (uint32)")
@@ -406,6 +420,9 @@ F.NotificationEvent_m_uiParam22 = ProtoField.uint64("NotificationEvent_m_uiParam
 F.NotificationEvent_m_strParam2_len = ProtoField.uint16("NotificationEvent_m_strParam2_len", "m_strParam2 length (String)")
 F.NotificationEvent_m_strParam2_data = ProtoField.string("NotificationEvent_m_strParam2_data", "m_strParam2 data (String)")
 F.NotificationEvent_m_uiParam3 = ProtoField.uint64("NotificationEvent_m_uiParam3", "m_uiParam3 (uint64)")
+F.NotificationEvent_m_mapParam_len = ProtoField.uint32("NotificationEvent_m_mapParam_len", "m_mapParam length (uint32)")
+F.NotificationEvent_m_mapParam_key_len = ProtoField.uint16("NotificationEvent_m_mapParam_key_len", "m_mapParam length (String)")
+F.NotificationEvent_m_mapParam_key_data = ProtoField.string("NotificationEvent_m_mapParam_key_data", "m_mapParam data (String)")
 F.LeaguePointInfo = ProtoField.bytes("LeaguePointInfo", "LeaguePointInfo (LeaguePointInfo)")
 F.LeaguePointInfo_tagId = ProtoField.uint64("LeaguePointInfo_tagId", "tagId (uint64)")
 F.LeaguePointInfo_regionFlag = ProtoField.uint8("LeaguePointInfo_regionFlag", "regionFlag (uint8)")
@@ -792,6 +809,9 @@ F.PlayLogPreparePostParam_Entries_len = ProtoField.uint32("PlayLogPreparePostPar
 F.PlayLogPreparePostParam_Play_time = ProtoField.uint64("PlayLogPreparePostParam_Play_time", "Play_time (uint64)")
 F.PlayLogPreparePostParam_Stage_id = ProtoField.uint32("PlayLogPreparePostParam_Stage_id", "Stage_id (uint32)")
 F.PlayLogPreparePostParam_Unknown = ProtoField.uint32("PlayLogPreparePostParam_Unknown", "Unknown (uint32)")
+F.PlayLogPreparePostParam_Properties_len = ProtoField.uint32("PlayLogPreparePostParam_Properties_len", "Properties length (uint32)")
+F.PlayLogPreparePostParam_Properties_key_len = ProtoField.uint16("PlayLogPreparePostParam_Properties_key_len", "Properties length (String)")
+F.PlayLogPreparePostParam_Properties_key_data = ProtoField.string("PlayLogPreparePostParam_Properties_key_data", "Properties data (String)")
 F.TimeAttackInfo = ProtoField.bytes("TimeAttackInfo", "TimeAttackInfo (TimeAttackInfo)")
 F.TimeAttackInfo_stageInfos_len = ProtoField.uint32("TimeAttackInfo_stageInfos_len", "stageInfos length (uint32)")
 F.TimeAttackInfo_stageInfos_key = ProtoField.int32("TimeAttackInfo_stageInfos_key", "stageInfos (uint32)")
@@ -3868,7 +3888,50 @@ local Data_container = tree:add(F.Data, tvb(off, 0))
 	
 return off
 end
+ function do_Variant(conn, tree, tvb, off, field_unique_name, field_name)
+			local variant = tvb(off, 1):le_uint()
+			off = off + 1
 
+			-- TODO implement length properly, maybe harder for String but doable
+			local len = 0
+
+			if variant == 0 then
+				len = 0
+			elseif variant == 1 or variant == 2 or variant == 5 or variant == 6 then
+				len = 8
+			elseif variant == 3 then
+				len = 1
+			elseif variant == 4 then
+				len = tvb(off, 2):le_uint() + 2
+			end
+
+			local Variant_container = tree:add(F.Variant, tvb(off, len))
+
+			if variant == 0 then
+				Variant_container:set_text(field_name .. " (none)")
+			elseif variant == 1 then
+				Variant_container:set_text(field_name .. " (Sint64)")
+				off, value = do_Sint64(conn, Variant_container, tvb, off, "Variant_Sint64", field_name)
+			elseif variant == 2 then
+				Variant_container:set_text(field_name .. " (Double)")
+				off, value = do_Double(conn, Variant_container, tvb, off, "Variant_Double", field_name)	
+			elseif variant == 3 then
+				Variant_container:set_text(field_name .. " (Bool)")
+				off, value = do_Bool(conn, Variant_container, tvb, off, "Variant_Bool", field_name)
+			elseif variant == 4 then
+				Variant_container:set_text(field_name .. " (String)")
+				off, value = do_String(conn, Variant_container, tvb, off, "Variant_String", field_name)
+			elseif variant == 5 then
+				Variant_container:set_text(field_name .. " (DateTime)")
+				off, value = do_DateTime(conn, Variant_container, tvb, off, "Variant_DateTime", field_name)
+			elseif variant == 6 then
+				Variant_container:set_text(field_name .. " (Uint64)")
+				off, value = do_Uint64(conn, Variant_container, tvb, off, "Variant_Uint64", field_name)
+			end
+
+			return off, value
+		end
+	
 			function do_Structure(conn, tree, tvb, off, field_name)
 				local Structure_container = tree:add(F.Structure, tvb(off, 0))
 				Structure_container:set_text("Structure")
@@ -4044,7 +4107,7 @@ local PropertyVariant_container = tree:add(F.PropertyVariant, tvb(off, 0))
 	PropertyVariant_container:set_text(field_name .. " (PropertyVariant):")
 	off = do_Structure(conn, PropertyVariant_container, tvb, off, 'PropertyVariant_Base', 'Base')
 off, PropertyVariant_ID = do_Uint32(conn, PropertyVariant_container, tvb, off, 'PropertyVariant_ID', 'ID')
---[[ Stubbed! Missing type Variant]]
+off = do_Variant(conn, PropertyVariant_container, tvb, off, 'PropertyVariant_Value', 'Value')
 
 return off
 end
@@ -4161,7 +4224,16 @@ function do_MatchmakeParam(conn, tree, tvb, off, field_unique_name, field_name)
 local MatchmakeParam_container = tree:add(F.MatchmakeParam, tvb(off, 0))
 	MatchmakeParam_container:set_text(field_name .. " (MatchmakeParam):")
 	off = do_Structure(conn, MatchmakeParam_container, tvb, off, 'MatchmakeParam_Base', 'Base')
---[[ Stubbed! Missing type (in map) Variant]]
+local MatchmakeParam_m_Params_len = tvb(off, 4):le_uint()
+	subMatchmakeParam_container = MatchmakeParam_container:add_le(F.MatchmakeParam_m_Params_len, tvb(off,4))
+	off = off + 4
+	for i=1,MatchmakeParam_m_Params_len do
+	off, MatchmakeParam_m_Params_key = do_String(conn, subMatchmakeParam_container, tvb, off, 'MatchmakeParam_m_Params_key', 'm_Params')
+
+off = do_Variant(conn, subMatchmakeParam_container, tvb, off, 'MatchmakeParam_m_Params_value', 'm_Params')
+
+	end
+	
 
 return off
 end
@@ -4424,7 +4496,16 @@ local PlayLogEntry_container = tree:add(F.PlayLogEntry, tvb(off, 0))
 off, PlayLogEntry_User_id = do_PID(conn, PlayLogEntry_container, tvb, off, 'PlayLogEntry_User_id', 'User_id')
 off, PlayLogEntry_Player_name = do_String(conn, PlayLogEntry_container, tvb, off, 'PlayLogEntry_Player_name', 'Player_name')
 off, PlayLogEntry_Unknown = do_Uint64(conn, PlayLogEntry_container, tvb, off, 'PlayLogEntry_Unknown', 'Unknown')
---[[ Stubbed! Missing type (in map) Variant]]
+local PlayLogEntry_Properties_len = tvb(off, 4):le_uint()
+	subPlayLogEntry_container = PlayLogEntry_container:add_le(F.PlayLogEntry_Properties_len, tvb(off,4))
+	off = off + 4
+	for i=1,PlayLogEntry_Properties_len do
+	off, PlayLogEntry_Properties_key = do_String(conn, subPlayLogEntry_container, tvb, off, 'PlayLogEntry_Properties_key', 'Properties')
+
+off = do_Variant(conn, subPlayLogEntry_container, tvb, off, 'PlayLogEntry_Properties_value', 'Properties')
+
+	end
+	
 
 return off
 end
@@ -4581,7 +4662,7 @@ local PlayerRank_container = tree:add(F.PlayerRank, tvb(off, 0))
 off = do_PlayerStatSet(conn, PlayerRank_container, tvb, off, 'PlayerRank_m_playerStatSet', 'm_playerStatSet')
 off, PlayerRank_m_rankStatus = do_Uint32(conn, PlayerRank_container, tvb, off, 'PlayerRank_m_rankStatus', 'm_rankStatus')
 off, PlayerRank_m_rank = do_Uint32(conn, PlayerRank_container, tvb, off, 'PlayerRank_m_rank', 'm_rank')
---[[ Stubbed! Missing type Variant]]
+off = do_Variant(conn, PlayerRank_container, tvb, off, 'PlayerRank_m_score', 'm_score')
 
 return off
 end
@@ -4672,7 +4753,7 @@ local ContentProperty_container = tree:add(F.ContentProperty, tvb(off, 0))
 	ContentProperty_container:set_text(field_name .. " (ContentProperty):")
 	off = do_Structure(conn, ContentProperty_container, tvb, off, 'ContentProperty_Base', 'Base')
 off, ContentProperty_m_ID = do_Uint32(conn, ContentProperty_container, tvb, off, 'ContentProperty_m_ID', 'm_ID')
---[[ Stubbed! Missing type Variant]]
+off = do_Variant(conn, ContentProperty_container, tvb, off, 'ContentProperty_m_value', 'm_value')
 
 return off
 end
@@ -4713,7 +4794,16 @@ off, NotificationEvent_m_uiParam12 = do_Uint64(conn, NotificationEvent_container
 off, NotificationEvent_m_uiParam22 = do_Uint64(conn, NotificationEvent_container, tvb, off, 'NotificationEvent_m_uiParam22', 'm_uiParam22')
 off, NotificationEvent_m_strParam2 = do_String(conn, NotificationEvent_container, tvb, off, 'NotificationEvent_m_strParam2', 'm_strParam2')
 off, NotificationEvent_m_uiParam3 = do_Uint64(conn, NotificationEvent_container, tvb, off, 'NotificationEvent_m_uiParam3', 'm_uiParam3')
---[[ Stubbed! Missing type (in map) Variant]]
+local NotificationEvent_m_mapParam_len = tvb(off, 4):le_uint()
+	subNotificationEvent_container = NotificationEvent_container:add_le(F.NotificationEvent_m_mapParam_len, tvb(off,4))
+	off = off + 4
+	for i=1,NotificationEvent_m_mapParam_len do
+	off, NotificationEvent_m_mapParam_key = do_String(conn, subNotificationEvent_container, tvb, off, 'NotificationEvent_m_mapParam_key', 'm_mapParam')
+
+off = do_Variant(conn, subNotificationEvent_container, tvb, off, 'NotificationEvent_m_mapParam_value', 'm_mapParam')
+
+	end
+	
 
 return off
 end
@@ -5518,7 +5608,16 @@ local PlayLogPreparePostParam_Entries_len = tvb(off, 4):le_uint()
 off, PlayLogPreparePostParam_Play_time = do_DateTime(conn, PlayLogPreparePostParam_container, tvb, off, 'PlayLogPreparePostParam_Play_time', 'Play_time')
 off, PlayLogPreparePostParam_Stage_id = do_Uint32(conn, PlayLogPreparePostParam_container, tvb, off, 'PlayLogPreparePostParam_Stage_id', 'Stage_id')
 off, PlayLogPreparePostParam_Unknown = do_Uint32(conn, PlayLogPreparePostParam_container, tvb, off, 'PlayLogPreparePostParam_Unknown', 'Unknown')
---[[ Stubbed! Missing type (in map) Variant]]
+local PlayLogPreparePostParam_Properties_len = tvb(off, 4):le_uint()
+	subPlayLogPreparePostParam_container = PlayLogPreparePostParam_container:add_le(F.PlayLogPreparePostParam_Properties_len, tvb(off,4))
+	off = off + 4
+	for i=1,PlayLogPreparePostParam_Properties_len do
+	off, PlayLogPreparePostParam_Properties_key = do_String(conn, subPlayLogPreparePostParam_container, tvb, off, 'PlayLogPreparePostParam_Properties_key', 'Properties')
+
+off = do_Variant(conn, subPlayLogPreparePostParam_container, tvb, off, 'PlayLogPreparePostParam_Properties_value', 'Properties')
+
+	end
+	
 
 return off
 end
