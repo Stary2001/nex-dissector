@@ -82,7 +82,7 @@ end
 
 local KERB_KEYS = {}
 
-local basedir = ( USER_DIR or persconffile_path() ) .. "/"
+local basedir = ( USER_DIR or persconffile_path() )
 local update_keyfile = false
 
 for line in io.lines(basedir .. "nex-keys.txt") do
@@ -108,7 +108,7 @@ end
 
 function script_path()
    local str = debug.getinfo(2, "S").source:sub(2)
-   return str:match("(.*/)")
+   return str:match("(.*[/\\])")
 end
 
 F = nex_proto.fields
