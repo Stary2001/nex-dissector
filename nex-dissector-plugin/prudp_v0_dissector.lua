@@ -26,6 +26,7 @@ F.fragment = ProtoField.uint8("prudpv0.fragment", "Fragment", base.HEX)
 F.size = ProtoField.uint16("prudpv0.size", "Packet size", base.HEX)
 
 F.payload = ProtoField.bytes("prudpv0.payload", "Payload")
+F.defragmented_payload = ProtoField.bytes("prudpv0.defragmented_payload", "Defragmented payload")
 F.checksum = ProtoField.uint8("prudpv0.checksum", "Checksum", base.HEX)
 
 function prudp_v0_proto.dissector(buf,pinfo,tree)
@@ -92,8 +93,9 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 	end
 
 	if payload_size and payload_size ~= 0 then
-		subtree:add(F.payload, buf:range(off, payload_size))
-		off = off + payload_size
+		local payload_range = buf:range(off, payload_size)
+		subtree:add(F.payload, payload_range)
+		defragment(0, subtree, pkt, pinfo, payload_range, F.defragmented_payload)
 	end
 
 	local info = pkt_types[pkt.type]
@@ -123,6 +125,9 @@ function prudp_v0_proto.dissector(buf,pinfo,tree)
 
 	if payload_size ~= nil and payload_size ~= 0 then
 		info = info .. " " .. tostring(payload_size) .. " bytes data"
+		if pkt.defragmented_size ~= nil then
+			info = info .. " DEFRAGMENTED_SIZE " .. tostring(pkt.defragmented_size)
+		end
 	end
 
 	pinfo.cols.info = info

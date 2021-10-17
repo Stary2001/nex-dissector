@@ -3,6 +3,8 @@ local common = require("common")
 
 require("prudp_v0_dissector")
 require("prudp_v1_dissector")
+require("fragmentation")
+
 local hmac = require("hmac")
 local md5 = require("md5")
 
@@ -130,6 +132,7 @@ local f_ack_v0 = Field.new("prudpv0.ack")
 local f_multi_ack_v0 = Field.new("prudpv0.multi_ack")
 local f_seq_v0 = Field.new("prudpv0.seq")
 local f_payload_v0 = Field.new("prudpv0.payload")
+local f_defragmented_payload_v0 = Field.new("prudpv0.defragmented_payload")
 local f_session_id_v0 = Field.new("prudpv0.session")
 local f_packet_sig_v0 = Field.new("prudpv0.packet_sig")
 local f_fragment_v0 = Field.new("prudpv0.fragment")
@@ -255,7 +258,11 @@ function nex_proto.dissector(buf, pinfo, tree)
 		pkt_seq = f_seq_v0()()
 		pkt_session_id = f_session_id_v0()()
 		pkt_signature = f_packet_sig_v0()()
-		payload_field_info = f_payload_v0()
+		if pkt_type == TYPE_DATA then
+			payload_field_info = f_defragmented_payload_v0()
+		else
+			payload_field_info = f_payload_v0()
+		end
 
 		if f_conn_sig_v0() then
 			pkt_conn_sig = f_conn_sig_v0()()
@@ -433,10 +440,8 @@ function nex_proto.dissector(buf, pinfo, tree)
 
 						return_msg_len = nex_data(return_msg_len_off, 2):le_uint()
 						return_msg = nex_data(return_msg_len_off + 2, return_msg_len):string()
-						print("aaaaaaaaaaa got return msg", return_msg)
 
 						major, minor, patch = return_msg:match("build:(%d+)_(%d+)_(%d+)")
-						print(got, major, minor, patch)
 						if major ~= nil then
 							conn['nex_version'] = {tonumber(major), tonumber(minor), tonumber(patch)}
 						end
