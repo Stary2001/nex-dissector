@@ -4,9 +4,6 @@ local sequence_stream = {}
 local first_sequence = {}
 local deferred_fragments = {}
 
-local f_defragmented_payload_v0 = Field.new("prudpv0.defragmented_payload")
-local f_defragmented_payload_v1 = Field.new("prudpv1.defragmented_payload")
-
 function defragment(version, subtree, pkt, pinfo, payload_range, defragmented_payload_field)
 	local fragments
 	if version == 0 then
