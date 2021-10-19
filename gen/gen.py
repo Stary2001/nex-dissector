@@ -574,6 +574,9 @@ def methods_pass(f):
 							found = True
 					if not found:
 						continue
+
+					if meth.name == "ProcessNintendoNotificationEvent":
+						meth.id = 1
 					current_method = meth
 					state = MethodRequest
 				elif state == MethodResponse:
@@ -589,9 +592,13 @@ def methods_pass(f):
 					skip_table = False
 			elif l.startswith('This method does not take any request data') or l.startswith('This method does not take any parameters'):
 				state = MethodResponse
-			elif l.startswith('This method does not return anything') or l.startswith("This method doesn't return anything"):
+			elif l.startswith('This method does not return anything') or l.startswith("This method doesn't return anything") or l.startswith("No RMC response is sent."):
 				state = SearchingForMethod
-				method_infos[current_method.id] = current_method
+				if current_method.name == "ProcessNintendoNotificationEvent":
+					method_infos[1] = current_method
+					method_infos[2] = current_method
+				else:
+					method_infos[current_method.id] = current_method
 			elif l.startswith("This method takes no parameters and doesn't return anything."):
 				state = SearchingForMethod
 				method_infos[current_method.id] = current_method
@@ -708,7 +715,7 @@ for type_name in type_funcs:
 	out_file.write(type_funcs[type_name] + "\n")
 
 for struct_name in struct_funcs:
-	if struct_name == 'Structure': # WEW
+	if struct_name == 'Structure':
 		out_file.write("""
 			function do_Structure(conn, tree, tvb, off, field_name)
 				local Structure_container = tree:add(F.Structure, tvb(off, 0))
