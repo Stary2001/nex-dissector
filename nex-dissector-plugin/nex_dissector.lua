@@ -738,10 +738,6 @@ function nexraw_proto.dissector(buf, pinfo, tree)
 		end
 	end
 
-	if pkt_type ~= TYPE_DATA or pkt_flag_ack or pkt_flag_multi_ack then
-		return
-	end
-
 	if payload == nil then
 		return
 	end
