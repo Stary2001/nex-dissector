@@ -595,7 +595,6 @@ Fraw.payload = ProtoField.bytes("nex.payload", "Payload")
 
 function nexraw_proto.dissector(buf, pinfo, tree)
 	raw_payload = buf
-	pkt_type = TYPE_DATA
 	local conn
 	local conn_id
 
