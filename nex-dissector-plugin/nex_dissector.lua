@@ -225,6 +225,8 @@ function dissect_resp(conn, tree, tvb, proto_id, method_id)
 end
 
 function nex_proto.dissector(buf, pinfo, tree)
+	print("test")
+	
 	local pkt_src
 	local pkt_type
 	local pkt_flag_ack
@@ -593,229 +595,147 @@ Fraw.payload = ProtoField.bytes("nex.payload", "Payload")
 
 function nexraw_proto.dissector(buf, pinfo, tree)
 	raw_payload = buf
-	if pkt_type == TYPE_SYN and pkt_flag_ack then
-		local partial_conn_id = tostring(pinfo.src) .. "-" .. tostring(pinfo.src_port) .. "-" .. tostring(pinfo.dst)
-		if CONNECTIONS[partial_conn_id] then
-			CONNECTIONS[partial_conn_id]['server_conn_sig'] = pkt_conn_sig
+	pkt_type = TYPE_DATA
+	local conn
+	local conn_id
+
+	conn, conn_id = find_connection(pinfo)
+
+	-- I hate this. Please come up with a better method.
+	pkt_id = pinfo.number
+	if dec_packets[pkt_id] == nil then
+		dec_packets[pkt_id] = raw_payload:bytes()
+		dec_payload = dec_packets[pkt_id]
+	else
+		dec_payload = dec_packets[pkt_id]
 		end
-	end
-	
-	if pkt_type == TYPE_CONNECT and not pkt_flag_ack then
-		-- This should be client->server. We knew the servers's IP and port, as well as the client's IP.
-		local partial_conn_id = tostring(pinfo.dst) .. "-" .. tostring(pinfo.dst_port) .. "-" .. tostring(pinfo.src)
-		local partial_conn = CONNECTIONS[partial_conn_id]
-		local conn, conn_id = find_connection(pinfo)
 
-		if SECURE_KEYS[partial_conn_id] ~= nil then
-			if raw_payload then
-				local first_buff_size = raw_payload(0, 4):le_uint() + 4
-				local check_buffer_size = raw_payload(first_buff_size, 4):le_uint()
-				local check_buffer = raw_payload(first_buff_size + 4, check_buffer_size)
+	local tvb = dec_payload:tvb("Decrypted payload"):range()
+	payload = tvb
 
-				local check_contents = check_buffer(0, check_buffer:len() - 16)
-				local check_hmac = check_buffer(check_buffer:len() - 16, 16)
-				local secure_key = SECURE_KEYS[partial_conn_id]
-				local check_decrypted = rc4.crypt(rc4.new_ks(secure_key), check_contents:bytes())
-				local pid = int_from_bytes(check_decrypted(0,4))
-				if pid ~= partial_conn['nonsecure_pid'] then
-					secure_key = secure_key:sub(1,16)
-					local check_decrypted = rc4.crypt(rc4.new_ks(secure_key), check_contents:bytes())
-					local pid = int_from_bytes(check_decrypted(0,4))
+	local proto_pkt_type = tvb(4,1):le_uint()
+	if bit.band(proto_pkt_type, 0x80) == 0 and tvb:len() > 14 then -- response, AND there must be something to dissect here..
+		local pkt_proto = bit.band(proto_pkt_type, bit.bnot(0x80))
+		local pkt_method_id = bit.band(tvb(0xa, 4):le_uint(), bit.bnot(0x8000))
+		local nex_data = tvb(14)
+		local ticket_buff
+		local buffer_len
 
-					if pid ~= partial_conn['nonsecure_pid'] then
-						print("Secure key is fucked!")
+		if proto_pkt_type == 10 then
+			if pkt_method_id == 1 or pkt_method_id == 2 then -- 1: Login, 2: LoginEx
+				buffer_len = nex_data(8, 4):le_uint()
+				ticket_buff = nex_data(12, buffer_len)
+
+				pid = nex_data(4, 4):le_uint()
+				conn['pid'] = pid
+				info = tostring(conn['pid'])
+			elseif pkt_method_id == 3 then -- 3: RequestTicket
+				buffer_len = nex_data(4, 4):le_uint()
+				ticket_buff = nex_data(8, buffer_len)
+				if conn['pid'] ~= nil then
+					pid = conn['pid']
+					info = tostring(conn['pid'])
+				end
 					end
+
+			local ticket = ticket_buff(0, buffer_len-16)
+			local hmac = ticket_buff(buffer_len-16, 16)
+
+			local kerb_key = KERB_KEYS[pid]
+
+			if kerb_key == nil then
+				error("Kerberos key for PID " .. tostring(pid) .. " not found! Please add it (or the NEX password) to the config file.")
+			end
+
+			ticket = rc4.crypt(rc4.new_ks(kerb_key), ticket:bytes())
+			secure_key = string.fromhex(tostring(ticket(0, 32)))
+
+			if pkt_method_id == 1 or pkt_method_id == 2 then -- 1: Login, 2: LoginEx
+				struct_header_len = 0
+				has_struct_headers = false
+
+				secure_url_len_off = 12 + struct_header_len + buffer_len
+				secure_url_len = nex_data(secure_url_len_off, 2):le_uint()
+
+				-- Time for a shitty heuristic!
+				if 14 + secure_url_len > nex_data:len() then
+					struct_header_len = 5
+					has_struct_headers = true
+
+					secure_url_len_off = 12 + struct_header_len + buffer_len
+
+					secure_url_len = nex_data(secure_url_len_off, 2):le_uint()
+				end
+				conn['has_struct_headers'] = has_struct_headers
+				conn['prudp_version'] = version
+
+				secure_url_off = secure_url_len_off + 2
+				secure_url = nex_data(secure_url_off, secure_url_len):string()
+
+				addr = string.match(secure_url, "address=([^;]+)")
+				port = string.match(secure_url, "port=([^;]+)")
+				conn['secure_id'] = addr .. "-" .. port
+
+				return_msg_len_off = secure_url_off + secure_url_len + 4 + 2 + 1
+				if version == 1 then
+					return_msg_len_off = return_msg_len_off + 8 -- skip date
 				end
 
-				CONNECTIONS[conn_id] = {
+				return_msg_len = nex_data(return_msg_len_off, 2):le_uint()
+				return_msg = nex_data(return_msg_len_off + 2, return_msg_len):string()
+
+				major, minor, patch = return_msg:match("build:(%d+)_(%d+)_(%d+)")
+				if major ~= nil then
+					conn['nex_version'] = {tonumber(major), tonumber(minor), tonumber(patch)}
+				end
+
+				-- this packet is server->client, so we use the server ip (from the secure url) first, then the dst ip (client ip)
+				new_conn_id = addr .. "-" .. port .. "-" .. tostring(pinfo.dst)
+				SECURE_KEYS[new_conn_id] = secure_key
+				CONNECTIONS[new_conn_id] = {
 					[PORT_SERVER] = rc4.new_ks(secure_key),
 					[PORT_CLIENT] = rc4.new_ks(secure_key),
-					['nonsecure_pid'] = partial_conn['nonsecure_pid'],
-					['has_struct_headers'] = partial_conn['has_struct_headers'],
-					['prudp_version'] = partial_conn['prudp_version'],
-					['nex_version'] = partial_conn['nex_version'],
-					['server_conn_sig'] = partial_conn['server_conn_sig'],
-					['client_conn_sig'] = pkt_conn_sig,
+					['nonsecure_pid'] = pid,
+					['has_struct_headers'] = conn['has_struct_headers'],
+					['prudp_version'] = conn['prudp_version'],
+					['nex_version'] = conn['nex_version']
 				}
-				SECURE_KEYS[conn_id] = secure_key
-				CONNECTIONS[partial_conn_id] = nil
-				SECURE_KEYS[partial_conn_id] = nil
-			else
-				print("Secure connection CONNECT without payload?")
-				CONNECTIONS[conn_id] = {
-					[PORT_SERVER] = rc4.new_ks("CD&ML"),
-					[PORT_CLIENT] = rc4.new_ks("CD&ML"),
-					['nonsecure_pid'] = partial_conn['nonsecure_pid'],
-					['has_struct_headers'] = partial_conn['has_struct_headers'],
-					['prudp_version'] = partial_conn['prudp_version'],
-					['nex_version'] = partial_conn['nex_version'],
-					['server_conn_sig'] = partial_conn['server_conn_sig'],
-					['client_conn_sig'] = pkt_conn_sig,
+
+				udp_table:add(tonumber(port), Dissector.get("nex"))
+				elseif pkt_method_id == 3 then -- If we request a ticket seperately, use that secure key instead.
+				new_conn_id = conn['secure_id'] .. "-" .. tostring(pinfo.dst)
+				SECURE_KEYS[new_conn_id] = secure_key
+				CONNECTIONS[new_conn_id] = {
+					[PORT_SERVER] = rc4.new_ks(secure_key),
+					[PORT_CLIENT] = rc4.new_ks(secure_key),
+					['nonsecure_pid'] = pid,
+					['has_struct_headers'] = conn['has_struct_headers'],
+					['prudp_version'] = conn['prudp_version'],
+					['nex_version'] = conn['nex_version']
 				}
-				SECURE_KEYS[conn_id] = secure_key
-				CONNECTIONS[partial_conn_id] = nil
-				SECURE_KEYS[partial_conn_id] = nil
 			end
-		else
-			set_connection(pinfo, {
-					[PORT_SERVER] = rc4.new_ks("CD&ML"),
-					[PORT_CLIENT] = rc4.new_ks("CD&ML"),
-					['client_conn_sig'] = pkt_conn_sig,
-				})
 		end
 	end
-	if pkt_type == TYPE_CONNECT and pkt_flag_ack and pkt_src ~= PORT_SERVER then
-		-- This should be server->client connection ack, but with a mismatched pkt_src. Fix up the keys
-		conn, conn_id = find_connection(pinfo)
-		conn[pkt_src] = conn[PORT_SERVER]
-		print("Mismatched server pkt_src " .. pkt_src .. ", correcting key...")
-	end
 
-	pkt_type = TYPE_DATA
-	if pkt_type == TYPE_DATA and not pkt_flag_ack and not pkt_flag_multi_ack then
-		if raw_payload then
-			local conn
-			local conn_id
-
-			conn, conn_id = find_connection(pinfo)
-
-			-- I hate this. Please come up with a better method.
-			pkt_id = pinfo.number
-			if dec_packets[pkt_id] == nil then
-				dec_packets[pkt_id] = raw_payload:bytes()
-				dec_payload = dec_packets[pkt_id]
-			else
-				dec_payload = dec_packets[pkt_id]
-			end
-
-			local tvb = dec_payload:tvb("Decrypted payload"):range()
-			payload = tvb
-
-			local proto_pkt_type = tvb(4,1):le_uint()
-			if bit.band(proto_pkt_type, 0x80) == 0 and tvb:len() > 14 then -- response, AND there must be something to dissect here..
-				local pkt_proto = bit.band(proto_pkt_type, bit.bnot(0x80))
-				local pkt_method_id = bit.band(tvb(0xa, 4):le_uint(), bit.bnot(0x8000))
-				local nex_data = tvb(14)
-				local ticket_buff
-				local buffer_len
-
-				if proto_pkt_type == 10 then
-					if pkt_method_id == 1 or pkt_method_id == 2 then -- 1: Login, 2: LoginEx
-						buffer_len = nex_data(8, 4):le_uint()
-						ticket_buff = nex_data(12, buffer_len)
-
-						pid = nex_data(4, 4):le_uint()
-						conn['pid'] = pid
-						info = tostring(conn['pid'])
-					elseif pkt_method_id == 3 then -- 3: RequestTicket
-						buffer_len = nex_data(4, 4):le_uint()
-						ticket_buff = nex_data(8, buffer_len)
-						if conn['pid'] ~= nil then
-							pid = conn['pid']
-							info = tostring(conn['pid'])
-						end
-					end
-
-					local ticket = ticket_buff(0, buffer_len-16)
-					local hmac = ticket_buff(buffer_len-16, 16)
-
-					local kerb_key = KERB_KEYS[pid]
-
-					if kerb_key == nil then
-						error("Kerberos key for PID " .. tostring(pid) .. " not found! Please add it (or the NEX password) to the config file.")
-					end
-
-					ticket = rc4.crypt(rc4.new_ks(kerb_key), ticket:bytes())
-					secure_key = string.fromhex(tostring(ticket(0, 32)))
-
-					if pkt_method_id == 1 or pkt_method_id == 2 then -- 1: Login, 2: LoginEx
-						struct_header_len = 0
-						has_struct_headers = false
-
-						secure_url_len_off = 12 + struct_header_len + buffer_len
-						secure_url_len = nex_data(secure_url_len_off, 2):le_uint()
-
-						-- Time for a shitty heuristic!
-						if 14 + secure_url_len > nex_data:len() then
-							struct_header_len = 5
-							has_struct_headers = true
-
-							secure_url_len_off = 12 + struct_header_len + buffer_len
-
-							secure_url_len = nex_data(secure_url_len_off, 2):le_uint()
-						end
-						conn['has_struct_headers'] = has_struct_headers
-						conn['prudp_version'] = version
-
-						secure_url_off = secure_url_len_off + 2
-						secure_url = nex_data(secure_url_off, secure_url_len):string()
-
-						addr = string.match(secure_url, "address=([^;]+)")
-						port = string.match(secure_url, "port=([^;]+)")
-						conn['secure_id'] = addr .. "-" .. port
-
-						return_msg_len_off = secure_url_off + secure_url_len + 4 + 2 + 1
-						if version == 1 then
-							return_msg_len_off = return_msg_len_off + 8 -- skip date
-						end
-
-						return_msg_len = nex_data(return_msg_len_off, 2):le_uint()
-						return_msg = nex_data(return_msg_len_off + 2, return_msg_len):string()
-
-						major, minor, patch = return_msg:match("build:(%d+)_(%d+)_(%d+)")
-						if major ~= nil then
-							conn['nex_version'] = {tonumber(major), tonumber(minor), tonumber(patch)}
-						end
-
-						-- this packet is server->client, so we use the server ip (from the secure url) first, then the dst ip (client ip)
-						new_conn_id = addr .. "-" .. port .. "-" .. tostring(pinfo.dst)
-						SECURE_KEYS[new_conn_id] = secure_key
-						CONNECTIONS[new_conn_id] = {
-							[PORT_SERVER] = rc4.new_ks(secure_key),
-							[PORT_CLIENT] = rc4.new_ks(secure_key),
-							['nonsecure_pid'] = pid,
-							['has_struct_headers'] = conn['has_struct_headers'],
-							['prudp_version'] = conn['prudp_version'],
-							['nex_version'] = conn['nex_version']
-						}
-
-						udp_table:add(tonumber(port), Dissector.get("nex"))
-					elseif pkt_method_id == 3 then -- If we request a ticket seperately, use that secure key instead.
-						new_conn_id = conn['secure_id'] .. "-" .. tostring(pinfo.dst)
-						SECURE_KEYS[new_conn_id] = secure_key
-						CONNECTIONS[new_conn_id] = {
-							[PORT_SERVER] = rc4.new_ks(secure_key),
-							[PORT_CLIENT] = rc4.new_ks(secure_key),
-							['nonsecure_pid'] = pid,
-							['has_struct_headers'] = conn['has_struct_headers'],
-							['prudp_version'] = conn['prudp_version'],
-							['nex_version'] = conn['nex_version']
-						}
-					end
+	-- game detection
+	if pkt_src == PORT_CLIENT and conn['game'] == nil and conn['nonsecure_pid'] ~= nil then
+		for access_key, game_name in pairs(access_key_table) do
+			if version == 0 then
+				if pkt_signature:raw() == sig_v0(access_key, SECURE_KEYS[conn_id], pkt_seq, f_fragment_v0()(), raw_payload) then
+					conn['game'] = game_name
+					break
+				end
+			elseif version == 1 then
+				-- for data..
+				optional_data = "\x02\x01" .. string.char(f_fragment_v1()())
+				if pkt_signature:raw() == sig_v1(access_key, buf:bytes(2+4, 8), SECURE_KEYS[conn_id], conn['server_conn_sig'], optional_data, raw_payload) then
+					conn['game'] = game_name
+					break
 				end
 			end
-
-			-- game detection
-			if pkt_src == PORT_CLIENT and conn['game'] == nil and conn['nonsecure_pid'] ~= nil then
-				for access_key, game_name in pairs(access_key_table) do
-					if version == 0 then
-						if pkt_signature:raw() == sig_v0(access_key, SECURE_KEYS[conn_id], pkt_seq, f_fragment_v0()(), raw_payload) then
-							conn['game'] = game_name
-							break
-						end
-					elseif version == 1 then
-						-- for data..
-						optional_data = "\x02\x01" .. string.char(f_fragment_v1()())
-						if pkt_signature:raw() == sig_v1(access_key, buf:bytes(2+4, 8), SECURE_KEYS[conn_id], conn['server_conn_sig'], optional_data, raw_payload) then
-							conn['game'] = game_name
-							break
-						end
-					end
-				end
-				if conn['game'] == nil then
-					conn['game'] = 'Unknown'
-				end
-			end
+		end
+		if conn['game'] == nil then
+			conn['game'] = 'Unknown'
 		end
 	end
 
@@ -846,6 +766,7 @@ function nexraw_proto.dissector(buf, pinfo, tree)
 		info = "Request"
 
 		local pkt_call_id = payload(5,4):le_uint()
+		print(pkt_call_id)
 		subtreeitem:add_le(Fraw.call_id, payload(5,4))
 
 		local pkt_method_id = payload(9,4):le_uint()
