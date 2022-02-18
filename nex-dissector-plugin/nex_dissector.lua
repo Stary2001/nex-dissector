@@ -225,8 +225,6 @@ function dissect_resp(conn, tree, tvb, proto_id, method_id)
 end
 
 function nex_proto.dissector(buf, pinfo, tree)
-	print("test")
-	
 	local pkt_src
 	local pkt_type
 	local pkt_flag_ack
