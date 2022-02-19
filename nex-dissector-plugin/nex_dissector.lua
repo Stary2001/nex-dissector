@@ -607,7 +607,14 @@ function nexraw_proto.dissector(buf, pinfo, tree)
 		dec_payload = dec_packets[pkt_id]
 		end
 
-	local tvb = dec_payload:tvb("Decrypted payload"):range()
+	local tvb = dec_payload:tvb("Decrypted payload"):range(1)
+	if bit.band(tvb(0,1):le_uint(), 1) == 1 then
+		pinfo.cols.src = "Server"
+		pinfo.cols.dst = "Client"
+	else
+		pinfo.cols.src = "Client"
+		pinfo.cols.dst = "Server"
+	end
 	payload = tvb
 
 	local proto_pkt_type = tvb(4,1):le_uint()
