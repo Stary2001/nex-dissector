@@ -570,9 +570,5 @@ function nex_proto.dissector(buf, pinfo, tree)
 
 	pinfo.cols.info = "NEX " .. info
 end
+nex_proto:register_heuristic("udp",nex_proto.dissector)
 
-udp_table = DissectorTable.get("udp.port")
--- prudpv0
-udp_table:add(60000, nex_proto)
--- prudpv1
-udp_table:add(59900, nex_proto)
